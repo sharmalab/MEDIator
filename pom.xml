@@ -1,0 +1,131 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>1.0.0</modelVersion>
+  <groupId>edu.emory.bmi</groupId>
+  <artifactId>datarepl-package</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>datarepl-package</name>
+  <description>Data Replication / Synchronization Tools</description>
+  <url>https://bitbucket.org/BMI/datareplicationsystem</url>
+
+  <properties>
+  	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  <modules>
+  	<module>modules</module>
+  	<module>documentation</module>
+  	<module>distribution</module>
+  </modules>
+  
+  <issueManagement>
+  	<system>BitBucket</system>
+  	<url>https://bitbucket.org/BMI/datareplicationsystem/issues</url>
+  </issueManagement>
+  <scm>
+  	<connection>https://author_name@bitbucket.org/BMI/datareplicationsystem.git</connection>
+  	<developerConnection>https://author_name@bitbucket.org/BMI/datareplicationsystem.git</developerConnection>
+  	<url>https://bitbucket.org/BMI/datareplicationsystem</url>
+  </scm>
+  
+  <organization>
+  	<name>Biomedical Informatics, Emory University</name>
+  	<url>http://www.bmi.emory.edu/</url>
+  </organization>
+  
+  <build>
+  	<pluginManagement>
+  		<plugins>
+  			<plugin>
+  				<groupId>org.apache.maven.plugins</groupId>
+  				<artifactId>maven-compiler-plugin</artifactId>
+  				<version>2.3.2</version>
+  				<configuration>
+  					<source>1.7</source>
+  					<target>1.7</target>
+  				</configuration>
+  			</plugin>
+  			<plugin>
+  				<groupId>org.apache.maven.plugins</groupId>
+  				<artifactId>maven-release-plugin</artifactId>
+  				<version>2.3.2</version>
+  				<configuration>
+  					<remoteTagging>true</remoteTagging>  				
+  					<preparationGoals>clean install</preparationGoals>
+  					<autoVersionSubmodules>true</autoVersionSubmodules>  					
+  				</configuration>
+  			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.8</version>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${session.executionRootDirectory}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+  	</pluginManagement>
+  </build>  
+  
+  <distributionManagement>
+	<repository>
+		<id>localrepo</id>
+		<name>LocalRepository</name>
+		<url>file:///${project.build.directory}/deployment-artifacts</url>
+	</repository>
+  </distributionManagement> 
+  
+  <dependencyManagement>
+  	<dependencies>
+  		<dependency>
+  			<groupId>${project.groupId}</groupId>
+  			<artifactId>modules</artifactId>
+  			<version>${project.version}</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>${project.groupId}</groupId>
+  			<artifactId>repl-server</artifactId>
+  			<version>${project.version}</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>${project.groupId}</groupId>
+  			<artifactId>documentation</artifactId>
+  			<version>${project.version}</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>${project.groupId}</groupId>
+  			<artifactId>distribution</artifactId>
+  			<version>${project.version}</version>
+  		</dependency>
+  		<dependency>
+  			<groupId>junit</groupId>
+  			<artifactId>junit</artifactId>
+  			<version>4.10</version>
+  			<scope>test</scope>
+  		</dependency>
+		<dependency>
+			<groupId>com.hazelcast</groupId>
+			<artifactId>hazelcast</artifactId>
+			<version>3.2.1</version>
+		</dependency> 		  		
+		<dependency>
+			<groupId>com.hazelcast</groupId>
+			<artifactId>hazelcast-all</artifactId>
+			<version>3.2.1</version>
+		</dependency> 		  		
+		<dependency>
+			<groupId>com.hazelcast</groupId>
+			<artifactId>hazelcast-client</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+  	</dependencies>
+  </dependencyManagement>    
+</project>
