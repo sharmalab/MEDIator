@@ -4,7 +4,8 @@ Welcome to the wiki of the Data Replication System project!
 
 Please visit the website to learn more - https://bitbucket.org/BMI/datareplicationsystem
 
-Resources:
+
+## Resources
 
 [1] TCIA REST API
 -----------------
