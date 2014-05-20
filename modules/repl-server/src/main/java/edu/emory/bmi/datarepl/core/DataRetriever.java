@@ -25,7 +25,10 @@ public class DataRetriever {
     public static void main(String[] args) throws TCIAClientException {
         InfDataAccessIntegration.getInfiniCore();
 
+        ITCIAClient client = new TCIAClientImpl(CommonConstants.API_KEY, CommonConstants.BASE_URL);
 
+
+        //Here, put some replicaSet, resulted from createReplicaSet(). For now, just some random string.
         long replicaSetId = InfDataAccessIntegration.putReplicaSet("SSS245");
 
         logger.info("Replica Set Id: " + replicaSetId + " Replica Set: " +
@@ -43,6 +46,7 @@ public class DataRetriever {
         logger.info("Replica Set Id: " + replicaSetId + " Replica Set: " +
                 InfDataAccessIntegration.getReplicaSet(replicaSetId));
 
+        //Here, push some real replicaSet changes. For now, just some random string.
         String newReplicaSet = InfDataAccessIntegration.pushChangesToReplicaSet(replicaSetId, "NEW00");
 
         logger.info("New ReplicaSet: " + newReplicaSet);
@@ -55,7 +59,6 @@ public class DataRetriever {
         logger.info("Duplicate Id: " + duplicateId + " Duplicate replica set: " +
                 InfDataAccessIntegration.getReplicaSet(duplicateId));
 
-        ITCIAClient client = new TCIAClientImpl(CommonConstants.API_KEY, CommonConstants.BASE_URL);
 
 //        String respXML = client.getCollectionValues(OutputFormat.xml);
 //        String respJSON = client.getCollectionValues(OutputFormat.json);
