@@ -10,13 +10,17 @@
 
 package edu.emory.bmi.datarepl.infinispan;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.infinispan.Cache;
 
 public class Initiator {
+    private static Logger logger = LogManager.getLogger(Initiator.class.getName());
+
     public static void main(String[] args) {
         InfDataAccessIntegration infDataAccessIntegration = InfDataAccessIntegration.getInfiniCore();
         @SuppressWarnings("unused")
         Cache defaultCache = infDataAccessIntegration.getDefaultCache();
-        System.out.println("Infinispan Initiator instance started..");
+        logger.info("Infinispan Initiator instance started..");
     }
 }

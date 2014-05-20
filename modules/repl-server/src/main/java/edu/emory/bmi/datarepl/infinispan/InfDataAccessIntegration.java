@@ -8,6 +8,8 @@
 
 package edu.emory.bmi.datarepl.infinispan;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.infinispan.Cache;
 import org.infinispan.manager.DefaultCacheManager;
 
@@ -20,6 +22,8 @@ import java.util.UUID;
 public class InfDataAccessIntegration {
     private static InfDataAccessIntegration infDataAccessIntegration = null;
     protected static Cache<Long, String> defaultCache;
+    private static Logger logger = LogManager.getLogger(InfDataAccessIntegration.class.getName());
+
 
     /**
      * Singleton. Prevents initialization from outside the class.
@@ -29,6 +33,7 @@ public class InfDataAccessIntegration {
     protected InfDataAccessIntegration() throws IOException {
         DefaultCacheManager manager = new DefaultCacheManager(InfConstants.INFINISPAN_CONFIG_FILE);
         defaultCache = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
+        logger.info("Initialized the Infinispan Cache for the Data Replication Tool..");
     }
 
     /**
@@ -39,7 +44,7 @@ public class InfDataAccessIntegration {
             try {
                 infDataAccessIntegration = new InfDataAccessIntegration();
             } catch (IOException e) {
-                System.out.println("Exception when trying to initialize Infinispan." + e);
+               logger.error("Exception when trying to initialize Infinispan.", e);
             }
         }
         return infDataAccessIntegration;
