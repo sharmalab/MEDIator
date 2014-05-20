@@ -13,44 +13,46 @@ import edu.emory.bmi.datarepl.tcia.ITCIAClient;
 import edu.emory.bmi.datarepl.tcia.OutputFormat;
 import edu.emory.bmi.datarepl.tcia.TCIAClientException;
 import edu.emory.bmi.datarepl.tcia.TCIAClientImpl;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Sample Main class to test the implementation
  */
 public class DataRetriever {
+    private static Logger logger = LogManager.getLogger(DataRetriever.class.getName());
 
     public static void main(String[] args) throws TCIAClientException {
-
         InfDataAccessIntegration.getInfiniCore();
 
 
         long replicaSetId = InfDataAccessIntegration.putReplicaSet("SSS245");
 
-        System.out.println("Replica Set Id: " + replicaSetId + " Replica Set: " +
+        logger.info("Replica Set Id: " + replicaSetId + " Replica Set: " +
                 InfDataAccessIntegration.getReplicaSet(replicaSetId));
 
-        System.out.println("Replica Set Id: " + replicaSetId + " Replica Set: " +
+        logger.info("Replica Set Id: " + replicaSetId + " Replica Set: " +
                 InfDataAccessIntegration.getReplicaSet(replicaSetId));
 
         boolean success = InfDataAccessIntegration.deleteReplicaSet(replicaSetId);
-        System.out.println(success);
+        logger.info(success);
 
         success = InfDataAccessIntegration.deleteReplicaSet(replicaSetId);
-        System.out.println(success);
+        logger.info(success);
 
-        System.out.println("Replica Set Id: " + replicaSetId + " Replica Set: " +
+        logger.info("Replica Set Id: " + replicaSetId + " Replica Set: " +
                 InfDataAccessIntegration.getReplicaSet(replicaSetId));
 
         String newReplicaSet = InfDataAccessIntegration.pushChangesToReplicaSet(replicaSetId, "NEW00");
 
-        System.out.println("New ReplicaSet: " + newReplicaSet);
+        logger.info("New ReplicaSet: " + newReplicaSet);
 
         newReplicaSet = InfDataAccessIntegration.pushChangesToReplicaSet(replicaSetId, "NEW11");
 
-        System.out.println("Newer ReplicaSet: " + newReplicaSet);
+        logger.info("Newer ReplicaSet: " + newReplicaSet);
 
         long duplicateId = InfDataAccessIntegration.duplicateReplicaSet(replicaSetId);
-        System.out.println("Duplicate Id: " + duplicateId + " Duplicate replica set: " +
+        logger.info("Duplicate Id: " + duplicateId + " Duplicate replica set: " +
                 InfDataAccessIntegration.getReplicaSet(duplicateId));
 
         ITCIAClient client = new TCIAClientImpl(CommonConstants.API_KEY, CommonConstants.BASE_URL);
