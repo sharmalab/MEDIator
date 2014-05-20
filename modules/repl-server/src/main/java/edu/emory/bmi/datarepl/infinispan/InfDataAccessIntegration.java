@@ -34,7 +34,7 @@ public class InfDataAccessIntegration {
     /**
      * Initializes Infinispan
      */
-    public static void getInfiniCore() {
+    public static InfDataAccessIntegration getInfiniCore() {
         if (infDataAccessIntegration == null) {
             try {
                 infDataAccessIntegration = new InfDataAccessIntegration();
@@ -42,6 +42,7 @@ public class InfDataAccessIntegration {
                 System.out.println("Exception when trying to initialize Infinispan." + e);
             }
         }
+        return infDataAccessIntegration;
     }
 
     /**
