@@ -26,7 +26,32 @@ public class DataRetriever {
 
         long replicaSetId = InfDataAccessIntegration.putReplicaSet("SSS245");
 
-        System.out.println("Replica Set Id: " + replicaSetId + " Replica Set: " + InfDataAccessIntegration.getReplicaSet(replicaSetId));
+        System.out.println("Replica Set Id: " + replicaSetId + " Replica Set: " +
+                InfDataAccessIntegration.getReplicaSet(replicaSetId));
+
+        System.out.println("Replica Set Id: " + replicaSetId + " Replica Set: " +
+                InfDataAccessIntegration.getReplicaSet(replicaSetId));
+
+        boolean success = InfDataAccessIntegration.deleteReplicaSet(replicaSetId);
+        System.out.println(success);
+
+        success = InfDataAccessIntegration.deleteReplicaSet(replicaSetId);
+        System.out.println(success);
+
+        System.out.println("Replica Set Id: " + replicaSetId + " Replica Set: " +
+                InfDataAccessIntegration.getReplicaSet(replicaSetId));
+
+        String newReplicaSet = InfDataAccessIntegration.pushChangesToReplicaSet(replicaSetId, "NEW00");
+
+        System.out.println("New ReplicaSet: " + newReplicaSet);
+
+        newReplicaSet = InfDataAccessIntegration.pushChangesToReplicaSet(replicaSetId, "NEW11");
+
+        System.out.println("Newer ReplicaSet: " + newReplicaSet);
+
+        long duplicateId = InfDataAccessIntegration.duplicateReplicaSet(replicaSetId);
+        System.out.println("Duplicate Id: " + duplicateId + " Duplicate replica set: " +
+                InfDataAccessIntegration.getReplicaSet(duplicateId));
 
         ITCIAClient client = new TCIAClientImpl(CommonConstants.API_KEY, CommonConstants.BASE_URL);
 

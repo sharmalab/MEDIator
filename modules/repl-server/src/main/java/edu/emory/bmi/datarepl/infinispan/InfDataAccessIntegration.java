@@ -47,6 +47,7 @@ public class InfDataAccessIntegration {
 
     /**
      * Gets the default cache
+     *
      * @return the cache
      */
     public static Cache<Long, String> getDefaultCache() {
@@ -55,6 +56,7 @@ public class InfDataAccessIntegration {
 
     /**
      * PUT /putReplicaSet
+     *
      * @param replicaSet, the query that to be stored
      * @return replicaSetId: Long
      */
@@ -66,11 +68,50 @@ public class InfDataAccessIntegration {
 
     /**
      * GET /getReplicaSet
+     *
      * @param replicaSetId, long
      * @return replicaSet:String
      */
     public static String getReplicaSet(long replicaSetId) {
         return defaultCache.get(replicaSetId);
+    }
+
+    /**
+     * DELETE /deleteReplicaSet
+     * @param replicaSetId the id of the replica to be evicted.
+     * @return true, if evicted now. False, if not available.
+     */
+    public static boolean deleteReplicaSet(long replicaSetId) {
+        if (defaultCache.get(replicaSetId) == null) {
+            return false;
+        } else {
+            defaultCache.evict(replicaSetId);
+            return true;
+        }
+    }
+
+    /**
+     * PUSH /pushChangesToReplicaSet
+     * @param replicaSetId, the id of the replica to be modified.
+     * @param newReplicaSet, the new replicaSet.
+     * @return the updated replica set.
+     */
+    public static String pushChangesToReplicaSet(long replicaSetId, String newReplicaSet) {
+        defaultCache.put(replicaSetId, newReplicaSet); //TODO: this could be adding some changes. Not merely replacing.
+        return newReplicaSet;
+    }
+
+
+    /**
+     * Makes a duplicate of an existing replica set.
+     * @param replicaSetId the id of the replica set to be duplicated.
+     * @return the id of the duplicate replica set.
+     */
+    public static long duplicateReplicaSet(long replicaSetId) {
+        long duplicateReplicaSetId = UUID.randomUUID().getLeastSignificantBits();
+        String replicaSet = getReplicaSet(replicaSetId);
+        defaultCache.put(duplicateReplicaSetId, replicaSet);
+        return duplicateReplicaSetId;
     }
 }
 
