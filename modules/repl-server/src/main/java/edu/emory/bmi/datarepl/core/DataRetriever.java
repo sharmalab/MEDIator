@@ -60,12 +60,12 @@ public class DataRetriever {
                 InfDataAccessIntegration.getReplicaSet(duplicateId));
 
 
-//        String respXML = client.getCollectionValues(OutputFormat.xml);
-//        String respJSON = client.getCollectionValues(OutputFormat.json);
-//        String respCSV = client.getCollectionValues(OutputFormat.csv);
-//
-//        System.out.println(respXML);
-//        System.out.println(respJSON);
-//        System.out.println(respCSV);
+        String respXML = client.getCollectionValues(OutputFormat.xml);
+        String respJSON = client.getCollectionValues(OutputFormat.json);
+        String respCSV = client.getCollectionValues(OutputFormat.csv);
+
+        System.out.println(respXML);
+        System.out.println(respJSON);
+        System.out.println(respCSV);
     }
 }

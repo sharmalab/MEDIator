@@ -14,7 +14,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 public class TCIAClientImpl implements ITCIAClient{
 
-    private final static String API_KEY_FIELD = "69ebf119-6100-4091-9b79-fafb7227e1d3"; //api_key
+    private final static String API_KEY_FIELD = "api_key";
     private String apiKey;
     private DefaultHttpClient httpClient ;
     private String baseUrl ;
