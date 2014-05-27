@@ -1,4 +1,4 @@
-package edu.emory.bmi.datarepl.tcia;
+package edu.emory.bmi.datarepl.tcia_rest_api;
 
 
 public class TCIAClientException extends Exception {

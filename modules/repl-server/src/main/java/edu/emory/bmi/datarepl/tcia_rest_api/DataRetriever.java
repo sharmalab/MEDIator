@@ -6,7 +6,7 @@
  * Copyright (c) 2014, Pradeeban Kathiravelu <pradeeban.kathiravelu@tecnico.ulisboa.pt>
  */
 
-package edu.emory.bmi.datarepl.tcia;
+package edu.emory.bmi.datarepl.tcia_rest_api;
 
 import edu.emory.bmi.datarepl.core.CommonConstants;
 import edu.emory.bmi.datarepl.infinispan.InfDataAccessIntegration;

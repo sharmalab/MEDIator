@@ -4,4 +4,4 @@
  * https://github.com/nadirsaghar/TCIA-REST-API-Client
  */
 
-package edu.emory.bmi.datarepl.tcia;
+package edu.emory.bmi.datarepl.tcia_rest_api;

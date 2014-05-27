@@ -1,4 +1,4 @@
-package edu.emory.bmi.datarepl.tcia;
+package edu.emory.bmi.datarepl.tcia_rest_api;
 
 
 import java.io.IOException;
@@ -12,7 +12,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-public class TCIAClientImpl implements ITCIAClient{
+public class TCIAClientImpl implements ITCIAClient {
 
     private final static String API_KEY_FIELD = "api_key";
     private String apiKey;
@@ -41,7 +41,7 @@ public class TCIAClientImpl implements ITCIAClient{
     }
 
     public String getModalityValues(String collection, String bodyPartExamined,
-                                    String modality, OutputFormat format) throws TCIAClientException {
+                                    String modality, edu.emory.bmi.datarepl.tcia_rest_api.OutputFormat format) throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
             URIBuilder uriBuilder = new URIBuilder( baseUri.toString() + "/" + getModalityValues);
@@ -62,16 +62,16 @@ public class TCIAClientImpl implements ITCIAClient{
             return convertStreamToString(is);
 
         }
-        catch (TCIAClientException e) {
+        catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
             throw e;
         }
         catch (Exception e) {
-            throw new TCIAClientException( e , baseUrl);
+            throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException( e , baseUrl);
         }
 
     }
 
-    private InputStream getRawData(URI uri) throws TCIAClientException, ClientProtocolException, IOException
+    private InputStream getRawData(URI uri) throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException, ClientProtocolException, IOException
     {
 // create a new HttpGet request
         HttpGet request = new HttpGet(uri);
@@ -84,13 +84,13 @@ public class TCIAClientImpl implements ITCIAClient{
         {
             if (response.getStatusLine().getStatusCode() == 401) // Unauthorized
             {
-                throw new TCIAClientException(uri.toString(),
+                throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException(uri.toString(),
                         "Unauthorized access");
             } else if (response.getStatusLine().getStatusCode() == 404) {
-                throw new TCIAClientException(uri.toString(),
+                throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException(uri.toString(),
                         "Resource not found");
             } else {
-                throw new TCIAClientException(uri.toString(), "Server Error : "
+                throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException(uri.toString(), "Server Error : "
                         + response.getStatusLine().getReasonPhrase());
             }
 
@@ -99,14 +99,14 @@ public class TCIAClientImpl implements ITCIAClient{
             if (entity != null && entity.getContent() != null) {
                 return entity.getContent();
             } else {
-                throw new TCIAClientException(baseUrl, "No Content");
+                throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException(baseUrl, "No Content");
             }
         }
     }
 
     public String getManufacturerValues(String collection,
-                                        String bodyPartExamined, String modality, OutputFormat format)
-            throws TCIAClientException {
+                                        String bodyPartExamined, String modality, edu.emory.bmi.datarepl.tcia_rest_api.OutputFormat format)
+            throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
             URIBuilder uriBuilder = new URIBuilder( baseUri.toString() + "/" + getManufacturerValues);
@@ -127,15 +127,15 @@ public class TCIAClientImpl implements ITCIAClient{
             return convertStreamToString(is);
 
         }
-        catch (TCIAClientException e) {
+        catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
             throw e;
         }
         catch (Exception e) {
-            throw new TCIAClientException( e , baseUrl);
+            throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException( e , baseUrl);
         }
     }
-    public String getCollectionValues(OutputFormat format)
-            throws TCIAClientException {
+    public String getCollectionValues(edu.emory.bmi.datarepl.tcia_rest_api.OutputFormat format)
+            throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
             URIBuilder uriBuilder = new URIBuilder( baseUri.toString() + "/" + getCollectionValues);
@@ -146,15 +146,15 @@ public class TCIAClientImpl implements ITCIAClient{
             return convertStreamToString(is);
 
         }
-        catch (TCIAClientException e) {
+        catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
             throw e;
         }
         catch (Exception e) {
-            throw new TCIAClientException( e , baseUrl);
+            throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException( e , baseUrl);
         }
     }
     public String getBodyPartValues(String collection, String bodyPartExamined,
-                                    String modality, OutputFormat format) throws TCIAClientException {
+                                    String modality, edu.emory.bmi.datarepl.tcia_rest_api.OutputFormat format) throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
             URIBuilder uriBuilder = new URIBuilder( baseUri.toString() + "/" + getBodyPartValues);
@@ -175,17 +175,17 @@ public class TCIAClientImpl implements ITCIAClient{
             return convertStreamToString(is);
 
         }
-        catch (TCIAClientException e) {
+        catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
             throw e;
         }
         catch (Exception e) {
-            throw new TCIAClientException( e , baseUrl);
+            throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException( e , baseUrl);
         }
 
     }
     public String getPatientStudy(String collection, String patientID,
-                                  String studyInstanceUID, OutputFormat format)
-            throws TCIAClientException {
+                                  String studyInstanceUID, edu.emory.bmi.datarepl.tcia_rest_api.OutputFormat format)
+            throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
             URIBuilder uriBuilder = new URIBuilder( baseUri.toString() + "/" + getPatientStudy);
@@ -206,17 +206,17 @@ public class TCIAClientImpl implements ITCIAClient{
             return convertStreamToString(is);
 
         }
-        catch (TCIAClientException e) {
+        catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
             throw e;
         }
         catch (Exception e) {
-            throw new TCIAClientException( e , baseUrl);
+            throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException( e , baseUrl);
         }
     }
 
     public String getSeries(String collection, String modality,
-                            String studyInstanceUID, OutputFormat format)
-            throws TCIAClientException {
+                            String studyInstanceUID, edu.emory.bmi.datarepl.tcia_rest_api.OutputFormat format)
+            throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
             URIBuilder uriBuilder = new URIBuilder( baseUri.toString() + "/" + getSeries);
@@ -237,15 +237,15 @@ public class TCIAClientImpl implements ITCIAClient{
             return convertStreamToString(is);
 
         }
-        catch (TCIAClientException e) {
+        catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
             throw e;
         }
         catch (Exception e) {
-            throw new TCIAClientException( e , baseUrl);
+            throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException( e , baseUrl);
         }
     }
-    public String getPatient(String collection, OutputFormat format)
-            throws TCIAClientException {
+    public String getPatient(String collection, edu.emory.bmi.datarepl.tcia_rest_api.OutputFormat format)
+            throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
             URIBuilder uriBuilder = new URIBuilder( baseUri.toString() + "/" + getPatient);
@@ -260,15 +260,15 @@ public class TCIAClientImpl implements ITCIAClient{
             return convertStreamToString(is);
 
         }
-        catch (TCIAClientException e) {
+        catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
             throw e;
         }
         catch (Exception e) {
-            throw new TCIAClientException( e , baseUrl);
+            throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException( e , baseUrl);
         }
     }
     public ImageResult getImage(String seriesInstanceUID)
-            throws TCIAClientException {
+            throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
             URIBuilder uriBuilder = new URIBuilder( baseUri.toString() + "/" + getImage);
@@ -294,13 +294,13 @@ public class TCIAClientImpl implements ITCIAClient{
             {
                 if (response.getStatusLine().getStatusCode() == 401) // Unauthorized
                 {
-                    throw new TCIAClientException(uri.toString(),
+                    throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException(uri.toString(),
                             "Unauthorized access");
                 } else if (response.getStatusLine().getStatusCode() == 404) {
-                    throw new TCIAClientException(uri.toString(),
+                    throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException(uri.toString(),
                             "Resource not found");
                 } else {
-                    throw new TCIAClientException(uri.toString(), "Server Error : "
+                    throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException(uri.toString(), "Server Error : "
                             + response.getStatusLine().getReasonPhrase());
                 }
 
@@ -312,16 +312,16 @@ public class TCIAClientImpl implements ITCIAClient{
                     imageResult.setImageCount(Integer.parseInt(response.getFirstHeader("imageCount").getValue()));
                     return imageResult;
                 } else {
-                    throw new TCIAClientException(baseUrl, "No Content");
+                    throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException(baseUrl, "No Content");
                 }
             }
 
         }
-        catch (TCIAClientException e) {
+        catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
             throw e;
         }
         catch (Exception e) {
-            throw new TCIAClientException( e , baseUrl);
+            throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException( e , baseUrl);
         }
     }
 
