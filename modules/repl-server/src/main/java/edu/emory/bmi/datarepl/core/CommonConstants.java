@@ -15,4 +15,6 @@ public final class CommonConstants {
     public static String BASE_URL = "https://services.cancerimagingarchive.net/services/TCIA/TCIA/query";
     //https://services-test.cancerimagingarchive.net/services/TCIA/TCIA/query"; // Base URL of the service
     public static String API_KEY = "69ebf119-6100-4091-9b79-fafb7227e1d3";
+
+    public static String MASHAPE_AUTHORIZATION = "7AErcmPVXcqsOT13K1Ij0bLVYL8RVvZ6";
 }

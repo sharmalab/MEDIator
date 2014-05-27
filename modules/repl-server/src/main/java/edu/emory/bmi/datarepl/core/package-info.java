@@ -1,5 +1,5 @@
 /*
- * Core class of the Data Replication Server
+ * Core classes of the Data Replication Server
  *
  */
 
