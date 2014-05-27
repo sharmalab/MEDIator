@@ -8,11 +8,11 @@
 
 package edu.emory.bmi.datarepl.core;
 
-import edu.emory.bmi.datarepl.infinispan.InfDataAccessIntegration;
-import edu.emory.bmi.datarepl.tcia.ITCIAClient;
-import edu.emory.bmi.datarepl.tcia.OutputFormat;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import edu.emory.bmi.datarepl.tcia.TCIAClientException;
-import edu.emory.bmi.datarepl.tcia.TCIAClientImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,49 +23,15 @@ public class DataRetriever {
     private static Logger logger = LogManager.getLogger(DataRetriever.class.getName());
 
     public static void main(String[] args) throws TCIAClientException {
-        InfDataAccessIntegration.getInfiniCore();
+        try {
+            HttpResponse<JsonNode> request = Unirest.get("https://tcia.p.mashape.com/getCollectionValues?format=%3Cformat%3E")
+                    .header("X-Mashape-Authorization", "7AErcmPVXcqsOT13K1Ij0bLVYL8RVvZ6")
+                    .header("api_key", CommonConstants.API_KEY)
+                    .asJson();
+            logger.info(request.getBody());
+        } catch (UnirestException e) {
+            logger.error("Failed invoking the request", e);
+        }
 
-        ITCIAClient client = new TCIAClientImpl(CommonConstants.API_KEY, CommonConstants.BASE_URL);
-
-
-        //Here, put some replicaSet, resulted from createReplicaSet(). For now, just some random string.
-        long replicaSetId = InfDataAccessIntegration.putReplicaSet("SSS245");
-
-        logger.info("Replica Set Id: " + replicaSetId + " Replica Set: " +
-                InfDataAccessIntegration.getReplicaSet(replicaSetId));
-
-        logger.info("Replica Set Id: " + replicaSetId + " Replica Set: " +
-                InfDataAccessIntegration.getReplicaSet(replicaSetId));
-
-        boolean success = InfDataAccessIntegration.deleteReplicaSet(replicaSetId);
-        logger.info(success);
-
-        success = InfDataAccessIntegration.deleteReplicaSet(replicaSetId);
-        logger.info(success);
-
-        logger.info("Replica Set Id: " + replicaSetId + " Replica Set: " +
-                InfDataAccessIntegration.getReplicaSet(replicaSetId));
-
-        //Here, push some real replicaSet changes. For now, just some random string.
-        String newReplicaSet = InfDataAccessIntegration.pushChangesToReplicaSet(replicaSetId, "NEW00");
-
-        logger.info("New ReplicaSet: " + newReplicaSet);
-
-        newReplicaSet = InfDataAccessIntegration.pushChangesToReplicaSet(replicaSetId, "NEW11");
-
-        logger.info("Newer ReplicaSet: " + newReplicaSet);
-
-        long duplicateId = InfDataAccessIntegration.duplicateReplicaSet(replicaSetId);
-        logger.info("Duplicate Id: " + duplicateId + " Duplicate replica set: " +
-                InfDataAccessIntegration.getReplicaSet(duplicateId));
-
-
-        String respXML = client.getCollectionValues(OutputFormat.xml);
-        String respJSON = client.getCollectionValues(OutputFormat.json);
-        String respCSV = client.getCollectionValues(OutputFormat.csv);
-
-        System.out.println(respXML);
-        System.out.println(respJSON);
-        System.out.println(respCSV);
     }
 }
