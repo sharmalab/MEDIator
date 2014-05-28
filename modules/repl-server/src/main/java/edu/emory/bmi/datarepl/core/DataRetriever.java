@@ -8,9 +8,7 @@
 
 package edu.emory.bmi.datarepl.core;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
 import edu.emory.bmi.datarepl.infinispan.InfDataAccessIntegration;
-import edu.emory.bmi.datarepl.mashape.TciaInvoker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,7 +22,7 @@ public class DataRetriever {
         InfDataAccessIntegration.getInfiniCore();
 
         long userId = 1001;
-        Long now[] = InfDataAccessIntegration.getUserReplicasMap(userId);
+        Long now[] = InfDataAccessIntegration.getUserReplicaSets(userId);
 
         if (now!= null) {
             for (Long aNow : now) {
@@ -39,7 +37,7 @@ public class DataRetriever {
         replicaSetIDs = 4L;
         InfDataAccessIntegration.addToUserReplicasMap(userId, replicaSetIDs);
 
-        now = InfDataAccessIntegration.getUserReplicasMap(userId);
+        now = InfDataAccessIntegration.getUserReplicaSets(userId);
 
         if (now!= null) {
             for (Long aNow : now) {

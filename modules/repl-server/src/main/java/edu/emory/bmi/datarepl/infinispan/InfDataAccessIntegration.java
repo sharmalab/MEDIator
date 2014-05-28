@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.UUID;
 
 /**
- * The core class of Infinispan data access integration
+ * The core class of Infinispan data access integration - Publisher/Consumer API.
  */
 public class InfDataAccessIntegration {
     private static InfDataAccessIntegration infDataAccessIntegration = null;
@@ -55,14 +55,19 @@ public class InfDataAccessIntegration {
     }
 
     /**
-     * Gets the default cache
+     * Gets the replica sets map
      *
-     * @return the cache
+     * @return the replica sets map
      */
     public static Cache<Long, String> getReplicaSetsMap() {
         return replicaSetsMap;
     }
 
+    /**
+     * Gets the user replicas map
+     *
+     * @return the user replicas map
+     */
     public static Cache<Long, Long[]> getUserReplicasMap() {
         return userReplicasMap;
     }
@@ -124,12 +129,12 @@ public class InfDataAccessIntegration {
     }
 
     /**
-     * GET /getUserReplicasMap
+     * GET /getUserReplicaSets
      *
      * @param replicaSetId, long
      * @return userReplicas: Long[]
      */
-    public static Long[] getUserReplicasMap(long replicaSetId) {
+    public static Long[] getUserReplicaSets(long replicaSetId) {
         return userReplicasMap.get(replicaSetId);
     }
 

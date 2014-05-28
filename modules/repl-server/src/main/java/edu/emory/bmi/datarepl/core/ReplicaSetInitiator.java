@@ -14,6 +14,9 @@ import edu.emory.bmi.datarepl.mashape.TciaInvoker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Initiates the replica sets upon log in and search queries - Interfacing Layer
+ */
 public class ReplicaSetInitiator {
     private static Logger logger = LogManager.getLogger(ReplicaSetInitiator.class.getName());
 
@@ -22,7 +25,7 @@ public class ReplicaSetInitiator {
      * @param userId Id of the user.
      */
     public static void login(long userId) {
-        Long[] replicaSetIDs = InfDataAccessIntegration.getUserReplicasMap(userId);
+        Long[] replicaSetIDs = InfDataAccessIntegration.getUserReplicaSets(userId);
 
         //currently getting all the replicaSets. TODO: Get only those that are changed.
         for (Long aReplicaSetID: replicaSetIDs) {
