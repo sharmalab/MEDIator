@@ -8,7 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import edu.emory.bmi.datarepl.core.CommonConstants;
+import edu.emory.bmi.datarepl.core.TCIAConstants;
 import edu.emory.bmi.datarepl.tcia_rest_api.ITCIAClient;
 import edu.emory.bmi.datarepl.tcia_rest_api.OutputFormat;
 import edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException;
@@ -22,7 +22,7 @@ import org.junit.Test;
 public class TestTCIAClient {
 
     private static String baseUrl = "https://services.cancerimagingarchive.net/services/TCIA/TCIA/query"; // Base URL of the service
-    private static String apiKey = CommonConstants.API_KEY;
+    private static String apiKey = TCIAConstants.API_KEY;
 
     /**
      * Method : GetCollectionValues

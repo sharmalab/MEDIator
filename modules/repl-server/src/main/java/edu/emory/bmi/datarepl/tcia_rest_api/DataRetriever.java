@@ -8,7 +8,7 @@
 
 package edu.emory.bmi.datarepl.tcia_rest_api;
 
-import edu.emory.bmi.datarepl.core.CommonConstants;
+import edu.emory.bmi.datarepl.core.TCIAConstants;
 import edu.emory.bmi.datarepl.infinispan.InfDataAccessIntegration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,7 +22,7 @@ public class DataRetriever {
     public static void main(String[] args) throws TCIAClientException {
         InfDataAccessIntegration.getInfiniCore();
 
-        ITCIAClient client = new TCIAClientImpl(CommonConstants.API_KEY, CommonConstants.BASE_URL);
+        ITCIAClient client = new TCIAClientImpl(TCIAConstants.API_KEY, TCIAConstants.BASE_URL);
 
 
         //Here, put some replicaSet, resulted from createReplicaSet(). For now, just some random string.
