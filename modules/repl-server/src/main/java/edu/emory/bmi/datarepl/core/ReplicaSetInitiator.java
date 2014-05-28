@@ -29,7 +29,7 @@ public class ReplicaSetInitiator {
 
         //currently getting all the replicaSets. TODO: Get only those that are changed.
         for (Long aReplicaSetID: replicaSetIDs) {
-            search(userId, InfDataAccessIntegration.getReplicaSet(aReplicaSetID));
+            search(InfDataAccessIntegration.getReplicaSet(aReplicaSetID));
         }
     }
 
@@ -49,10 +49,9 @@ public class ReplicaSetInitiator {
 
     /**
      * For the initial search. Search and store the replicaSet.
-     * @param userId the id of the user
      * @param query the user query.
      */
-    public static void search(long userId, String query) {
+    public static void search(String query) {
         try {
             TciaInvoker.retrieveMetadata(query);
         } catch (UnirestException e) {
