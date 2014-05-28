@@ -34,5 +34,7 @@ public final class TCIAConstants {
 
     public static String MASHAPE_BASE_URL = "https://tcia.p.mashape.com/";
 
+    public static String IMAGE_TAG = "IMG__";
 
+    public static String META_TAG = "META__";
 }

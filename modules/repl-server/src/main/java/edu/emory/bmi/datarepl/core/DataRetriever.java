@@ -23,34 +23,14 @@ public class DataRetriever {
     public static void main(String[] args) {
         InfDataAccessIntegration.getInfiniCore();
 
+        LogInInitiator logInInitiator = new LogInInitiator();
         long userId = 1001;
-        Long now[] = InfDataAccessIntegration.getUserReplicaSets(userId);
+        logInInitiator.login(userId);
 
-        if (now!= null) {
-            for (Long aNow : now) {
-                System.out.println(aNow);
-            }
-        }
-
-        Long replicaSetIDs = 3L;
-
-        InfDataAccessIntegration.addToUserReplicasMap(userId, replicaSetIDs);
-
-        replicaSetIDs = 4L;
-        InfDataAccessIntegration.addToUserReplicasMap(userId, replicaSetIDs);
-
-        now = InfDataAccessIntegration.getUserReplicaSets(userId);
-
-        if (now!= null) {
-            for (Long aNow : now) {
-                System.out.println(aNow);
-            }
-        }
-
-
+        TciaInvoker tciaInvoker = logInInitiator.getTciaInvoker();
 
         try {
-            TciaInvoker.getImage("1.3.6.1.4.1.14519.5.2.1.7695.4001.306204232344341694648035234440");
+            tciaInvoker.getImage("1.3.6.1.4.1.14519.5.2.1.7695.4001.306204232344341694648035234440");
         } catch (UnirestException e) {
             logger.error("Failed invoking the request", e);
         }
