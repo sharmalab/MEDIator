@@ -19,8 +19,6 @@ public class Initiator {
 
     public static void main(String[] args) {
         InfDataAccessIntegration infDataAccessIntegration = InfDataAccessIntegration.getInfiniCore();
-        @SuppressWarnings("unused")
-        Cache defaultCache = infDataAccessIntegration.getDefaultCache();
         logger.info("Infinispan Initiator instance started..");
     }
 }

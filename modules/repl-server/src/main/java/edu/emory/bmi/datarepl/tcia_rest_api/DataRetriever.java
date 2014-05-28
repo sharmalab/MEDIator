@@ -26,7 +26,7 @@ public class DataRetriever {
 
 
         //Here, put some replicaSet, resulted from createReplicaSet(). For now, just some random string.
-        long replicaSetId = InfDataAccessIntegration.putReplicaSet("SSS245");
+        long replicaSetId = InfDataAccessIntegration.putReplicaSet(1111L, "SSS245");
 
         logger.info("Replica Set Id: " + replicaSetId + " Replica Set: " +
                 InfDataAccessIntegration.getReplicaSet(replicaSetId));
@@ -52,7 +52,7 @@ public class DataRetriever {
 
         logger.info("Newer ReplicaSet: " + newReplicaSet);
 
-        long duplicateId = InfDataAccessIntegration.duplicateReplicaSet(replicaSetId);
+        long duplicateId = InfDataAccessIntegration.duplicateReplicaSet(replicaSetId, 11);
         logger.info("Duplicate Id: " + duplicateId + " Duplicate replica set: " +
                 InfDataAccessIntegration.getReplicaSet(duplicateId));
 

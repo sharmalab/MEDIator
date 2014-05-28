@@ -15,6 +15,8 @@ import edu.emory.bmi.datarepl.core.CommonConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.InputStream;
+
 /**
  * Invokes TCIA through Mashape.
  */
@@ -22,7 +24,35 @@ public class TciaInvoker {
     private static Logger logger = LogManager.getLogger(TciaInvoker.class.getName());
 
     /**
+     * /GET Retrieve the meta data
+     *
+     * @param replicaSet query information
+     * @return HttpResponse
+     * @throws UnirestException
+     */
+    public static HttpResponse retrieveMetadata(String replicaSet) throws UnirestException {
+        return Unirest.get(replicaSet).header("X-Mashape-Authorization", CommonConstants.MASHAPE_AUTHORIZATION)
+                .header("api_key", CommonConstants.API_KEY)
+                .asJson();
+    }
+
+
+    /**
+     * /GET Retrieve the search results
+     *
+     * @param replicaSet query information
+     * @return HttpResponse
+     * @throws UnirestException
+     */
+    public static HttpResponse retrieveSearchOutput(String replicaSet) throws UnirestException {
+        //todo: implement
+        return null;
+    }
+
+
+    /**
      * /GET the collection values
+     *
      * @return collection values
      * @throws UnirestException
      */
@@ -35,6 +65,7 @@ public class TciaInvoker {
 
     /**
      * /GET the values of the body parts
+     *
      * @return bodyPartValues
      * @throws UnirestException
      */
@@ -47,6 +78,7 @@ public class TciaInvoker {
 
     /**
      * /GET Manufacturer values
+     *
      * @return manufacturer values
      * @throws UnirestException
      */
@@ -59,6 +91,7 @@ public class TciaInvoker {
 
     /**
      * /GET Modality values
+     *
      * @return modality values
      * @throws UnirestException
      */
@@ -71,11 +104,12 @@ public class TciaInvoker {
 
     /**
      * /GET patient
+     *
      * @return patient
      * @throws UnirestException
      */
     public static HttpResponse getPatient() throws UnirestException {
-        return  Unirest.get("https://tcia.p.mashape.com/getPatient?format=%3Cformat%3E&Collection=%3CCollection%3E")
+        return Unirest.get("https://tcia.p.mashape.com/getPatient?format=%3Cformat%3E&Collection=%3CCollection%3E")
                 .header("X-Mashape-Authorization", CommonConstants.MASHAPE_AUTHORIZATION)
                 .header("api_key", CommonConstants.API_KEY)
                 .asJson();
@@ -83,6 +117,7 @@ public class TciaInvoker {
 
     /**
      * /GET patientStudy
+     *
      * @return patientStudy
      * @throws UnirestException
      */
@@ -95,6 +130,7 @@ public class TciaInvoker {
 
     /**
      * /GET series
+     *
      * @return series
      * @throws UnirestException
      */
@@ -107,15 +143,16 @@ public class TciaInvoker {
 
     /**
      * /GET Image
+     *
      * @param SeriesInstanceUID, instance ID of the series
      * @return image as a zip
      * @throws UnirestException
      */
     public static HttpResponse getImage(String SeriesInstanceUID) throws UnirestException {
-//        Unirest.get("https://tcia.p.mashape.com/getImage?SeriesInstanceUID=%3CSeriesInstanceUID%3E")
-        return Unirest.get("https://tcia.p.mashape.com/getImage?SeriesInstanceUID="+SeriesInstanceUID)
-                .header("X-Mashape-Authorization", CommonConstants.MASHAPE_AUTHORIZATION)
-                .header("api_key", CommonConstants.API_KEY)
+        HttpResponse<InputStream> request = Unirest.get("https://tcia.p.mashape.com/getImage?SeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.7695.4001.306204232344341694648035234440")
+                .header("X-Mashape-Authorization", "7AErcmPVXcqsOT13K1Ij0bLVYL8RVvZ6")
+                .header("api_key", "69ebf119-6100-4091-9b79-fafb7227e1d3")
                 .asBinary();
+        return request;
     }
 }

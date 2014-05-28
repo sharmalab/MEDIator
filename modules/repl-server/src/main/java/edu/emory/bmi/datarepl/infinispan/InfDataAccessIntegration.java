@@ -14,6 +14,7 @@ import org.infinispan.Cache;
 import org.infinispan.manager.DefaultCacheManager;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.UUID;
 
 /**
@@ -21,7 +22,9 @@ import java.util.UUID;
  */
 public class InfDataAccessIntegration {
     private static InfDataAccessIntegration infDataAccessIntegration = null;
-    protected static Cache<Long, String> defaultCache;
+    protected static Cache<Long, String> replicaSetsMap;
+    protected static Cache<Long, Long[]> userReplicasMap;
+
     private static Logger logger = LogManager.getLogger(InfDataAccessIntegration.class.getName());
 
 
@@ -32,7 +35,8 @@ public class InfDataAccessIntegration {
      */
     protected InfDataAccessIntegration() throws IOException {
         DefaultCacheManager manager = new DefaultCacheManager(InfConstants.INFINISPAN_CONFIG_FILE);
-        defaultCache = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
+        replicaSetsMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
+        userReplicasMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
         logger.info("Initialized the Infinispan Cache for the Data Replication Tool..");
     }
 
@@ -55,20 +59,78 @@ public class InfDataAccessIntegration {
      *
      * @return the cache
      */
-    public static Cache<Long, String> getDefaultCache() {
-        return defaultCache;
+    public static Cache<Long, String> getReplicaSetsMap() {
+        return replicaSetsMap;
+    }
+
+    public static Cache<Long, Long[]> getUserReplicasMap() {
+        return userReplicasMap;
+    }
+
+    /**
+     * Creates a replicaSet
+     * @param userId the user that the replicaSet is associated with
+     * @param replicaSet the replica set
+     * @return replicaSetId
+     */
+    public static long createReplicaSet(long userId, String replicaSet) {
+        long replicaSetId = UUID.randomUUID().getLeastSignificantBits();
+        putReplicaSet(replicaSetId, replicaSet);
+        addToUserReplicasMap(userId, replicaSetId);
+        return replicaSetId;
+    }
+
+    /**
+     * Creates a replicaSet
+     * @param userId the user that the replicaSet is associated with
+     * @param replicaSet the array of replica sets
+     */
+    public static void createMultipleReplicaSets(long userId, String[] replicaSet) {
+        for (String aReplicaSet : replicaSet) {
+            long replicaSetId = UUID.randomUUID().getLeastSignificantBits();
+            putReplicaSet(replicaSetId, aReplicaSet);
+            addToUserReplicasMap(userId, replicaSetId);
+        }
+    }
+
+    /**
+     * /PUSH add replicaSetId to the userReplicasMap
+     * @param userId Id of the user
+     * @param repicaSetId new replicaSetIds to be added
+     */
+    public static void addToUserReplicasMap(long userId, long repicaSetId) {
+        Long replicaSetIDs[];
+        if (userReplicasMap.get(userId) != null) {
+            replicaSetIDs = Arrays.copyOf(userReplicasMap.get(userId), userReplicasMap.get(userId).length + 1);
+            replicaSetIDs[replicaSetIDs.length - 1] = repicaSetId;
+        }
+        else {
+            replicaSetIDs = new Long[1];
+            replicaSetIDs[0] = repicaSetId;
+        }
+        userReplicasMap.put(userId, replicaSetIDs);
     }
 
     /**
      * PUT /putReplicaSet
      *
+     * @param replicaSetId, the id of the replica set.
      * @param replicaSet, the query that to be stored
      * @return replicaSetId: Long
      */
-    public static long putReplicaSet(String replicaSet) {
-        long replicaSetId = UUID.randomUUID().getLeastSignificantBits();
-        defaultCache.put(replicaSetId, replicaSet);
+    public static long putReplicaSet(long replicaSetId, String replicaSet) {
+        replicaSetsMap.put(replicaSetId, replicaSet);
         return replicaSetId;
+    }
+
+    /**
+     * GET /getUserReplicasMap
+     *
+     * @param replicaSetId, long
+     * @return userReplicas: Long[]
+     */
+    public static Long[] getUserReplicasMap(long replicaSetId) {
+        return userReplicasMap.get(replicaSetId);
     }
 
     /**
@@ -78,7 +140,7 @@ public class InfDataAccessIntegration {
      * @return replicaSet:String
      */
     public static String getReplicaSet(long replicaSetId) {
-        return defaultCache.get(replicaSetId);
+        return replicaSetsMap.get(replicaSetId);
     }
 
     /**
@@ -87,10 +149,10 @@ public class InfDataAccessIntegration {
      * @return true, if evicted now. False, if not available.
      */
     public static boolean deleteReplicaSet(long replicaSetId) {
-        if (defaultCache.get(replicaSetId) == null) {
+        if (replicaSetsMap.get(replicaSetId) == null) {
             return false;
         } else {
-            defaultCache.evict(replicaSetId);
+            replicaSetsMap.evict(replicaSetId);
             return true;
         }
     }
@@ -102,7 +164,7 @@ public class InfDataAccessIntegration {
      * @return the updated replica set.
      */
     public static String pushChangesToReplicaSet(long replicaSetId, String newReplicaSet) {
-        defaultCache.put(replicaSetId, newReplicaSet); //TODO: this could be adding some changes. Not merely replacing.
+        replicaSetsMap.put(replicaSetId, newReplicaSet); //TODO: this could be adding some changes. Not merely replacing.
         return newReplicaSet;
     }
 
@@ -110,12 +172,14 @@ public class InfDataAccessIntegration {
     /**
      * Makes a duplicate of an existing replica set.
      * @param replicaSetId the id of the replica set to be duplicated.
+     * @param userId the user who is duplicating the replica.
      * @return the id of the duplicate replica set.
      */
-    public static long duplicateReplicaSet(long replicaSetId) {
+    public static long duplicateReplicaSet(long replicaSetId, long userId) {
         long duplicateReplicaSetId = UUID.randomUUID().getLeastSignificantBits();
         String replicaSet = getReplicaSet(replicaSetId);
-        defaultCache.put(duplicateReplicaSetId, replicaSet);
+        replicaSetsMap.put(duplicateReplicaSetId, replicaSet);
+        addToUserReplicasMap(duplicateReplicaSetId, userId);
         return duplicateReplicaSetId;
     }
 }
