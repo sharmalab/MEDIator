@@ -32,5 +32,7 @@ public final class TCIAConstants {
 
     public static String STUDY_INSTANCE_UID = "StudyInstanceUID";
 
+    public static String MASHAPE_BASE_URL = "https://tcia.p.mashape.com/";
+
 
 }

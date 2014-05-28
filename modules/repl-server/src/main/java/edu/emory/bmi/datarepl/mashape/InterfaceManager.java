@@ -25,21 +25,24 @@ public abstract class InterfaceManager {
      * @return HttpResponse
      * @throws com.mashape.unirest.http.exceptions.UnirestException
      */
-    public static HttpResponse retrieveMetadata(String replicaSet) throws UnirestException {
-        return Unirest.get(replicaSet).header("X-Mashape-Authorization", TCIAConstants.MASHAPE_AUTHORIZATION).
+    public HttpResponse retrieveMetadata(String replicaSet) throws UnirestException {
+        return Unirest.get(TCIAConstants.MASHAPE_BASE_URL + replicaSet).
+                header("X-Mashape-Authorization", TCIAConstants.MASHAPE_AUTHORIZATION).
                 header("api_key", TCIAConstants.API_KEY).
                 asJson();
     }
 
     /**
-     * /GET Retrieve the search results
+     * /GET Retrieve the images
      *
      * @param replicaSet query information
      * @return HttpResponse
      * @throws UnirestException
      */
-    public static HttpResponse retrieveSearchOutput(String replicaSet) throws UnirestException {
-        //todo: implement
-        return null;
+    public HttpResponse retrieveImage(String replicaSet) throws UnirestException {
+        return Unirest.get(TCIAConstants.MASHAPE_BASE_URL + replicaSet).
+                header("X-Mashape-Authorization", TCIAConstants.MASHAPE_AUTHORIZATION).
+                header("api_key", TCIAConstants.API_KEY).
+                asBinary();
     }
 }
