@@ -52,7 +52,7 @@ public class DataRetriever {
 
         logger.info("Newer ReplicaSet: " + newReplicaSet);
 
-        long duplicateId = InfDataAccessIntegration.duplicateReplicaSet(replicaSetId, 11);
+        long duplicateId = InfDataAccessIntegration.duplicateReplicaSet(replicaSetId, "User11");
         logger.info("Duplicate Id: " + duplicateId + " Duplicate replica set: " +
                 InfDataAccessIntegration.getReplicaSet(duplicateId));
 

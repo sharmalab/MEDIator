@@ -24,7 +24,7 @@ public class LogInInitiator {
      * When the user logs in, retrieve the stored replica sets
      * @param userId Id of the user.
      */
-    public void login(long userId) {
+    public void login(String userId) {
         tciaInvoker = new TciaInvoker(userId);
 
         Long[] replicaSetIDs = InfDataAccessIntegration.getUserReplicaSets(userId);

@@ -24,9 +24,9 @@ import java.io.InputStream;
  */
 public class TciaInvoker extends InterfaceManager {
     private static Logger logger = LogManager.getLogger(TciaInvoker.class.getName());
-    private Long userId;
+    private String userId;
 
-    public TciaInvoker(Long userId) {
+    public TciaInvoker(String userId) {
         this.userId = userId;
     }
 

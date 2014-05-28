@@ -23,7 +23,7 @@ import java.util.UUID;
 public class InfDataAccessIntegration {
     private static InfDataAccessIntegration infDataAccessIntegration = null;
     protected static Cache<Long, String> replicaSetsMap;
-    protected static Cache<Long, Long[]> userReplicasMap;
+    protected static Cache<String, Long[]> userReplicasMap;
 
     private static Logger logger = LogManager.getLogger(InfDataAccessIntegration.class.getName());
 
@@ -68,7 +68,7 @@ public class InfDataAccessIntegration {
      *
      * @return the user replicas map
      */
-    public static Cache<Long, Long[]> getUserReplicasMap() {
+    public static Cache<String, Long[]> getUserReplicasMap() {
         return userReplicasMap;
     }
 
@@ -78,7 +78,7 @@ public class InfDataAccessIntegration {
      * @param replicaSet the replica set
      * @return replicaSetId
      */
-    public static long createReplicaSet(long userId, String replicaSet) {
+    public static long createReplicaSet(String userId, String replicaSet) {
         long replicaSetId = UUID.randomUUID().getLeastSignificantBits();
         putReplicaSet(replicaSetId, replicaSet);
         addToUserReplicasMap(userId, replicaSetId);
@@ -90,7 +90,7 @@ public class InfDataAccessIntegration {
      * @param userId the user that the replicaSet is associated with
      * @param replicaSet the array of replica sets
      */
-    public static void createMultipleReplicaSets(long userId, String[] replicaSet) {
+    public static void createMultipleReplicaSets(String userId, String[] replicaSet) {
         for (String aReplicaSet : replicaSet) {
             long replicaSetId = UUID.randomUUID().getLeastSignificantBits();
             putReplicaSet(replicaSetId, aReplicaSet);
@@ -103,7 +103,7 @@ public class InfDataAccessIntegration {
      * @param userId Id of the user
      * @param repicaSetId new replicaSetIds to be added
      */
-    public static void addToUserReplicasMap(long userId, long repicaSetId) {
+    public static void addToUserReplicasMap(String userId, long repicaSetId) {
         Long replicaSetIDs[];
         if (userReplicasMap.get(userId) != null) {
             replicaSetIDs = Arrays.copyOf(userReplicasMap.get(userId), userReplicasMap.get(userId).length + 1);
@@ -131,11 +131,11 @@ public class InfDataAccessIntegration {
     /**
      * GET /getUserReplicaSets
      *
-     * @param replicaSetId, long
+     * @param userId, String
      * @return userReplicas: Long[]
      */
-    public static Long[] getUserReplicaSets(long replicaSetId) {
-        return userReplicasMap.get(replicaSetId);
+    public static Long[] getUserReplicaSets(String userId) {
+        return userReplicasMap.get(userId);
     }
 
     /**
@@ -180,11 +180,11 @@ public class InfDataAccessIntegration {
      * @param userId the user who is duplicating the replica.
      * @return the id of the duplicate replica set.
      */
-    public static long duplicateReplicaSet(long replicaSetId, long userId) {
+    public static long duplicateReplicaSet(long replicaSetId, String userId) {
         long duplicateReplicaSetId = UUID.randomUUID().getLeastSignificantBits();
         String replicaSet = getReplicaSet(replicaSetId);
         replicaSetsMap.put(duplicateReplicaSetId, replicaSet);
-        addToUserReplicasMap(duplicateReplicaSetId, userId);
+        addToUserReplicasMap(userId, duplicateReplicaSetId);
         return duplicateReplicaSetId;
     }
 }

@@ -24,7 +24,7 @@ public class DataRetriever {
         InfDataAccessIntegration.getInfiniCore();
 
         LogInInitiator logInInitiator = new LogInInitiator();
-        long userId = 1001;
+        String userId = "USER__1001";
         logInInitiator.login(userId);
 
         TciaInvoker tciaInvoker = logInInitiator.getTciaInvoker();
