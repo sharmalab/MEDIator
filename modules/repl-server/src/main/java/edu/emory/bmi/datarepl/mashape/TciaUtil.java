@@ -52,10 +52,10 @@ public class TciaUtil {
      */
     public static String wrapVariable(String variableName, String inputValue) {
         String wrappedValue;
-        if (inputValue.length() > 0) {
-            wrappedValue = inputValue;
-        } else {
+        if (inputValue == null || inputValue.length() <= 0) {
             wrappedValue = "%3C" + variableName + "%3E";
+        } else {
+            wrappedValue = inputValue;
         }
         return wrappedValue;
     }
