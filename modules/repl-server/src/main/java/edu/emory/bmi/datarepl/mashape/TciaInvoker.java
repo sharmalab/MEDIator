@@ -97,7 +97,7 @@ public class TciaInvoker extends InterfaceManager {
 
         String query = "getManufacturerValues?format=" + format +
                 "&Collection=" + collection +
-                "BodyPartExamined=" + bodyPartExamined +
+                "&BodyPartExamined=" + bodyPartExamined +
                 "&Modality=" + modality;
         InfDataAccessIntegration.createReplicaSet(userId, TCIAConstants.META_TAG + query);
 
@@ -127,7 +127,7 @@ public class TciaInvoker extends InterfaceManager {
         String query = "getModalityValues?Collection=" + collection +
                 "&BodyPartExamined=" + bodyPartExamined +
                 "&Modality=" + modality +
-                "format=" + format;
+                "&format=" + format;
         InfDataAccessIntegration.createReplicaSet(userId, TCIAConstants.META_TAG + query);
 
         return Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).
