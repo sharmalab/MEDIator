@@ -8,6 +8,7 @@
 
 package edu.emory.bmi.datarepl.core;
 
+import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import edu.emory.bmi.datarepl.infinispan.InfDataAccessIntegration;
 import edu.emory.bmi.datarepl.mashape.TciaInvoker;
@@ -30,6 +31,10 @@ public class DataRetriever {
         TciaInvoker tciaInvoker = logInInitiator.getTciaInvoker();
 
         try {
+            HttpResponse response = tciaInvoker.getCollectionValues("json");
+            if (logger.isDebugEnabled()) {
+                logger.debug(response.getBody());
+            }
             tciaInvoker.getImage("1.3.6.1.4.1.14519.5.2.1.7695.4001.306204232344341694648035234440");
         } catch (UnirestException e) {
             logger.error("Failed invoking the request", e);

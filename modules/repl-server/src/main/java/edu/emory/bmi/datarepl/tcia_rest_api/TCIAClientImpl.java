@@ -41,7 +41,7 @@ public class TCIAClientImpl implements ITCIAClient {
     }
 
     public String getModalityValues(String collection, String bodyPartExamined,
-                                    String modality, edu.emory.bmi.datarepl.tcia_rest_api.OutputFormat format) throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
+                                    String modality, OutputFormat format) throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
             URIBuilder uriBuilder = new URIBuilder( baseUri.toString() + "/" + getModalityValues);
@@ -105,7 +105,7 @@ public class TCIAClientImpl implements ITCIAClient {
     }
 
     public String getManufacturerValues(String collection,
-                                        String bodyPartExamined, String modality, edu.emory.bmi.datarepl.tcia_rest_api.OutputFormat format)
+                                        String bodyPartExamined, String modality, OutputFormat format)
             throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
@@ -134,7 +134,7 @@ public class TCIAClientImpl implements ITCIAClient {
             throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException( e , baseUrl);
         }
     }
-    public String getCollectionValues(edu.emory.bmi.datarepl.tcia_rest_api.OutputFormat format)
+    public String getCollectionValues(OutputFormat format)
             throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
@@ -154,7 +154,7 @@ public class TCIAClientImpl implements ITCIAClient {
         }
     }
     public String getBodyPartValues(String collection, String bodyPartExamined,
-                                    String modality, edu.emory.bmi.datarepl.tcia_rest_api.OutputFormat format) throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
+                                    String modality, OutputFormat format) throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
             URIBuilder uriBuilder = new URIBuilder( baseUri.toString() + "/" + getBodyPartValues);
@@ -184,7 +184,7 @@ public class TCIAClientImpl implements ITCIAClient {
 
     }
     public String getPatientStudy(String collection, String patientID,
-                                  String studyInstanceUID, edu.emory.bmi.datarepl.tcia_rest_api.OutputFormat format)
+                                  String studyInstanceUID, OutputFormat format)
             throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
@@ -215,7 +215,7 @@ public class TCIAClientImpl implements ITCIAClient {
     }
 
     public String getSeries(String collection, String modality,
-                            String studyInstanceUID, edu.emory.bmi.datarepl.tcia_rest_api.OutputFormat format)
+                            String studyInstanceUID, OutputFormat format)
             throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
@@ -244,7 +244,7 @@ public class TCIAClientImpl implements ITCIAClient {
             throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException( e , baseUrl);
         }
     }
-    public String getPatient(String collection, edu.emory.bmi.datarepl.tcia_rest_api.OutputFormat format)
+    public String getPatient(String collection, OutputFormat format)
             throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
