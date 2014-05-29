@@ -38,7 +38,16 @@ public class DataRetriever {
             logger.info(response.getBody());
             response = tciaInvoker.getPatientStudy("json", "TCGA-GBM", null, null);
             logger.info(response.getBody());
+            response = tciaInvoker.getPatient("json", "TCGA-GBM");
+            logger.info(response.getBody());
+            response = tciaInvoker.getBodyPartValues("json", null, null, "MR");
+            logger.info(response.getBody());
+            response = tciaInvoker.getModalityValues("json", null, "BRAIN", "MR");
+            logger.info(response.getBody());
+            response = tciaInvoker.getManufacturerValues("json", null, "BRAIN", "MR");
+            logger.info(response.getBody());
             tciaInvoker.getImage("1.3.6.1.4.1.14519.5.2.1.7695.4001.306204232344341694648035234440");
+
         } catch (UnirestException e) {
             logger.error("Failed invoking the request", e);
         }
