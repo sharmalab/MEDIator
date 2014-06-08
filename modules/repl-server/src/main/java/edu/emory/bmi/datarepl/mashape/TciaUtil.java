@@ -59,5 +59,13 @@ public class TciaUtil {
         }
         return wrappedValue;
     }
+
+    public static String addParam(String output, String variableName, String value) {
+        String join = output.length() == 0 ? "?" : "&";
+        if (value != null) {
+            output += join + variableName + "=" + value;
+        }
+        return output;
+    }
 }
 
