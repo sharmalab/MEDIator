@@ -61,15 +61,14 @@ public class TciaInvoker extends InterfaceManager {
      */
     public HttpResponse getBodyPartValues(String iFormat, String iCollection, String iBodyPartExamined,
                                           String iModality) throws UnirestException {
-        String format = TciaUtil.wrapVariable(TCIAConstants.FORMAT, iFormat);
-        String collection = TciaUtil.wrapVariable(TCIAConstants.COLLECTION, iCollection);
-        String bodyPartExamined = TciaUtil.wrapVariable(TCIAConstants.BODY_PART_EXAMINED, iBodyPartExamined);
-        String modality = TciaUtil.wrapVariable(TCIAConstants.MODALITY, iModality);
+        String query = "getBodyPartValues";
+        String temp = "";
+        temp = TciaUtil.addParam(temp, TCIAConstants.FORMAT, iFormat);
+        temp = TciaUtil.addParam(temp, TCIAConstants.COLLECTION, iCollection);
+        temp = TciaUtil.addParam(temp, TCIAConstants.BODY_PART_EXAMINED, iBodyPartExamined);
+        temp = TciaUtil.addParam(temp, TCIAConstants.MODALITY, iModality);
+        query += temp;
 
-        String query = "getBodyPartValues?format=" + format +
-                "&Collection=" + collection +
-                "&BodyPartExamined=" + bodyPartExamined +
-                "&Modality=" + modality;
         InfDataAccessIntegration.createReplicaSet(userId, TCIAConstants.META_TAG + query);
 
         return Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).
@@ -90,15 +89,14 @@ public class TciaInvoker extends InterfaceManager {
      */
     public HttpResponse getManufacturerValues(String iFormat, String iCollection, String iBodyPartExamined,
                                               String iModality) throws UnirestException {
-        String format = TciaUtil.wrapVariable(TCIAConstants.FORMAT, iFormat);
-        String collection = TciaUtil.wrapVariable(TCIAConstants.COLLECTION, iCollection);
-        String bodyPartExamined = TciaUtil.wrapVariable(TCIAConstants.BODY_PART_EXAMINED, iBodyPartExamined);
-        String modality = TciaUtil.wrapVariable(TCIAConstants.MODALITY, iModality);
+        String query = "getManufacturerValues";
+        String temp = "";
+        temp = TciaUtil.addParam(temp, TCIAConstants.FORMAT, iFormat);
+        temp = TciaUtil.addParam(temp, TCIAConstants.COLLECTION, iCollection);
+        temp = TciaUtil.addParam(temp, TCIAConstants.BODY_PART_EXAMINED, iBodyPartExamined);
+        temp = TciaUtil.addParam(temp, TCIAConstants.MODALITY, iModality);
+        query += temp;
 
-        String query = "getManufacturerValues?format=" + format +
-                "&Collection=" + collection +
-                "&BodyPartExamined=" + bodyPartExamined +
-                "&Modality=" + modality;
         InfDataAccessIntegration.createReplicaSet(userId, TCIAConstants.META_TAG + query);
 
         return Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).
@@ -119,15 +117,14 @@ public class TciaInvoker extends InterfaceManager {
      */
     public HttpResponse getModalityValues(String iFormat, String iCollection, String iBodyPartExamined,
                                           String iModality) throws UnirestException {
-        String format = TciaUtil.wrapVariable(TCIAConstants.FORMAT, iFormat);
-        String collection = TciaUtil.wrapVariable(TCIAConstants.COLLECTION, iCollection);
-        String bodyPartExamined = TciaUtil.wrapVariable(TCIAConstants.BODY_PART_EXAMINED, iBodyPartExamined);
-        String modality = TciaUtil.wrapVariable(TCIAConstants.MODALITY, iModality);
+        String query = "getModalityValues";
+        String temp = "";
+        temp = TciaUtil.addParam(temp, TCIAConstants.FORMAT, iFormat);
+        temp = TciaUtil.addParam(temp, TCIAConstants.COLLECTION, iCollection);
+        temp = TciaUtil.addParam(temp, TCIAConstants.BODY_PART_EXAMINED, iBodyPartExamined);
+        temp = TciaUtil.addParam(temp, TCIAConstants.MODALITY, iModality);
+        query += temp;
 
-        String query = "getModalityValues?Collection=" + collection +
-                "&BodyPartExamined=" + bodyPartExamined +
-                "&Modality=" + modality +
-                "&format=" + format;
         InfDataAccessIntegration.createReplicaSet(userId, TCIAConstants.META_TAG + query);
 
         return Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).
@@ -199,6 +196,7 @@ public class TciaInvoker extends InterfaceManager {
      */
     public HttpResponse getSeries(String iFormat, String iCollection, String iPatientID,
                                   String iStudyInstanceUID, String iModality) throws UnirestException {
+//        String query = "getSeries";
         String format = TciaUtil.wrapVariable(TCIAConstants.FORMAT, iFormat);
         String collection = TciaUtil.wrapVariable(TCIAConstants.COLLECTION, iCollection);
         String patientID = TciaUtil.wrapVariable(TCIAConstants.PATIENT_ID, iPatientID);

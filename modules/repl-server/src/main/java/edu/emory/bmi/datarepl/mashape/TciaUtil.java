@@ -60,6 +60,13 @@ public class TciaUtil {
         return wrappedValue;
     }
 
+    /**
+     * Add parameters to form the query
+     * @param output output query
+     * @param variableName the parameter name to be added
+     * @param value value of the parameter to be added
+     * @return output
+     */
     public static String addParam(String output, String variableName, String value) {
         String join = output.length() == 0 ? "?" : "&";
         if (value != null) {
