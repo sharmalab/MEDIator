@@ -36,18 +36,16 @@ public class TciaUtil {
         while ((read = in.read(buffer)) > 0) {
             fos.write(buffer, 0, read);
         }
-
-        if (logger.isDebugEnabled()) {
-            logger.debug("Downloaded the file: " + name);
-        }
+        logger.info("\n\n[getImage]: Downloaded the file: " + name);
         fos.close();
         in.close();
     }
 
     /**
      * Wrap the variables for TCIA API
+     *
      * @param variableName, the name of the variable to be wrapped
-     * @param inputValue, the input value from the user.
+     * @param inputValue,   the input value from the user.
      * @return the wrapped value.
      */
     public static String wrapVariable(String variableName, String inputValue) {
@@ -62,9 +60,10 @@ public class TciaUtil {
 
     /**
      * Add parameters to form the query
-     * @param output output query
+     *
+     * @param output       output query
      * @param variableName the parameter name to be added
-     * @param value value of the parameter to be added
+     * @param value        value of the parameter to be added
      * @return output
      */
     public static String addParam(String output, String variableName, String value) {

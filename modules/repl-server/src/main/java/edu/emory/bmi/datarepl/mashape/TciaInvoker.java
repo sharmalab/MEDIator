@@ -38,9 +38,11 @@ public class TciaInvoker extends InterfaceManager {
      * @throws UnirestException
      */
     public HttpResponse getCollectionValues(String iFormat) throws UnirestException {
-        String format = TciaUtil.wrapVariable(TCIAConstants.FORMAT, iFormat);
+        String query = "getCollectionValues";
+        String temp = "";
+        temp = TciaUtil.addParam(temp, TCIAConstants.FORMAT, iFormat);
+        query += temp;
 
-        String query = "getCollectionValues?format=" + format;
         InfDataAccessIntegration.createReplicaSet(userId, TCIAConstants.META_TAG + query);
 
         return Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).
@@ -142,12 +144,11 @@ public class TciaInvoker extends InterfaceManager {
      * @throws UnirestException
      */
     public HttpResponse getPatient(String iFormat, String iCollection) throws UnirestException {
-        String format = TciaUtil.wrapVariable(TCIAConstants.FORMAT, iFormat);
-        String collection = TciaUtil.wrapVariable(TCIAConstants.COLLECTION, iCollection);
-
-        String query = "getPatient?format=" + format +
-                "&Collection=" + collection;
-        InfDataAccessIntegration.createReplicaSet(userId, TCIAConstants.META_TAG + query);
+        String query = "getPatient";
+        String temp = "";
+        temp = TciaUtil.addParam(temp, TCIAConstants.FORMAT, iFormat);
+        temp = TciaUtil.addParam(temp, TCIAConstants.COLLECTION, iCollection);
+        query += temp;
 
         return Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).
                 header("X-Mashape-Authorization", TCIAConstants.MASHAPE_AUTHORIZATION).
@@ -174,6 +175,7 @@ public class TciaInvoker extends InterfaceManager {
         temp = TciaUtil.addParam(temp, TCIAConstants.PATIENT_ID, iPatientID);
         temp = TciaUtil.addParam(temp, TCIAConstants.STUDY_INSTANCE_UID, iStudyInstanceUID);
         query += temp;
+
         InfDataAccessIntegration.createReplicaSet(userId, TCIAConstants.META_TAG + query);
 
         return Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).
@@ -196,18 +198,15 @@ public class TciaInvoker extends InterfaceManager {
      */
     public HttpResponse getSeries(String iFormat, String iCollection, String iPatientID,
                                   String iStudyInstanceUID, String iModality) throws UnirestException {
-//        String query = "getSeries";
-        String format = TciaUtil.wrapVariable(TCIAConstants.FORMAT, iFormat);
-        String collection = TciaUtil.wrapVariable(TCIAConstants.COLLECTION, iCollection);
-        String patientID = TciaUtil.wrapVariable(TCIAConstants.PATIENT_ID, iPatientID);
-        String studyInstanceUID = TciaUtil.wrapVariable(TCIAConstants.STUDY_INSTANCE_UID, iStudyInstanceUID);
-        String modality = TciaUtil.wrapVariable(TCIAConstants.MODALITY, iModality);
+        String query = "getSeries";
+        String temp = "";
+        temp = TciaUtil.addParam(temp, TCIAConstants.FORMAT, iFormat);
+        temp = TciaUtil.addParam(temp, TCIAConstants.COLLECTION, iCollection);
+        temp = TciaUtil.addParam(temp, TCIAConstants.PATIENT_ID, iPatientID);
+        temp = TciaUtil.addParam(temp, TCIAConstants.STUDY_INSTANCE_UID, iStudyInstanceUID);
+        temp = TciaUtil.addParam(temp, TCIAConstants.MODALITY, iModality);
+        query += temp;
 
-        String query = "getSeries?format=" + format +
-                "&Collection=" + collection +
-                "&PatientID=" + patientID +
-                "&StudyInstanceUID=" + studyInstanceUID;// +
-        //"&Modality=" + modality;
         InfDataAccessIntegration.createReplicaSet(userId, TCIAConstants.META_TAG + query);
 
         return Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).
@@ -231,8 +230,6 @@ public class TciaInvoker extends InterfaceManager {
                 header("X-Mashape-Authorization", TCIAConstants.MASHAPE_AUTHORIZATION).
                 header("api_key", TCIAConstants.API_KEY).
                 asBinary();
-        logger.info(request.getHeaders());
-
         try {
             TciaUtil.saveTo(request.getBody(), seriesInstanceUID + ".zip", ".");
         } catch (IOException e) {

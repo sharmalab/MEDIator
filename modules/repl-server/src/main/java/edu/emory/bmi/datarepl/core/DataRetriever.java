@@ -33,22 +33,34 @@ public class DataRetriever {
         HttpResponse response;
         try {
             response = tciaInvoker.getCollectionValues("json");
-            logger.info("\n\n[getCollectionValues] body: " + response.getBody());
+            logger.info("\n\n[getCollectionValues]: " + response.getBody());
+
             response = tciaInvoker.getPatient("json", "TCGA-GBM");
-            logger.info("\n\n[getPatient] body: " + response.getBody());
+            logger.info("\n\n[getPatient]: " + response.getBody());
+
             response = tciaInvoker.getPatientStudy("json", "TCGA-GBM", "TCGA-06-6701", null);
-            logger.info("\n\n[getPatientStudy] body" + response.getBody());
-            response = tciaInvoker.getSeries("json", "TCGA-GBM", "TCGA-06-6701","1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895", null);
-            logger.info("\n\n[getSeries] body: " + response.getBody());
+            logger.info("\n\n[getPatientStudy]: " + response.getBody());
+
+            response = tciaInvoker.getPatientStudy("json", "TCGA-GBM", null, null);
+            logger.info("\n\n[getPatientStudy]: " + response.getBody());
+
+            response = tciaInvoker.getSeries("json", "TCGA-GBM",
+                    "TCGA-06-6701","1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895", null);
+            logger.info("\n\n[getSeries]: " + response.getBody());
+
+            response = tciaInvoker.getSeries("json", "TCGA-GBM", "TCGA-06-6701", null, null);
+            logger.info("\n\n[getSeries]: " + response.getBody());
+
             tciaInvoker.getImage("1.3.6.1.4.1.14519.5.2.1.7695.4001.306204232344341694648035234440");
 
-            logger.info("\n\n************************************************[getSeries] header: " + response.getHeaders());
             response = tciaInvoker.getBodyPartValues("json", null, null, "MR");
-            logger.info("\n\n[getBodyPartValues] body: " + response.getBody());
+            logger.info("\n\n[getBodyPartValues]: " + response.getBody());
+
             response = tciaInvoker.getModalityValues("json", null, "BRAIN", "MR");
-            logger.info("\n\n[getModalityValues] body: " + response.getBody());
+            logger.info("\n\n[getModalityValues]: " + response.getBody());
+
             response = tciaInvoker.getManufacturerValues("json", null, "BRAIN", "MR");
-            logger.info("\n\n[getManufacturerValues] body: " + response.getBody());
+            logger.info("\n\n[getManufacturerValues]: " + response.getBody());
         } catch (UnirestException e) {
             logger.error("Failed invoking the request", e);
         }
