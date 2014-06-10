@@ -4,31 +4,32 @@
 \usepackage{moreverb}
 \usepackage{amsmath}
 \usepackage[utf8]{inputenc}
-    \usepackage{listings}  
-    \usepackage{color}  
-    \usepackage{textcomp}  
-    \definecolor{listinggray}{gray}{0.98}  
-    \definecolor{lbcolor}{rgb}{0.98,0.98,0.98}  
-    \lstset{  
-     backgroundcolor=\color{lbcolor},  
-     tabsize=4,  
-     rulecolor=,  
-     language=java,  
-            basicstyle=\scriptsize,  
-            upquote=true,  
-            aboveskip={1.5\baselineskip},  
-            columns=fixed,  
-            showstringspaces=false,  
-            extendedchars=true,  
-            breaklines=true,  
-            showtabs=false,  
-            showspaces=false,  
-            showstringspaces=false,  
-            identifierstyle=\ttfamily,  
-            keywordstyle=\color[rgb]{0,0,1},  
-            commentstyle=\color[rgb]{0.133,0.545,0.133},  
-            stringstyle=\color[rgb]{0.627,0.126,0.941},  
-    }
+\usepackage{pifont}
+\usepackage{listings}  
+\usepackage{color}  
+\usepackage{textcomp}  
+\definecolor{listinggray}{gray}{0.98}  
+\definecolor{lbcolor}{rgb}{0.98,0.98,0.98}  
+\lstset{  
+ backgroundcolor=\color{lbcolor},  
+ tabsize=4,  
+ rulecolor=,  
+ language=java,  
+        basicstyle=\scriptsize,  
+        upquote=true,  
+        aboveskip={1.5\baselineskip},  
+        columns=fixed,  
+        showstringspaces=false,  
+        extendedchars=true,  
+        breaklines=true,  
+        showtabs=false,  
+        showspaces=false,  
+        showstringspaces=false,  
+        identifierstyle=\ttfamily,  
+        keywordstyle=\color[rgb]{0,0,1},  
+        commentstyle=\color[rgb]{0.133,0.545,0.133},  
+        stringstyle=\color[rgb]{0.627,0.126,0.941},  
+}
 
 \ifCLASSINFOpdf
    \usepackage[pdftex]{graphicx}
@@ -92,10 +93,10 @@ Two distributed cache instances exist in InfDataAccessIntegration.
     protected static Cache userReplicasMap;
     protected static Cache replicaSetsMap;
 \end{lstlisting}  
-userReplicasMap is a mapping of userId -> Array of replicaSetIDs. UserID could be the logged in user name. (for now, testing with random strings).
-replicaSetsMap is a mapping of replicaSetID -> replicaSet
+userReplicasMap is a mapping of userId \ding{213} Array of replicaSetIDs. UserID could be the logged in user name. (for now, testing with random strings).
+replicaSetsMap is a mapping of replicaSetID \ding{213} replicaSet.
 
-Though this could be replaced with a single cache instance with the mapping of userID -> replicaSets, having two cache instances will be more efficient during searches, duplicates, and push changes. Hence, two cache instances design was chosen.
+Though this could be replaced with a single cache instance with the mapping of userID \ding{213} replicaSets, having two cache instances will be more efficient during searches, duplicates, and push changes. Hence, two cache instances design was chosen.
 
 $InfDataAccessIntegration$ provides the API for publisher/consumer, $TCIAInvoker$ which extends the abstract class InterfaceManager, implements the TCIA integration to invoke these methods. Figure~\ref{fig:class} provides a core class hierarchy of the system.
 \begin{figure}[ht]
@@ -133,6 +134,18 @@ Here, query is something like, "getSeries?format=" + format +
                 "&Modality=" + modality;
 \end{lstlisting}  
 When a new instance starts now, and invokes the log in action for the same user, it will execute the queries for the stored replicaSets again, and reproduce the same results.
+
+Figure~\ref{fig:methods} depict the methods that retrieve image and metadata at different granularity from TCIA.
+\begin{figure}[ht]
+\begin{center}
+ \resizebox{\columnwidth}{!}{
+  \includegraphics[width=\textwidth]{methods.png}
+ }
+\end{center}
+ \caption{Retrieving images and meta data}
+ \label{fig:methods}
+\end{figure}
+
 \section{Evaluation}
 \section{Conclusion}
 \balance
