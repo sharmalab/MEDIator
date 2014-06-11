@@ -127,7 +127,11 @@ TCIAConstants.IMAGE_TAG + "getImage?SeriesInstanceUID=" + seriesInstanceUID
 For other information (meta data), such as collections and seies,
 \begin{lstlisting}  
 TCIAConstants.META_TAG + query;
-Here, query is something like, "getSeries?format=" + format +
+\end{lstlisting}  
+
+Here, query takes the below format. 
+\begin{lstlisting}  
+"getSeries?format=" + format +
                 "&Collection=" + collection +
                 "&PatientID=" + patientID +
                 "&StudyInstanceUID=" + studyInstanceUID +
