@@ -25,6 +25,8 @@ public class InfDataAccessIntegration {
     protected static Cache<Long, String> replicaSetsMap;
     protected static Cache<String, Long[]> userReplicasMap;
 
+    protected DefaultCacheManager manager;
+
     private static Logger logger = LogManager.getLogger(InfDataAccessIntegration.class.getName());
 
 
@@ -34,7 +36,7 @@ public class InfDataAccessIntegration {
      * @throws IOException, if getting the cache failed.
      */
     protected InfDataAccessIntegration() throws IOException {
-        DefaultCacheManager manager = new DefaultCacheManager(InfConstants.INFINISPAN_CONFIG_FILE);
+        manager = new DefaultCacheManager(InfConstants.INFINISPAN_CONFIG_FILE);
         replicaSetsMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
         userReplicasMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
         logger.info("Initialized the Infinispan Cache for the Data Replication Tool..");
