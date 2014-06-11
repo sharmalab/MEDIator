@@ -8,7 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import edu.emory.bmi.datarepl.core.TCIAConstants;
+import edu.emory.bmi.datarepl.constants.TCIAConstants;
 import edu.emory.bmi.datarepl.tcia_rest_api.ITCIAClient;
 import edu.emory.bmi.datarepl.tcia_rest_api.OutputFormat;
 import edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException;

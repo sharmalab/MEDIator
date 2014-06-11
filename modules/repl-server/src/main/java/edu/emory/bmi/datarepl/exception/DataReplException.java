@@ -6,7 +6,7 @@
  * Copyright (c) 2014, Pradeeban Kathiravelu <pradeeban.kathiravelu@tecnico.ulisboa.pt>
  */
 
-package edu.emory.bmi.datarepl.core;
+package edu.emory.bmi.datarepl.exception;
 
 /**
  * DataReplication Tool general Exception

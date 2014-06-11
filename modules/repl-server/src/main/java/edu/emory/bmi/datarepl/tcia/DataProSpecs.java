@@ -1,7 +1,7 @@
 package edu.emory.bmi.datarepl.tcia;
 
-import edu.emory.bmi.datarepl.infinispan.InfConstants;
-import edu.emory.bmi.datarepl.infinispan.InfDataAccessIntegration;
+import edu.emory.bmi.datarepl.constants.InfConstants;
+import edu.emory.bmi.datarepl.core.InfDataAccessIntegration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.infinispan.Cache;
@@ -12,11 +12,11 @@ import java.util.UUID;
 /**
  * Extending DataAccessIntegration for Tcia.
  */
-public class TciaInfDAI extends InfDataAccessIntegration {
+public class DataProSpecs extends InfDataAccessIntegration {
 
-    private static TciaInfDAI infDataAccessIntegration = null;
+    private static DataProSpecs infDataAccessIntegration = null;
 
-    private static Logger logger = LogManager.getLogger(TciaInfDAI.class.getName());
+    private static Logger logger = LogManager.getLogger(DataProSpecs.class.getName());
 
     protected static Cache<Long, Boolean[]> tciaMetaMap;
     protected static Cache<Long, String[]> collectionsMap;
@@ -29,7 +29,7 @@ public class TciaInfDAI extends InfDataAccessIntegration {
      *
      * @throws java.io.IOException, if getting the cache failed.
      */
-    protected TciaInfDAI() throws IOException {
+    protected DataProSpecs() throws IOException {
         super();
         tciaMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
         collectionsMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
@@ -46,7 +46,7 @@ public class TciaInfDAI extends InfDataAccessIntegration {
     public static InfDataAccessIntegration getInfiniCore() {
         if (infDataAccessIntegration == null) {
             try {
-                infDataAccessIntegration = new TciaInfDAI();
+                infDataAccessIntegration = new DataProSpecs();
             } catch (IOException e) {
                 logger.error("Exception when trying to initialize Infinispan.", e);
             }
@@ -64,7 +64,7 @@ public class TciaInfDAI extends InfDataAccessIntegration {
      * @param studyInstanceUID  String[]
      * @param seriesInstanceUID String[]
      */
-    public static void createReplicaSet(String userId, String[] collection, String[] patientID,
+    public void createReplicaSet(String userId, String[] collection, String[] patientID,
                                         String[] studyInstanceUID, String[] seriesInstanceUID) {
         long replicaSetId = UUID.randomUUID().getLeastSignificantBits();
 
@@ -89,7 +89,7 @@ public class TciaInfDAI extends InfDataAccessIntegration {
      * @param metadata,     boolean array of meta data
      * @return replicaSetId: Long
      */
-    public static long putReplicaSet(long replicaSetId, Boolean[] metadata) {
+    public long putReplicaSet(long replicaSetId, Boolean[] metadata) {
         tciaMetaMap.put(replicaSetId, metadata);
         return replicaSetId;
     }
@@ -101,7 +101,7 @@ public class TciaInfDAI extends InfDataAccessIntegration {
      * @param metadata,     boolean array of meta data
      * @return replicaSetId: Long
      */
-    public static long putCollectionSet(long replicaSetId, String[] metadata) {
+    public long putCollectionSet(long replicaSetId, String[] metadata) {
         collectionsMap.put(replicaSetId, metadata);
         return replicaSetId;
     }
@@ -113,7 +113,7 @@ public class TciaInfDAI extends InfDataAccessIntegration {
      * @param metadata,     boolean array of meta data
      * @return replicaSetId: Long
      */
-    public static long putPatientSet(long replicaSetId, String[] metadata) {
+    public long putPatientSet(long replicaSetId, String[] metadata) {
         patientsMap.put(replicaSetId, metadata);
         return replicaSetId;
     }
@@ -125,7 +125,7 @@ public class TciaInfDAI extends InfDataAccessIntegration {
      * @param metadata,     boolean array of meta data
      * @return replicaSetId: Long
      */
-    public static long putStudiesSet(long replicaSetId, String[] metadata) {
+    public long putStudiesSet(long replicaSetId, String[] metadata) {
         studiesMap.put(replicaSetId, metadata);
         return replicaSetId;
     }
@@ -137,7 +137,7 @@ public class TciaInfDAI extends InfDataAccessIntegration {
      * @param metadata,     boolean array of meta data
      * @return replicaSetId: Long
      */
-    public static long putSeriesSet(long replicaSetId, String[] metadata) {
+    public long putSeriesSet(long replicaSetId, String[] metadata) {
         seriesMap.put(replicaSetId, metadata);
         return replicaSetId;
     }
@@ -148,7 +148,7 @@ public class TciaInfDAI extends InfDataAccessIntegration {
      * @param replicaSetId, long
      * @return replicaSet:String
      */
-    public static Boolean[] getMetaMap(long replicaSetId) {
+    public Boolean[] getMetaMap(long replicaSetId) {
         return tciaMetaMap.get(replicaSetId);
     }
 
@@ -158,7 +158,7 @@ public class TciaInfDAI extends InfDataAccessIntegration {
      * @param replicaSetId, long
      * @return replicaSet:String
      */
-    public static String[] getCollectionsSet(long replicaSetId) {
+    public String[] getCollectionsSet(long replicaSetId) {
         return collectionsMap.get(replicaSetId);
     }
 
@@ -168,7 +168,7 @@ public class TciaInfDAI extends InfDataAccessIntegration {
      * @param replicaSetId, long
      * @return replicaSet:String
      */
-    public static String[] getPatientsSet(long replicaSetId) {
+    public String[] getPatientsSet(long replicaSetId) {
         return patientsMap.get(replicaSetId);
     }
 
@@ -178,7 +178,7 @@ public class TciaInfDAI extends InfDataAccessIntegration {
      * @param replicaSetId, long
      * @return replicaSet:String
      */
-    public static String[] getStudiesSet(long replicaSetId) {
+    public String[] getStudiesSet(long replicaSetId) {
         return studiesMap.get(replicaSetId);
     }
 
@@ -188,7 +188,7 @@ public class TciaInfDAI extends InfDataAccessIntegration {
      * @param replicaSetId, long
      * @return replicaSet:String
      */
-    public static String[] getSeriesSet(long replicaSetId) {
+    public String[] getSeriesSet(long replicaSetId) {
         return seriesMap.get(replicaSetId);
     }
 
@@ -198,7 +198,8 @@ public class TciaInfDAI extends InfDataAccessIntegration {
      * @param replicaSetId the id of the replica to be evicted.
      * @return true, if evicted now. False, if not available.
      */
-    public static boolean deleteReplicaSet(long replicaSetId) {
+    @Override
+    public boolean deleteReplicaSet(long replicaSetId) {
         if (tciaMetaMap.get(replicaSetId) == null) {
             return false;
         } else {
@@ -221,7 +222,7 @@ public class TciaInfDAI extends InfDataAccessIntegration {
      * @param seriesInstanceUID String[]
      * @return the updated replica set.
      */
-    public static Boolean[] pushChangesToReplicaSet(long replicaSetId, String[] collection, String[] patientID,
+    public Boolean[] pushChangesToReplicaSet(long replicaSetId, String[] collection, String[] patientID,
                                                  String[] studyInstanceUID, String[] seriesInstanceUID) {
         Boolean[] metaMap = new Boolean[4];
         metaMap[0] = collection != null;
@@ -245,7 +246,8 @@ public class TciaInfDAI extends InfDataAccessIntegration {
      * @param userId       the user who is duplicating the replica.
      * @return the id of the duplicate replica set.
      */
-    public static long duplicateReplicaSet(long replicaSetId, String userId) {
+    @Override
+    public long duplicateReplicaSet(long replicaSetId, String userId) {
         long duplicateReplicaSetId = UUID.randomUUID().getLeastSignificantBits();
         Boolean[] replicaSet = getMetaMap(replicaSetId);
         tciaMetaMap.put(duplicateReplicaSetId, replicaSet);
@@ -256,6 +258,4 @@ public class TciaInfDAI extends InfDataAccessIntegration {
         seriesMap.put(duplicateReplicaSetId, getSeriesSet(replicaSetId));
         return duplicateReplicaSetId;
     }
-
-
 }

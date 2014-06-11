@@ -6,12 +6,12 @@
  * Copyright (c) 2014, Pradeeban Kathiravelu <pradeeban.kathiravelu@tecnico.ulisboa.pt>
  */
 
-package edu.emory.bmi.datarepl.core;
+package edu.emory.bmi.datarepl.ui;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import edu.emory.bmi.datarepl.infinispan.InfDataAccessIntegration;
-import edu.emory.bmi.datarepl.mashape.TciaInvoker;
+import edu.emory.bmi.datarepl.core.InfDataAccessIntegration;
+import edu.emory.bmi.datarepl.interfacing.TciaInvoker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

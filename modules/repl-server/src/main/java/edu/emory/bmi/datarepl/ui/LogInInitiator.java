@@ -6,11 +6,12 @@
  * Copyright (c) 2014, Pradeeban Kathiravelu <pradeeban.kathiravelu@tecnico.ulisboa.pt>
  */
 
-package edu.emory.bmi.datarepl.core;
+package edu.emory.bmi.datarepl.ui;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
-import edu.emory.bmi.datarepl.infinispan.InfDataAccessIntegration;
-import edu.emory.bmi.datarepl.mashape.TciaInvoker;
+import edu.emory.bmi.datarepl.exception.DataReplException;
+import edu.emory.bmi.datarepl.core.InfDataAccessIntegration;
+import edu.emory.bmi.datarepl.interfacing.TciaInvoker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,14 +26,15 @@ public class LogInInitiator {
      * @param userId Id of the user.
      */
     public void login(String userId) {
+        InfDataAccessIntegration infDataAccessIntegration = InfDataAccessIntegration.getInfiniCore();
         tciaInvoker = new TciaInvoker(userId);
 
-        Long[] replicaSetIDs = InfDataAccessIntegration.getUserReplicaSets(userId);
+        Long[] replicaSetIDs = infDataAccessIntegration.getUserReplicaSets(userId);
 
         //currently getting all the replicaSets.
         if (replicaSetIDs != null) {
             for (Long aReplicaSetID : replicaSetIDs) {
-                search(InfDataAccessIntegration.getReplicaSet(aReplicaSetID));
+                search(infDataAccessIntegration.getReplicaSet(aReplicaSetID));
             }
         }
     }

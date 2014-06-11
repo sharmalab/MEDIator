@@ -6,7 +6,7 @@
  * Copyright (c) 2014, Pradeeban Kathiravelu <pradeeban.kathiravelu@tecnico.ulisboa.pt>
  */
 
-package edu.emory.bmi.datarepl.mashape;
+package edu.emory.bmi.datarepl.interfacing;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

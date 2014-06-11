@@ -8,11 +8,10 @@
  * Copyright (c) 2014, Pradeeban Kathiravelu <pradeeban.kathiravelu@tecnico.ulisboa.pt>
  */
 
-package edu.emory.bmi.datarepl.infinispan;
+package edu.emory.bmi.datarepl.core;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.infinispan.Cache;
 
 public class Initiator {
     private static Logger logger = LogManager.getLogger(Initiator.class.getName());

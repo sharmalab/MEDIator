@@ -6,7 +6,7 @@
  * Copyright (c) 2014, Pradeeban Kathiravelu <pradeeban.kathiravelu@tecnico.ulisboa.pt>
  */
 
-package edu.emory.bmi.datarepl.infinispan;
+package edu.emory.bmi.datarepl.core;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +20,7 @@ import java.util.UUID;
 /**
  * The core class of Infinispan data access integration - Publisher/Consumer API.
  */
-public class InfDataAccessIntegration {
+public class InfDataAccessIntegration implements PubConsAPI {
     private static InfDataAccessIntegration infDataAccessIntegration = null;
     protected static Cache<Long, String> replicaSetsMap;
     protected static Cache<String, Long[]> userReplicasMap;
@@ -36,9 +36,9 @@ public class InfDataAccessIntegration {
      * @throws IOException, if getting the cache failed.
      */
     protected InfDataAccessIntegration() throws IOException {
-        manager = new DefaultCacheManager(InfConstants.INFINISPAN_CONFIG_FILE);
-        replicaSetsMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
-        userReplicasMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
+        manager = new DefaultCacheManager(edu.emory.bmi.datarepl.constants.InfConstants.INFINISPAN_CONFIG_FILE);
+        replicaSetsMap = manager.getCache(edu.emory.bmi.datarepl.constants.InfConstants.TRANSACTIONAL_CACHE);
+        userReplicasMap = manager.getCache(edu.emory.bmi.datarepl.constants.InfConstants.TRANSACTIONAL_CACHE);
         logger.info("Initialized the Infinispan Cache for the Data Replication Tool..");
     }
 
@@ -61,7 +61,7 @@ public class InfDataAccessIntegration {
      *
      * @return the replica sets map
      */
-    public static Cache<Long, String> getReplicaSetsMap() {
+    public Cache<Long, String> getReplicaSetsMap() {
         return replicaSetsMap;
     }
 
@@ -70,7 +70,7 @@ public class InfDataAccessIntegration {
      *
      * @return the user replicas map
      */
-    public static Cache<String, Long[]> getUserReplicasMap() {
+    public Cache<String, Long[]> getUserReplicasMap() {
         return userReplicasMap;
     }
 
@@ -80,7 +80,8 @@ public class InfDataAccessIntegration {
      * @param replicaSet the replica set
      * @return replicaSetId
      */
-    public static long createReplicaSet(String userId, String replicaSet) {
+    @Override
+    public long createReplicaSet(String userId, String replicaSet) {
         long replicaSetId = UUID.randomUUID().getLeastSignificantBits();
         putReplicaSet(replicaSetId, replicaSet);
         addToUserReplicasMap(userId, replicaSetId);
@@ -92,7 +93,7 @@ public class InfDataAccessIntegration {
      * @param userId the user that the replicaSet is associated with
      * @param replicaSet the array of replica sets
      */
-    public static void createMultipleReplicaSets(String userId, String[] replicaSet) {
+    public void createMultipleReplicaSets(String userId, String[] replicaSet) {
         for (String aReplicaSet : replicaSet) {
             long replicaSetId = UUID.randomUUID().getLeastSignificantBits();
             putReplicaSet(replicaSetId, aReplicaSet);
@@ -105,7 +106,7 @@ public class InfDataAccessIntegration {
      * @param userId Id of the user
      * @param repicaSetId new replicaSetIds to be added
      */
-    public static void addToUserReplicasMap(String userId, long repicaSetId) {
+    public void addToUserReplicasMap(String userId, long repicaSetId) {
         Long replicaSetIDs[];
         if (userReplicasMap.get(userId) != null) {
             replicaSetIDs = Arrays.copyOf(userReplicasMap.get(userId), userReplicasMap.get(userId).length + 1);
@@ -125,7 +126,8 @@ public class InfDataAccessIntegration {
      * @param replicaSet, the query that to be stored
      * @return replicaSetId: Long
      */
-    public static long putReplicaSet(long replicaSetId, String replicaSet) {
+    @Override
+    public long putReplicaSet(long replicaSetId, String replicaSet) {
         replicaSetsMap.put(replicaSetId, replicaSet);
         return replicaSetId;
     }
@@ -136,7 +138,7 @@ public class InfDataAccessIntegration {
      * @param userId, String
      * @return userReplicas: Long[]
      */
-    public static Long[] getUserReplicaSets(String userId) {
+    public Long[] getUserReplicaSets(String userId) {
         return userReplicasMap.get(userId);
     }
 
@@ -146,7 +148,8 @@ public class InfDataAccessIntegration {
      * @param replicaSetId, long
      * @return replicaSet:String
      */
-    public static String getReplicaSet(long replicaSetId) {
+    @Override
+    public String getReplicaSet(long replicaSetId) {
         return replicaSetsMap.get(replicaSetId);
     }
 
@@ -155,7 +158,8 @@ public class InfDataAccessIntegration {
      * @param replicaSetId the id of the replica to be evicted.
      * @return true, if evicted now. False, if not available.
      */
-    public static boolean deleteReplicaSet(long replicaSetId) {
+    @Override
+    public boolean deleteReplicaSet(long replicaSetId) {
         if (replicaSetsMap.get(replicaSetId) == null) {
             return false;
         } else {
@@ -170,7 +174,8 @@ public class InfDataAccessIntegration {
      * @param newReplicaSet, the new replicaSet.
      * @return the updated replica set.
      */
-    public static String pushChangesToReplicaSet(long replicaSetId, String newReplicaSet) {
+    @Override
+    public String pushChangesToReplicaSet(long replicaSetId, String newReplicaSet) {
         replicaSetsMap.put(replicaSetId, newReplicaSet); //TODO: this could be adding some changes. Not merely replacing.
         return newReplicaSet;
     }
@@ -182,7 +187,8 @@ public class InfDataAccessIntegration {
      * @param userId the user who is duplicating the replica.
      * @return the id of the duplicate replica set.
      */
-    public static long duplicateReplicaSet(long replicaSetId, String userId) {
+    @Override
+    public long duplicateReplicaSet(long replicaSetId, String userId) {
         long duplicateReplicaSetId = UUID.randomUUID().getLeastSignificantBits();
         String replicaSet = getReplicaSet(replicaSetId);
         replicaSetsMap.put(duplicateReplicaSetId, replicaSet);

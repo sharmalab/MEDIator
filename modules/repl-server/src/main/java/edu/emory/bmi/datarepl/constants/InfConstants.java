@@ -6,7 +6,7 @@
  * Copyright (c) 2014, Pradeeban Kathiravelu <pradeeban.kathiravelu@tecnico.ulisboa.pt>
  */
 
-package edu.emory.bmi.datarepl.infinispan;
+package edu.emory.bmi.datarepl.constants;
 
 /**
  * Constants specific to Infinispan In-Memory Data Grid Integration.
