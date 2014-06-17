@@ -21,12 +21,15 @@ import org.apache.logging.log4j.Logger;
 public class LogInInitiator {
     private static Logger logger = LogManager.getLogger(LogInInitiator.class.getName());
     private TciaInvoker tciaInvoker;
+    private InfDataAccessIntegration infDataAccessIntegration;
+
     /**
      * When the user logs in, retrieve the stored replica sets
+     *
      * @param userId Id of the user.
      */
     public void login(String userId) {
-        InfDataAccessIntegration infDataAccessIntegration = InfDataAccessIntegration.getInfiniCore();
+        infDataAccessIntegration = InfDataAccessIntegration.getInfiniCore();
         tciaInvoker = new TciaInvoker(userId);
 
         Long[] replicaSetIDs = infDataAccessIntegration.getUserReplicaSets(userId);
@@ -39,8 +42,9 @@ public class LogInInitiator {
         }
     }
 
-     /**
+    /**
      * For the initial search. Search and store the replicaSet.
+     *
      * @param replicaSet the user query.
      */
     public void search(String replicaSet) {
