@@ -36,6 +36,7 @@
 \else
 \fi
 
+
 \addtolength{\textwidth}{2mm}
 \hyphenation{op-tical net-works semi-conduc-tor}
 
@@ -56,15 +57,17 @@ Email: ashish.sharma@emory.edu}}
 \maketitle
 
 \begin{abstract}
-Consumers download the data by searching the image repository using the browser. The information that the consumer is interested in, gets updated whenever the data producers update or add patient information. The current download tool lacks the ability to track the relevant updates to the consumer. A data replication and synchronization tool will assist automated downloads to the consumers.
+Consumers download the data by searching the image repository using the browser. The information that the consumer is interested in, gets updated whenever the data producers update or add patient information. The current download tool lacks the ability to track the relevant updates to the consumer. A data replication and synchronization tool will assist automated downloads to the consumers. Users can create replica sets as a sub set of their search queries, and share their replica sets with other users, and update their replica sets periodically. Replica sets can be used as a way of tracking and sharing information. This project exploits this model to create a data replication and synchronization tool for data sources. As a proof of concept, a data replication and synchronization tool has been implemented for The Cancer Imaging Archive (TCIA).
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
 
 \section{Introduction}
 \section{Background}
+\balance
+\subsection{Representation of Medical Images in TCIA}
 Medical images are represented in multiple granularity. Figure~\ref{fig:granularity} represents how the images are structured hierarchically in TCIA.
-\begin{figure}[ht]
+\begin{figure}[!htbp]
 \begin{center}
  \resizebox{\columnwidth}{!}{
   \includegraphics[width=\textwidth]{tcia.png}
@@ -75,9 +78,9 @@ Medical images are represented in multiple granularity. Figure~\ref{fig:granular
 \end{figure}
 
 \section{Design and Implementation}
-\subsection{Deployment}
+\balance
 Having multiple instances running over different nodes provide fault-tolerance, as when one node terminates, the other nodes have the backup replica of the partitions stored in the terminated node. Figure~\ref{fig:deployment} shows the higher level deployment view of the solution.
-\begin{figure}[ht]
+\begin{figure}[!htbp]
 \begin{center}
  \resizebox{0.6\columnwidth}{!}{
   \includegraphics[width=0.6\textwidth]{deployment.png}
@@ -87,7 +90,7 @@ Having multiple instances running over different nodes provide fault-tolerance, 
  \label{fig:deployment}
 \end{figure}
 
-\subsection{Design}
+\subsection{Generic Design}
 Two distributed cache instances exist in InfDataAccessIntegration.
 \begin{lstlisting}  
     protected static Cache userReplicasMap;
@@ -98,20 +101,8 @@ replicaSetsMap is a mapping of replicaSetID \ding{213} replicaSet.
 
 Though this could be replaced with a single cache instance with the mapping of userID \ding{213} replicaSets, having two cache instances will be more efficient during searches, duplicates, and push changes. Hence, two cache instances design was chosen.
 
-$InfDataAccessIntegration$ provides the API for publisher/consumer, $TCIAInvoker$ which extends the abstract class InterfaceManager, implements the TCIA integration to invoke these methods. Figure~\ref{fig:class} provides a core class hierarchy of the system.
-\begin{figure}[ht]
-\begin{center}
- \resizebox{0.6\columnwidth}{!}{
-  \includegraphics[width=0.6\textwidth]{classDiagram.png}
- }
-\end{center}
- \caption{Core Class Hierarchy}
- \label{fig:class}
-\end{figure}
-
-\subsection{Execution Flow}
-The execution flow is depicted by Figure~\ref{fig:execution}. When the user logs in, $logIn()$ checks whether the user has already stored replicaSets from the Infinispan distributed Cache. If so, execute them all again. This would be changed later as we do not have to execute all. Rather, we need to execute for the diffs. When the user performs new searches, for the images, series, collections, and the other meta data, the results will be returned to the user, and the user can chose ta subset of the returned results to create a replicaSet.
-\begin{figure}[ht]
+$InfDataAccessIntegration$ provides the API for publisher/consumer, Invoker classes extending the abstract class InterfaceManager, implement the respective data source integration to invoke these methods. The execution flow is depicted by Figure~\ref{fig:execution}. When the user logs in, $logIn()$ checks whether the user has already stored replicaSets from the Infinispan distributed Cache. If so, execute them all again. This would be changed later as we do not have to execute all. Rather, we need to execute for the diffs. When the user performs new searches, for the images, series, collections, and the other meta data, the results will be returned to the user, and the user can chose ta subset of the returned results to create a replicaSet.
+\begin{figure}[!htbp]
 \begin{center}
  \resizebox{\columnwidth}{!}{
   \includegraphics[width=\textwidth]{execFlow.png}
@@ -139,8 +130,43 @@ Here, query takes the below format.
 \end{lstlisting}  
 When a new instance starts now, and invokes the log in action for the same user, it will execute the queries for the stored replicaSets again, and reproduce the same results.
 
-Figure~\ref{fig:methods} depict the methods that retrieve image and metadata at different granularity from TCIA.
-\begin{figure}[ht]
+\subsection{Design and Implementation for TCIA}
+Different complex data sources require custom development extending the generic framework. As creating and customizing the replicaSet require a more specific data structure, further implementations are done, extending the core class hierarchy. An extension based on the base design was developed for TCIA, as shown by Figure~\ref{fig:class}, which provides a core class hierarchy of the system.
+\begin{figure}[!htbp]
+\begin{center}
+ \resizebox{0.6\columnwidth}{!}{
+  \includegraphics[width=0.6\textwidth]{classDiagram.png}
+ }
+\end{center}
+ \caption{Core Class Hierarchy}
+ \label{fig:class}
+\end{figure}
+
+Meta data such as collections, patients, studies, and series are retrieved at different levels, though the default download manager of TCIA downloads the data in series level, composed of the images of the series in a single zip archive. While having the default userReplicasMap to contain the IDs of the replica sets for each user, the replica set itself is stored in multiple maps instead of a single replicaSets map, to provide an efficient storage and access.
+
+$DataProSpecs$ extends the $InfDataAccessIntegration$ class. 5 maps are created as below to represent the replica sets.
+\begin{lstlisting}  
+    protected static Cache<Long, Boolean[]> tciaMetaMap;
+    protected static Cache<Long, String[]> collectionsMap;
+    protected static Cache<Long, String[]> patientsMap;
+    protected static Cache<Long, String[]> studiesMap;
+    protected static Cache<Long, String[]> seriesMap;
+\end{lstlisting} 
+
+$tciaMetaMap$ contains a boolean array, which reflects which of the granularity of meta data is selected as a whole. For TCIA, if a few collections are selected, the first element of the array is set to true, and similarly, the other meta data are marked to true or false as shown by the below code segment.
+\begin{lstlisting}  
+        Boolean[] metaMap = new Boolean[4];
+        metaMap[0] = collection != null;
+        metaMap[1] = patientID != null;
+        metaMap[2] = studyInstanceUID != null;
+        metaMap[3] = seriesInstanceUID != null;
+
+        putReplicaSet(replicaSetId, metaMap);
+\end{lstlisting} 
+The name of the collections, patientID, studyInstanceUID, and seriesInstanceUID are stored against the respective replicaSetID in collectionsMap, patientsMap, studiesMap, and seriesMap respectively. Hence changes are done at the respective maps. Duplicating the replicaSets duplicate the contents of the entire row to a new replicaSetID. Similarly, deleting a replicaSet deletes the respective information from all the maps.
+
+TCIA public API provides methods to retrieve the images and meta data of different granularity. Figure~\ref{fig:methods} depict the methods that retrieve image and metadata at different granularity from TCIA. These methods are invoked by the replication manager tool to retrieve the images.
+\begin{figure}[htbp]
 \begin{center}
  \resizebox{\columnwidth}{!}{
   \includegraphics[width=\textwidth]{methods.png}
@@ -150,6 +176,7 @@ Figure~\ref{fig:methods} depict the methods that retrieve image and metadata at 
  \label{fig:methods}
 \end{figure}
 
+
 \section{Evaluation}
 \section{Conclusion}
 \balance
@@ -158,3 +185,5 @@ Figure~\ref{fig:methods} depict the methods that retrieve image and metadata at 
 %\end{thebibliography}
 
 \end{document}
+
+
