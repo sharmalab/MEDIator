@@ -15,7 +15,7 @@
           <th>Model</th>
           <th>StudyInstanceUID</th>
           <th>SeriesInstanceUID</th>
-          <th>SeriesInstanceUID</th>
+          <th>Description</th>
           <th>Image Count</th>
           <th>Series Date</th>
           <th>Manufacturer</th>
@@ -33,7 +33,7 @@
             <TD>$series.ManufacturerModelName</TD>
             <TD>$series.StudyInstanceUID</TD>
             <TD>$series.SeriesInstanceUID</TD>
-            <TD>$series.SeriesInstanceUID</TD>
+            <TD>$series.SeriesDescription</TD>
             <TD>$series.ImageCount</TD>
             <TD>$series.SeriesDate</TD>
             <TD>$series.Manufacturer</TD>
