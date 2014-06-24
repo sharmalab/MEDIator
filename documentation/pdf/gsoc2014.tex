@@ -101,7 +101,7 @@ replicaSetsMap is a mapping of replicaSetID \ding{213} replicaSet.
 
 Though this could be replaced with a single cache instance with the mapping of userID \ding{213} replicaSets, having two cache instances will be more efficient during searches, duplicates, and push changes. Hence, two cache instances design was chosen.
 
-$InfDataAccessIntegration$ provides the API for publisher/consumer, Invoker classes extending the abstract class InterfaceManager, implement the respective data source integration to invoke these methods. The execution flow is depicted by Figure~\ref{fig:execution}. When the user logs in, $logIn()$ checks whether the user has already stored replicaSets from the Infinispan distributed Cache. If so, execute them all again. This would be changed later as we do not have to execute all. Rather, we need to execute for the diffs. When the user performs new searches, for the images, series, collections, and the other meta data, the results will be returned to the user, and the user can chose ta subset of the returned results to create a replicaSet.
+$InfDataAccessIntegration$ implements the PubConsAPI for publisher/consumer, where $InterfaceManager$ implements the $InterfaceAPI$ for the interface between the data source and the data replication and synchronization tool. Invoker classes extending the abstract class InterfaceManager, implement the respective data source integration to invoke these methods. The execution flow is depicted by Figure~\ref{fig:execution}. When the user logs in, $logIn()$ checks whether the user has already stored replicaSets from the Infinispan distributed Cache. If so, execute them all again. This would be changed later as we do not have to execute all. Rather, we need to execute for the diffs. When the user performs new searches, for the images, series, collections, and the other meta data, the results will be returned to the user, and the user can chose ta subset of the returned results to create a replicaSet.
 \begin{figure}[!htbp]
 \begin{center}
  \resizebox{\columnwidth}{!}{
@@ -134,15 +134,15 @@ When a new instance starts now, and invokes the log in action for the same user,
 Different complex data sources require custom development extending the generic framework. As creating and customizing the replicaSet require a more specific data structure, further implementations are done, extending the core class hierarchy. An extension based on the base design was developed for TCIA, as shown by Figure~\ref{fig:class}, which provides a core class hierarchy of the system.
 \begin{figure}[!htbp]
 \begin{center}
- \resizebox{0.6\columnwidth}{!}{
-  \includegraphics[width=0.6\textwidth]{classDiagram.png}
+ \resizebox{0.8\columnwidth}{!}{
+  \includegraphics[width=0.8\textwidth]{classDiagram.png}
  }
 \end{center}
  \caption{Core Class Hierarchy}
  \label{fig:class}
 \end{figure}
 
-Meta data such as collections, patients, studies, and series are retrieved at different levels, though the default download manager of TCIA downloads the data in series level, composed of the images of the series in a single zip archive. While having the default userReplicasMap to contain the IDs of the replica sets for each user, the replica set itself is stored in multiple maps instead of a single replicaSets map, to provide an efficient storage and access.
+$TciaInvoker$ extends $InterfaceManager$ to implement the interfacing layer between the TCIA data source and the data replication and synchronization tool. Meta data such as collections, patients, studies, and series are retrieved at different levels, though the default download manager of TCIA downloads the data in series level, composed of the images of the series in a single zip archive. While having the default userReplicasMap to contain the IDs of the replica sets for each user, the replica set itself is stored in multiple maps instead of a single replicaSets map, to provide an efficient storage and access.
 
 $DataProSpecs$ extends the $InfDataAccessIntegration$ class. 5 maps are created as below to represent the replica sets.
 \begin{lstlisting}  
@@ -176,6 +176,16 @@ TCIA public API provides methods to retrieve the images and meta data of differe
  \label{fig:methods}
 \end{figure}
 
+\paragraph*{User Interface} Apache Velocity is used to generate the web pages for the replication tool. $DataRetriever$ class is invoked to retrieve the meta data from TCIA and to create and retrieve replica sets. $UIGenerator$ class invokes the Apache Velocity templates to create the web pages, presenting the data to the users. $DataRetriever$ has instances of $TciaInvoker$ and $TciaLogInInitiator$ to invoke the TCIA queries and replication tool create and retrieve replicaSets mechanisms. $TciaLogInInitiator$ has instances of $TciaInvoker$ and $DataProSpecs$, to invoke the public APIs provided by these classes for the data provider specification and publisher/consumer APIs. Figure~\ref{fig:classUX} depicts the class hierarchy involved in the user interface.
+\begin{figure}[!htbp]
+\begin{center}
+ \resizebox{0.45\columnwidth}{!}{
+  \includegraphics[width=0.45\textwidth]{classUX.png}
+ }
+\end{center}
+ \caption{Class Hierarchy of the User Interface}
+ \label{fig:classUX}
+\end{figure}
 
 \section{Evaluation}
 \section{Conclusion}
