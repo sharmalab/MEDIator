@@ -36,8 +36,8 @@ public class DataRetrieverUI {
     private static Logger logger = LogManager.getLogger(DataRetrieverUI.class.getName());
 
     public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
-        VelocityEngine ve = new VelocityEngine();
-        ve.init();
+        VelocityEngine velocityEngine = new VelocityEngine();
+        velocityEngine.init();
 
         InfDataAccessIntegration.getInfiniCore();
 
@@ -50,7 +50,6 @@ public class DataRetrieverUI {
         HttpResponse response;
         try {
             response = tciaInvoker.getSeries("json", "TCGA-GBM", "TCGA-06-6701", null, null);
-            System.out.println(response.getBody().toString());
             JSONArray jsonMainArr = new JSONArray(response.getBody().toString());
 
             ArrayList list = new ArrayList();
@@ -62,10 +61,10 @@ public class DataRetrieverUI {
             VelocityContext context = new VelocityContext();
             context.put("seriesList", list);
 
-            Template t = ve.getTemplate("series.vm");
+            Template template = velocityEngine.getTemplate("series.vm");
             StringWriter writer = new StringWriter();
 
-            t.merge(context, writer);
+            template.merge(context, writer);
 
             PrintWriter printWriter = new PrintWriter("series.html", "UTF-8");
             printWriter.println(writer.toString());
