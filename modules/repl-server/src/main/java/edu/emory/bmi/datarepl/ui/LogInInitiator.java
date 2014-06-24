@@ -18,9 +18,9 @@ import org.apache.logging.log4j.Logger;
 /**
  * Initiates the replica sets upon log in and search queries - Interfacing Layer
  */
-public class LogInInitiator {
+public abstract class LogInInitiator {
     private static Logger logger = LogManager.getLogger(LogInInitiator.class.getName());
-    private TciaInvoker tciaInvoker;
+    protected TciaInvoker tciaInvoker;
     private InfDataAccessIntegration infDataAccessIntegration;
 
     /**

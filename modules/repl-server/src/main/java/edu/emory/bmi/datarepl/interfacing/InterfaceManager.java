@@ -22,7 +22,7 @@ import java.io.InputStream;
 /**
  * The abstract core class of the interface layer.
  */
-public abstract class InterfaceManager {
+public abstract class InterfaceManager implements InterfaceAPI{
     private static Logger logger = LogManager.getLogger(InterfaceManager.class.getName());
 
 

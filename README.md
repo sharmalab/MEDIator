@@ -31,3 +31,11 @@ $ java -classpath conf/log4j2-text.xml:lib/commons-codec-1.6.jar:lib/commons-log
 
 Make sure to include log4j2-test.xml into your class path to be able to view the logs.
 In an IDE, you may simply add the conf folder to the class path, or mark it as a source directory.
+
+## Dependencies
+----------------
+This project depends on the below major projects.
+* Infinispan
+* Mashape Unirest
+* Apache Velocity
+* Apache Log4j2

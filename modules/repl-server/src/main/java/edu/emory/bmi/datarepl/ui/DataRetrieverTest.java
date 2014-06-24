@@ -19,7 +19,6 @@ import org.apache.logging.log4j.Logger;
 /**
  * Sample Main class to test the implementation
  */
-@Deprecated
 public class DataRetrieverTest {
     private static Logger logger = LogManager.getLogger(DataRetrieverTest.class.getName());
 

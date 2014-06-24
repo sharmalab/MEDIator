@@ -42,8 +42,6 @@ public class TciaInvoker extends InterfaceManager {
         temp = TciaUtil.addParam(temp, TCIAConstants.FORMAT, iFormat);
         query += temp;
 
-//        InfDataAccessIntegration.createReplicaSet(userId, TCIAConstants.META_TAG + query);
-
         return Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).
                 header("X-Mashape-Authorization", TCIAConstants.MASHAPE_AUTHORIZATION).
                 header("api_key", TCIAConstants.API_KEY)
@@ -69,8 +67,6 @@ public class TciaInvoker extends InterfaceManager {
         temp = TciaUtil.addParam(temp, TCIAConstants.BODY_PART_EXAMINED, iBodyPartExamined);
         temp = TciaUtil.addParam(temp, TCIAConstants.MODALITY, iModality);
         query += temp;
-
-//        InfDataAccessIntegration.createReplicaSet(userId, TCIAConstants.META_TAG + query);
 
         return Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).
                 header("X-Mashape-Authorization", TCIAConstants.MASHAPE_AUTHORIZATION).
@@ -98,8 +94,6 @@ public class TciaInvoker extends InterfaceManager {
         temp = TciaUtil.addParam(temp, TCIAConstants.MODALITY, iModality);
         query += temp;
 
-//        InfDataAccessIntegration.createReplicaSet(userId, TCIAConstants.META_TAG + query);
-
         return Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).
                 header("X-Mashape-Authorization", TCIAConstants.MASHAPE_AUTHORIZATION).
                 header("api_key", TCIAConstants.API_KEY).
@@ -126,8 +120,6 @@ public class TciaInvoker extends InterfaceManager {
         temp = TciaUtil.addParam(temp, TCIAConstants.MODALITY, iModality);
         query += temp;
 
-//        InfDataAccessIntegration.createReplicaSet(userId, TCIAConstants.META_TAG + query);
-
         return Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).
                 header("X-Mashape-Authorization", TCIAConstants.MASHAPE_AUTHORIZATION).
                 header("api_key", TCIAConstants.API_KEY).
@@ -148,8 +140,6 @@ public class TciaInvoker extends InterfaceManager {
         temp = TciaUtil.addParam(temp, TCIAConstants.FORMAT, iFormat);
         temp = TciaUtil.addParam(temp, TCIAConstants.COLLECTION, iCollection);
         query += temp;
-
-//        InfDataAccessIntegration.createReplicaSet(userId, TCIAConstants.META_TAG + query);
 
         return Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).
                 header("X-Mashape-Authorization", TCIAConstants.MASHAPE_AUTHORIZATION).
@@ -176,8 +166,6 @@ public class TciaInvoker extends InterfaceManager {
         temp = TciaUtil.addParam(temp, TCIAConstants.PATIENT_ID, iPatientID);
         temp = TciaUtil.addParam(temp, TCIAConstants.STUDY_INSTANCE_UID, iStudyInstanceUID);
         query += temp;
-
-//        InfDataAccessIntegration.createReplicaSet(userId, TCIAConstants.META_TAG + query);
 
         return Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).
                 header("X-Mashape-Authorization", TCIAConstants.MASHAPE_AUTHORIZATION).
@@ -208,8 +196,6 @@ public class TciaInvoker extends InterfaceManager {
         temp = TciaUtil.addParam(temp, TCIAConstants.MODALITY, iModality);
         query += temp;
 
-//        InfDataAccessIntegration.createReplicaSet(userId, TCIAConstants.META_TAG + query);
-
         return Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).
                 header("X-Mashape-Authorization", TCIAConstants.MASHAPE_AUTHORIZATION).
                 header("api_key", TCIAConstants.API_KEY).
@@ -225,8 +211,6 @@ public class TciaInvoker extends InterfaceManager {
      */
     public HttpResponse getImage(String seriesInstanceUID) throws UnirestException {
         String query = "getImage?SeriesInstanceUID=" + seriesInstanceUID;
-
-//        InfDataAccessIntegration.createReplicaSet(userId, TCIAConstants.IMAGE_TAG + query);
 
         HttpResponse<InputStream> request = Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).
                 header("X-Mashape-Authorization", TCIAConstants.MASHAPE_AUTHORIZATION).

@@ -120,7 +120,7 @@ public class InfDataAccessIntegration implements PubConsAPI {
     }
 
     /**
-     * PUT /putReplicaSet
+     * PUT /putMetaMap
      *
      * @param replicaSetId, the id of the replica set.
      * @param replicaSet, the query that to be stored

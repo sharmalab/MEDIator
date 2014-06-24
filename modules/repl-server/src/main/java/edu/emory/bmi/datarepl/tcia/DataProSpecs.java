@@ -32,10 +32,10 @@ public class DataProSpecs extends InfDataAccessIntegration {
     protected DataProSpecs() throws IOException {
         super();
         tciaMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
-        collectionsMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
-        patientsMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
-        studiesMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
-        seriesMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
+        collectionsMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_COLLECTIONS);
+        patientsMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_PATIENTS);
+        studiesMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_STUDIES);
+        seriesMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_SERIES);
         logger.info("Initialized the Infinispan Cache for the TCIA Data Replication Tool..");
 
     }
@@ -74,28 +74,36 @@ public class DataProSpecs extends InfDataAccessIntegration {
         metaMap[2] = studyInstanceUID != null;
         metaMap[3] = seriesInstanceUID != null;
 
-        putReplicaSet(replicaSetId, metaMap);
-        putCollectionSet(replicaSetId, collection);
-        putPatientSet(replicaSetId, patientID);
-        putStudiesSet(replicaSetId, studyInstanceUID);
-        putSeriesSet(replicaSetId, seriesInstanceUID);
+        putMetaMap(replicaSetId, metaMap);
+        if (collection!=null) {
+            putCollectionSet(replicaSetId, collection);
+        }
+        if (patientID!= null) {
+            putPatientSet(replicaSetId, patientID);
+        }
+        if (studyInstanceUID!= null) {
+            putStudiesSet(replicaSetId, studyInstanceUID);
+        }
+        if (seriesInstanceUID!=null) {
+            putSeriesSet(replicaSetId, seriesInstanceUID);
+        }
         addToUserReplicasMap(userId, replicaSetId);
     }
 
     /**
-     * PUT /putReplicaSet
+     * PUT /putMetaMap
      *
      * @param replicaSetId, the id of the replica set.
      * @param metadata,     boolean array of meta data
      * @return replicaSetId: Long
      */
-    public long putReplicaSet(long replicaSetId, Boolean[] metadata) {
+    public long putMetaMap(long replicaSetId, Boolean[] metadata) {
         tciaMetaMap.put(replicaSetId, metadata);
         return replicaSetId;
     }
 
     /**
-     * PUT /putReplicaSet
+     * PUT /putMetaMap
      *
      * @param replicaSetId, the id of the replica set.
      * @param metadata,     boolean array of meta data
@@ -107,7 +115,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
     }
 
     /**
-     * PUT /putReplicaSet
+     * PUT /putMetaMap
      *
      * @param replicaSetId, the id of the replica set.
      * @param metadata,     boolean array of meta data
@@ -119,7 +127,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
     }
 
     /**
-     * PUT /putReplicaSet
+     * PUT /putMetaMap
      *
      * @param replicaSetId, the id of the replica set.
      * @param metadata,     boolean array of meta data
@@ -131,7 +139,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
     }
 
     /**
-     * PUT /putReplicaSet
+     * PUT /putMetaMap
      *
      * @param replicaSetId, the id of the replica set.
      * @param metadata,     boolean array of meta data
@@ -230,7 +238,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
         metaMap[2] = studyInstanceUID != null;
         metaMap[3] = seriesInstanceUID != null;
 
-        putReplicaSet(replicaSetId, metaMap);
+        putMetaMap(replicaSetId, metaMap);
         putCollectionSet(replicaSetId, collection);
         putPatientSet(replicaSetId, patientID);
         putStudiesSet(replicaSetId, studyInstanceUID);

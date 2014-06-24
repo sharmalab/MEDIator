@@ -1,19 +1,20 @@
+/*
+ * Title:        Data Replication Server
+ * Description:  Data Replication / Synchronization Tools.
+ * Licence:      Apache License Version 2.0 - http://www.apache.org/licenses/
+ *
+ * Copyright (c) 2014, Pradeeban Kathiravelu <pradeeban.kathiravelu@tecnico.ulisboa.pt>
+ */
+
 package edu.emory.bmi.datarepl.interfacing;
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import edu.emory.bmi.datarepl.exception.DataReplException;
+
 /**
- * API for Publish/Consume action
+ * API for Interface Layer
  */
 public interface InterfaceAPI {
-
-    public long createReplicaSet(String userId, String replicaSet);
-
-    public long putReplicaSet(long replicaSetId, String replicaSet);
-
-    public String getReplicaSet(long replicaSetId);
-
-    public String pushChangesToReplicaSet(long replicaSetId, String newReplicaSet);
-
-    public boolean deleteReplicaSet(long replicaSetId);
-
-    public long duplicateReplicaSet(long replicaSetId, String userId);
+    public HttpResponse retrieve(String replicaSet) throws UnirestException, DataReplException;
 }
