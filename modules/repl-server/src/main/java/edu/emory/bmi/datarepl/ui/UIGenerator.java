@@ -41,6 +41,25 @@ public class UIGenerator {
 
     /**
      * Prints the replicaSets into an HTML page
+     * @param replicaSetID replica Set ID
+     * @param collectionNames array of collection names
+     * @param patientIDs array of patient IDs
+     * @param studyInstanceUIDs array of study instance UIDs
+     * @param seriesInstanceUIDs array of series instance UIDs
+     */
+    public static void printReplicaSet(Long replicaSetID, String[] collectionNames, String[] patientIDs,
+                                       String[] studyInstanceUIDs, String[] seriesInstanceUIDs) {
+        context = new VelocityContext();
+        context.put("collectionList", collectionNames);
+        context.put("patientsList", patientIDs);
+        context.put("studiesList", studyInstanceUIDs);
+        context.put("seriesList", seriesInstanceUIDs);
+        context.put("title", "ReplicaSetID: " + replicaSetID.toString());
+        printToFile("replicaSet.vm", replicaSetID.toString());
+    }
+
+    /**
+     * Prints the replicaSets into an HTML page
      * @param replicaSetIDs an array of replicaSet IDs.
      */
     public static void printReplicaSetList(Long[] replicaSetIDs) {

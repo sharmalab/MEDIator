@@ -34,10 +34,10 @@ public class TciaLogInInitiator extends LogInInitiator {
         tciaInvoker = new TciaInvoker(userId);
 
         Long[] replicaSetIDs = dataProSpecs.getUserReplicaSets(userId);
-        String[] collectionNames;
-        String[] patientID;
-        String[] studyInstanceUID;
-        String[] seriesInstanceUID;
+        String[] collectionNames = {};
+        String[] patientIDs = {};
+        String[] studyInstanceUIDs = {};
+        String[] seriesInstanceUIDs = {};
 
         //currently getting all the replicaSets.
         if (replicaSetIDs != null) {
@@ -52,15 +52,16 @@ public class TciaLogInInitiator extends LogInInitiator {
                     collectionNames = dataProSpecs.getCollectionsSet(aReplicaSetID);
                 }
                 if (metaMap[1]) {
-                    patientID = dataProSpecs.getPatientsSet(aReplicaSetID);
+                    patientIDs = dataProSpecs.getPatientsSet(aReplicaSetID);
                 }
                 if (metaMap[2]) {
-                    studyInstanceUID = dataProSpecs.getStudiesSet(aReplicaSetID);
+                    studyInstanceUIDs = dataProSpecs.getStudiesSet(aReplicaSetID);
                 }
                 if (metaMap[3]) {
-                    seriesInstanceUID = dataProSpecs.getSeriesSet(aReplicaSetID);
+                    seriesInstanceUIDs = dataProSpecs.getSeriesSet(aReplicaSetID);
                 }
-                // TODO: FOREACH REPLICA SET: CREATE MULTIPLE PAGE 4.
+                UIGenerator.printReplicaSet(aReplicaSetID, collectionNames, patientIDs, studyInstanceUIDs,
+                        seriesInstanceUIDs);
             }
         }
     }
