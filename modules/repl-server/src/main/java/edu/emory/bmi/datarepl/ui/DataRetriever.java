@@ -47,6 +47,35 @@ public class DataRetriever {
             UIGenerator.printStudies(response);
             logger.info("\n\n[getPatientStudy]: " + response.getBody());
 
+            response = tciaInvoker.getCollectionValues("json");
+            logger.info("\n\n[getCollectionValues]: " + response.getBody());
+
+            response = tciaInvoker.getPatient("json", "TCGA-GBM");
+            logger.info("\n\n[getPatient]: " + response.getBody());
+
+            response = tciaInvoker.getPatientStudy("json", "TCGA-GBM", "TCGA-06-6701",
+                    "1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895");
+            logger.info("\n\n[getPatientStudy]: " + response.getBody());
+
+            response = tciaInvoker.getPatientStudy("json", "TCGA-GBM", "TCGA-06-6701", null);
+            logger.info("\n\n[getPatientStudy]: " + response.getBody());
+
+            response = tciaInvoker.getPatientStudy("json", "TCGA-GBM", null, null);
+            logger.info("\n\n[getPatientStudy]: " + response.getBody());
+
+            response = tciaInvoker.getSeries("json", "TCGA-GBM",
+                    "TCGA-06-6701","1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895", null);
+            logger.info("\n\n[getSeries]: " + response.getBody());
+
+            response = tciaInvoker.getBodyPartValues("json", null, null, "MR");
+            logger.info("\n\n[getBodyPartValues]: " + response.getBody());
+
+            response = tciaInvoker.getModalityValues("json", null, "BRAIN", "MR");
+            logger.info("\n\n[getModalityValues]: " + response.getBody());
+
+            response = tciaInvoker.getManufacturerValues("json", null, "BRAIN", "MR");
+            logger.info("\n\n[getManufacturerValues]: " + response.getBody());
+
         } catch (UnirestException e) {
             logger.error("Failed invoking the request", e);
         }
@@ -64,7 +93,9 @@ public class DataRetriever {
         String[] seriesInstanceUID_2 = {"1.3.6.1.4.1.14519.5.2.1.4591.4001.257366771253217605513205827698",
                 "1.3.6.1.4.1.14519.5.2.1.4591.4001.954200813327151024838841102184"};
 
-        dataProSpecs.createReplicaSet(userId, null, null, null, seriesInstanceUID_1);
+        String[] studyInstanceUID_1 = {"1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895"};
+
+        dataProSpecs.createReplicaSet(userId, null, null, studyInstanceUID_1, seriesInstanceUID_1);
         dataProSpecs.createReplicaSet(userId, null, null, null, seriesInstanceUID_2);
     }
 
