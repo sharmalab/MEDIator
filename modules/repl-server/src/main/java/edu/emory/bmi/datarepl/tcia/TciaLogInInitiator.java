@@ -27,15 +27,8 @@ public class TciaLogInInitiator extends LogInInitiator {
      */
     public void login(String userId) {
         dataProSpecs = (DataProSpecs) DataProSpecs.getInfiniCore();
-        String[] seriesInstanceUID_1 = {"1.3.6.1.4.1.14519.5.2.1.4591.4001.179004339156422100336233996679",
-        "1.3.6.1.4.1.14519.5.2.1.4591.4001.207817564815692939776262246027",
-        "1.3.6.1.4.1.14519.5.2.1.4591.4001.336683613914449960778928930818"};
 
-        String[] seriesInstanceUID_2 = {"1.3.6.1.4.1.14519.5.2.1.4591.4001.257366771253217605513205827698",
-                "1.3.6.1.4.1.14519.5.2.1.4591.4001.954200813327151024838841102184"};
-
-        dataProSpecs.createReplicaSet(userId, null, null, null, seriesInstanceUID_1);
-        dataProSpecs.createReplicaSet(userId, null, null, null, seriesInstanceUID_2);
+        logger.info("user, " + userId + " logs in..");
 
         tciaInvoker = new TciaInvoker(userId);
 
@@ -47,6 +40,7 @@ public class TciaLogInInitiator extends LogInInitiator {
 
         //currently getting all the replicaSets.
         if (replicaSetIDs != null) {
+            logger.info("Retrieving the replica sets");
             for (Long aReplicaSetID : replicaSetIDs) {
                 logger.info("ReplicaSetID: " + aReplicaSetID);
                 // TODO: CREATE PAGE 3.
