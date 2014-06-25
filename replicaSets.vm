@@ -15,7 +15,7 @@
         #foreach( $rs in $rsList )
           <TR  style="border-bottom:1px solid black">
             <TD>$count</TD>
-            <TD>$rs</TD>
+            <TD><a href="$rs">$rs</a></TD>
           </TR>
           #set( $count = $count + 1 )
         #end
