@@ -70,6 +70,18 @@ public class UIGenerator {
         context.put("seriesList", list);
     }
 
+    private static void getStudiesContext(HttpResponse response) {
+        context = new VelocityContext();
+        JSONArray jsonMainArr = new JSONArray(response.getBody().toString());
+
+        ArrayList list = new ArrayList();
+        for (int i = 0; i < jsonMainArr.length(); i++) {
+            JSONObject childJSONObject = jsonMainArr.getJSONObject(i);
+            list.add(childJSONObject);
+        }
+        context.put("studiesList", list);
+    }
+
     /**
      * Prints the series into the html page.
      * @param response, the response
@@ -77,6 +89,15 @@ public class UIGenerator {
     public static void printSeries(HttpResponse response) {
         getSeriesContext(response);
         printToFile("series.vm", "series.html");
+    }
+
+    /**
+     * Prints the studies into the html page.
+     * @param response, the response
+     */
+    public static void printStudies(HttpResponse response) {
+        getStudiesContext(response);
+        printToFile("studies.vm", "studies.html");
     }
 
     /**

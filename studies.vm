@@ -1,0 +1,41 @@
+  <HTML>
+    <HEAD>
+      <TITLE>Study</TITLE>
+    </HEAD>
+
+
+    <BODY>
+
+      #set( $count = 1 )  
+      <TABLE  border="1">
+        <tr>
+          <th>#</th>
+          <th>Series Count</th>
+          <th>Patient Sex</th>
+          <th>Patient ID</th>
+          <th>Study Date</th>
+          <th>Collection</th>
+          <th>Description</th>
+          <th>Patient Name</th>
+          <th>Study Instance UID</th>
+          <th>Age</th>
+        </tr>
+        #foreach( $studies in $studiesList )
+          <TR  style="border-bottom:1px solid black">
+            <TD>$count</TD>
+            <TD>$studies.SeriesCount</TD>
+            <TD>$studies.PatientSex</TD>
+            <TD>$studies.PatientID</TD>
+            <TD>$studies.StudyDate</TD>
+            <TD>$studies.Collection</TD>
+            <TD>$studies.StudyDescription</TD>
+            <TD>$studies.PatientName</TD>
+            <TD>$studies.StudyInstanceUID</TD>
+            <TD>$studies.PatientAge</TD>
+          </TR>
+          #set( $count = $count + 1 )
+        #end
+      </TABLE>
+
+    </BODY>
+  </HTML>

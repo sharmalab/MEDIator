@@ -41,8 +41,12 @@ public class DataRetriever {
         try {
             response = tciaInvoker.getSeries("json", "TCGA-GBM", "TCGA-06-6701", null, null);
             UIGenerator.printSeries(response);
-
             logger.info("\n\n[getSeries]: " + response.getBody());
+
+            response = tciaInvoker.getPatientStudy(null, null, "TCGA-06-6701", null);
+            UIGenerator.printStudies(response);
+            logger.info("\n\n[getPatientStudy]: " + response.getBody());
+
         } catch (UnirestException e) {
             logger.error("Failed invoking the request", e);
         }
