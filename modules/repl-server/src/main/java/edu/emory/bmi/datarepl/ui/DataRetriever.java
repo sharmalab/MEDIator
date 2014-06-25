@@ -40,7 +40,7 @@ public class DataRetriever {
         HttpResponse response;
         try {
             response = tciaInvoker.getSeries("json", "TCGA-GBM", "TCGA-06-6701", null, null);
-            UIGenerator.putSeriesContext(response);
+            UIGenerator.printSeries(response);
 
             logger.info("\n\n[getSeries]: " + response.getBody());
         } catch (UnirestException e) {

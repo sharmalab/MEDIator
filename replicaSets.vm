@@ -1,0 +1,25 @@
+  <HTML>
+    <HEAD>
+      <TITLE>List of Replica Sets of the user</TITLE>
+    </HEAD>
+
+
+    <BODY>
+
+      #set( $count = 1 )  
+      <TABLE  border="1">
+        <tr>
+          <th>#</th>
+          <th>ReplicaSet ID</th>
+        </tr>
+        #foreach( $rs in $rsList )
+          <TR  style="border-bottom:1px solid black">
+            <TD>$count</TD>
+            <TD>$rs</TD>
+          </TR>
+          #set( $count = $count + 1 )
+        #end
+      </TABLE>
+
+    </BODY>
+  </HTML>

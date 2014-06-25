@@ -10,6 +10,7 @@ package edu.emory.bmi.datarepl.tcia;
 
 import edu.emory.bmi.datarepl.interfacing.TciaInvoker;
 import edu.emory.bmi.datarepl.ui.LogInInitiator;
+import edu.emory.bmi.datarepl.ui.UIGenerator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,9 +42,11 @@ public class TciaLogInInitiator extends LogInInitiator {
         //currently getting all the replicaSets.
         if (replicaSetIDs != null) {
             logger.info("Retrieving the replica sets");
+            UIGenerator.printReplicaSetList(replicaSetIDs);
+
             for (Long aReplicaSetID : replicaSetIDs) {
                 logger.info("ReplicaSetID: " + aReplicaSetID);
-                // TODO: CREATE PAGE 3.
+
                 Boolean[] metaMap = dataProSpecs.getMetaMap(aReplicaSetID);
                 if (metaMap[0]) {
                     collectionNames = dataProSpecs.getCollectionsSet(aReplicaSetID);

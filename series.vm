@@ -27,7 +27,7 @@
         </tr>
         #foreach( $series in $seriesList )
           <TR  style="border-bottom:1px solid black">
-            <TD>$count)</TD>
+            <TD>$count</TD>
             <TD>$series.SoftwareVersions</TD>
             <TD>$series.ProtocolName</TD>
             <TD>$series.ManufacturerModelName</TD>

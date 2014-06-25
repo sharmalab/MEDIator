@@ -35,17 +35,26 @@ public class UIGenerator {
     /**
      * Initialize the velocity engine
      */
-    public static void initVelocityEngine() {
+    public UIGenerator() {
         velocityEngine.init();
-        context = new VelocityContext();
     }
 
     /**
-     * Puts the context.
+     * Prints the replicaSets into an HTML page
+     * @param replicaSetIDs an array of replicaSet IDs.
+     */
+    public static void printReplicaSetList(Long[] replicaSetIDs) {
+        context = new VelocityContext();
+        context.put("rsList", replicaSetIDs);
+        printToFile("replicaSets.vm", "replicaSets.html");
+    }
+
+    /**
+     * Prints the series into the html page.
      * @param response, the response
      */
-    public static void putSeriesContext(HttpResponse response) {
-        initVelocityEngine();
+    public static void printSeries(HttpResponse response) {
+        context = new VelocityContext();
         JSONArray jsonMainArr = new JSONArray(response.getBody().toString());
 
         ArrayList list = new ArrayList();
