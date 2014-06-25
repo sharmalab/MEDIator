@@ -50,7 +50,7 @@ public class UIGenerator {
     public static void printReplicaSet(Long replicaSetID, String[] collectionNames, String[] patientIDs,
                                        String[] studyInstanceUIDs, String[] seriesInstanceUIDs) {
         context = new VelocityContext();
-        context.put("collectionList", collectionNames);
+        context.put("collectionsList", collectionNames);
         context.put("patientsList", patientIDs);
         context.put("studiesList", studyInstanceUIDs);
         context.put("seriesList", seriesInstanceUIDs);

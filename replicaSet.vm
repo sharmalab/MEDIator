@@ -5,6 +5,49 @@
 
 
     <BODY>
+      <TABLE  border="1">
+        <tr>
+          <th>List of Collections in the Replica Set</th>
+        </tr>
+        #foreach( $collection in $collectionsList )
+           <TR  style="border-bottom:1px solid black">
+             <TD>$collection</TD>
+            </TR>
+        #end
+      </TABLE>
+
+      <TABLE  border="1">
+        <tr>
+          <th>List of Patients in the Replica Set</th>
+        </tr>
+       #foreach( $patient in $patientsList )
+          <TR  style="border-bottom:1px solid black">
+            <TD>$patient</TD>
+           </TR>
+        #end
+      </TABLE>
+
+      <TABLE  border="1">
+        <tr>
+          <th>List of Studies in the Replica Set</th>
+        </tr>
+       #foreach( $study in $studiesList )
+          <TR  style="border-bottom:1px solid black">
+            <TD>$study</TD>
+           </TR>
+        #end
+      </TABLE>
+
+      <TABLE  border="1">
+        <tr>
+          <th>List of Series in the Replica Set</th>
+        </tr>
+       #foreach( $series in $seriesList )
+          <TR  style="border-bottom:1px solid black">
+           <TD>$series</TD>
+           </TR>
+        #end
+      </TABLE>
 
 
     </BODY>

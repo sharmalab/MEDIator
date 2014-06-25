@@ -1,0 +1,41 @@
+  <HTML>
+    <HEAD>
+      <TITLE>ReplicaSetID: -8646179239329584869</TITLE>
+    </HEAD>
+
+
+    <BODY>
+      <TABLE  border="1">
+        <tr>
+          <th>List of Collections in the Replica Set</th>
+        </tr>
+              </TABLE>
+
+      <TABLE  border="1">
+        <tr>
+          <th>List of Patients in the Replica Set</th>
+        </tr>
+             </TABLE>
+
+      <TABLE  border="1">
+        <tr>
+          <th>List of Studies in the Replica Set</th>
+        </tr>
+             </TABLE>
+
+      <TABLE  border="1">
+        <tr>
+          <th>List of Series in the Replica Set</th>
+        </tr>
+                 <TR  style="border-bottom:1px solid black">
+           <TD>1.3.6.1.4.1.14519.5.2.1.4591.4001.257366771253217605513205827698</TD>
+           </TR>
+                  <TR  style="border-bottom:1px solid black">
+           <TD>1.3.6.1.4.1.14519.5.2.1.4591.4001.954200813327151024838841102184</TD>
+           </TR>
+              </TABLE>
+
+
+    </BODY>
+  </HTML>
+
