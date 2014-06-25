@@ -60,7 +60,7 @@ public class TciaLogInInitiator extends LogInInitiator {
                 if (metaMap[3]) {
                     seriesInstanceUIDs = dataProSpecs.getSeriesSet(aReplicaSetID);
                 }
-                UIGenerator.printReplicaSet(aReplicaSetID, collectionNames, patientIDs, studyInstanceUIDs,
+                ReplicaSetRetriever.retrieveReplicaSet(aReplicaSetID, collectionNames, patientIDs, studyInstanceUIDs,
                         seriesInstanceUIDs);
             }
         }

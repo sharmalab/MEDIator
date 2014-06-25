@@ -13,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -31,33 +32,21 @@ public class UIGenerator {
     private static VelocityEngine velocityEngine = new VelocityEngine();
     private static VelocityContext context;
     private static Logger logger = LogManager.getLogger(UIGenerator.class.getName());
+    private static boolean initiated = false;
 
     /**
      * Initialize the velocity engine
      */
     public UIGenerator() {
-        velocityEngine.init();
+        init();
     }
 
-    /**
-     * Prints the replicaSets into an HTML page
-     * @param replicaSetID replica Set ID
-     * @param collectionNames array of collection names
-     * @param patientIDs array of patient IDs
-     * @param studyInstanceUIDs array of study instance UIDs
-     * @param seriesInstanceUIDs array of series instance UIDs
-     */
-    public static void printReplicaSet(Long replicaSetID, String[] collectionNames, String[] patientIDs,
-                                       String[] studyInstanceUIDs, String[] seriesInstanceUIDs) {
-        context = new VelocityContext();
-        context.put("collectionsList", collectionNames);
-        context.put("patientsList", patientIDs);
-        context.put("studiesList", studyInstanceUIDs);
-        context.put("seriesList", seriesInstanceUIDs);
-        context.put("title", "ReplicaSetID: " + replicaSetID.toString());
-        printToFile("replicaSet.vm", replicaSetID.toString());
+    public static void init() {
+        if (!initiated) {
+            velocityEngine.init();
+            initiated = true;
+        }
     }
-
     /**
      * Prints the replicaSets into an HTML page
      * @param replicaSetIDs an array of replicaSet IDs.
@@ -68,11 +57,8 @@ public class UIGenerator {
         printToFile("replicaSets.vm", "replicaSets.html");
     }
 
-    /**
-     * Prints the series into the html page.
-     * @param response, the response
-     */
-    public static void printSeries(HttpResponse response) {
+
+    private static void getSeriesContext(HttpResponse response) {
         context = new VelocityContext();
         JSONArray jsonMainArr = new JSONArray(response.getBody().toString());
 
@@ -81,13 +67,25 @@ public class UIGenerator {
             JSONObject childJSONObject = jsonMainArr.getJSONObject(i);
             list.add(childJSONObject);
         }
-
         context.put("seriesList", list);
+    }
 
+    /**
+     * Prints the series into the html page.
+     * @param response, the response
+     */
+    public static void printSeries(HttpResponse response) {
+        getSeriesContext(response);
         printToFile("series.vm", "series.html");
     }
 
-    private static void printToFile(String templateName, String outputFile) {
+    /**
+     * Prints the output into an HTML file
+     * @param context VelocityContext
+     * @param templateName template file
+     * @param outputFile output HTML file
+     */
+    public static void printToFile(VelocityContext context, String templateName, String outputFile) {
         Template template = velocityEngine.getTemplate(templateName);
         StringWriter writer = new StringWriter();
 
@@ -103,5 +101,9 @@ public class UIGenerator {
         } catch (UnsupportedEncodingException e) {
             logger.error("Unsupported encoding", e);
         }
+    }
+
+    private static void printToFile(String templateName, String outputFile) {
+        printToFile(context, templateName, outputFile);
     }
 }

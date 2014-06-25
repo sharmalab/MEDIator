@@ -64,4 +64,7 @@ public class DataRetriever {
         dataProSpecs.createReplicaSet(userId, null, null, null, seriesInstanceUID_2);
     }
 
+    public static TciaInvoker getTciaInvoker() {
+        return tciaInvoker;
+    }
 }
