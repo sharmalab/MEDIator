@@ -221,7 +221,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
     }
 
     /**
-     * PUSH /pushChangesToReplicaSet
+     * PUSH /updateReplicaSet
      *
      * @param replicaSetId,     the id of the replica to be modified.
      * @param collection        collection names
@@ -230,8 +230,8 @@ public class DataProSpecs extends InfDataAccessIntegration {
      * @param seriesInstanceUID String[]
      * @return the updated replica set.
      */
-    public Boolean[] pushChangesToReplicaSet(long replicaSetId, String[] collection, String[] patientID,
-                                                 String[] studyInstanceUID, String[] seriesInstanceUID) {
+    public Boolean[] updateReplicaSet(long replicaSetId, String[] collection, String[] patientID,
+                                      String[] studyInstanceUID, String[] seriesInstanceUID) {
         Boolean[] metaMap = new Boolean[4];
         metaMap[0] = collection != null;
         metaMap[1] = patientID != null;

@@ -80,7 +80,6 @@ public class InfDataAccessIntegration implements PubConsAPI {
      * @param replicaSet the replica set
      * @return replicaSetId
      */
-    @Override
     public long createReplicaSet(String userId, String replicaSet) {
         long replicaSetId = UUID.randomUUID().getLeastSignificantBits();
         putReplicaSet(replicaSetId, replicaSet);
@@ -126,7 +125,6 @@ public class InfDataAccessIntegration implements PubConsAPI {
      * @param replicaSet, the query that to be stored
      * @return replicaSetId: Long
      */
-    @Override
     public long putReplicaSet(long replicaSetId, String replicaSet) {
         replicaSetsMap.put(replicaSetId, replicaSet);
         return replicaSetId;
@@ -148,7 +146,6 @@ public class InfDataAccessIntegration implements PubConsAPI {
      * @param replicaSetId, long
      * @return replicaSet:String
      */
-    @Override
     public String getReplicaSet(long replicaSetId) {
         return replicaSetsMap.get(replicaSetId);
     }
@@ -158,7 +155,6 @@ public class InfDataAccessIntegration implements PubConsAPI {
      * @param replicaSetId the id of the replica to be evicted.
      * @return true, if evicted now. False, if not available.
      */
-    @Override
     public boolean deleteReplicaSet(long replicaSetId) {
         if (replicaSetsMap.get(replicaSetId) == null) {
             return false;
@@ -169,13 +165,12 @@ public class InfDataAccessIntegration implements PubConsAPI {
     }
 
     /**
-     * PUSH /pushChangesToReplicaSet
+     * PUSH /updateReplicaSet
      * @param replicaSetId, the id of the replica to be modified.
      * @param newReplicaSet, the new replicaSet.
      * @return the updated replica set.
      */
-    @Override
-    public String pushChangesToReplicaSet(long replicaSetId, String newReplicaSet) {
+    public String updateReplicaSet(long replicaSetId, String newReplicaSet) {
         replicaSetsMap.put(replicaSetId, newReplicaSet); //TODO: this could be adding some changes. Not merely replacing.
         return newReplicaSet;
     }
@@ -187,7 +182,6 @@ public class InfDataAccessIntegration implements PubConsAPI {
      * @param userId the user who is duplicating the replica.
      * @return the id of the duplicate replica set.
      */
-    @Override
     public long duplicateReplicaSet(long replicaSetId, String userId) {
         long duplicateReplicaSetId = UUID.randomUUID().getLeastSignificantBits();
         String replicaSet = getReplicaSet(replicaSetId);

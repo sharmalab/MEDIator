@@ -53,6 +53,7 @@ public class DataRetriever {
             response = tciaInvoker.getPatient("json", "TCGA-GBM");
             logger.info("\n\n[getPatient]: " + response.getBody());
 
+
             response = tciaInvoker.getPatientStudy("json", "TCGA-GBM", "TCGA-06-6701",
                     "1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895");
             logger.info("\n\n[getPatientStudy]: " + response.getBody());

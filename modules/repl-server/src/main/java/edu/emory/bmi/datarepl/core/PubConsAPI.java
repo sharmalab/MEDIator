@@ -11,7 +11,7 @@ public interface PubConsAPI {
 
     public String getReplicaSet(long replicaSetId);
 
-    public String pushChangesToReplicaSet(long replicaSetId, String newReplicaSet);
+    public String updateReplicaSet(long replicaSetId, String newReplicaSet);
 
     public boolean deleteReplicaSet(long replicaSetId);
 
