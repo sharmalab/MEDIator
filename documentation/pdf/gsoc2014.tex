@@ -63,11 +63,15 @@ Consumers download the data by searching the image repository using the browser.
 \IEEEpeerreviewmaketitle
 
 \section{Introduction}
+Data sources contain data of different granularity. Data is organized in a hierarchical structure, where different levels are used to present data in specific formats. Folders and documents make a good example of this. A unique identifier is assigned to each of the data units. A search across the data source would present the user with the list of matching criteria. Interesting sub set of the matching criteria may be bookmarked by the user and shared with others. 
+
+The sub set which is commonly known as a replica set, can be updated, duplicated, shared with other users, and deleted later. A search query may contain different parameters that can define the scope of the search and the outcomes, and often return the outputs in a finer granularity. When a sub set of such information is stored as a replica set, it is sufficient to store the unique identifiers of the matching data units of finer granularity than the original search query, as it would be sufficient to reproduce the data that is represented by the replica set.
+
 \section{Background}
 \balance
 \subsection{Representation of Medical Images in TCIA}
 Medical images are represented in multiple granularity. Figure~\ref{fig:granularity} represents how the images are structured hierarchically in TCIA.
-\begin{figure}[!htbp]
+\begin{figure}[b]
 \begin{center}
  \resizebox{\columnwidth}{!}{
   \includegraphics[width=\textwidth]{tcia.png}
@@ -132,7 +136,7 @@ When a new instance starts now, and invokes the log in action for the same user,
 
 \subsection{Design and Implementation for TCIA}
 Different complex data sources require custom development extending the generic framework. As creating and customizing the replicaSet require a more specific data structure, further implementations are done, extending the core class hierarchy. An extension based on the base design was developed for TCIA, as shown by Figure~\ref{fig:class}, which provides a core class hierarchy of the system.
-\begin{figure}[!htbp]
+\begin{figure}[b]
 \begin{center}
  \resizebox{0.8\columnwidth}{!}{
   \includegraphics[width=0.8\textwidth]{classDiagram.png}
@@ -165,8 +169,9 @@ $tciaMetaMap$ contains a boolean array, which reflects which of the granularity 
 \end{lstlisting} 
 The name of the collections, patientID, studyInstanceUID, and seriesInstanceUID are stored against the respective replicaSetID in collectionsMap, patientsMap, studiesMap, and seriesMap respectively. Hence changes are done at the respective maps. Duplicating the replicaSets duplicate the contents of the entire row to a new replicaSetID. Similarly, deleting a replicaSet deletes the respective information from all the maps.
 
-TCIA public API provides methods to retrieve the images and meta data of different granularity. Figure~\ref{fig:methods} depict the methods that retrieve image and metadata at different granularity from TCIA. These methods are invoked by the replication manager tool to retrieve the images.
-\begin{figure}[htbp]
+TCIA public API provides methods to retrieve the images and meta data of different granularity. Figure~\ref{fig:methods} depict the methods that retrieve image and metadata at different granularity from TCIA. These methods are invoked by the replication manager tool to retrieve the images. As shown by Figure~\ref{fig:methods} an initial search on TCIA may contain parameters such as modality, in addition to collection name, patient ID, study instance ID, and series instance UID. However, each of these search returns the output in a finer granularity, and when a sub set of this finer granularity is selected, each of the selected elements are always identified by their respective identifier. Hence, storing an array of patient ID would be sufficient to identify the selected sub set of the collection including the array of patients. Similary an array of study instance UID is sufficient to represent the selected sub set of any patient, and an array of series instance UID is sufficient to represent the selected sub set of any study, as it will contain an array of series.
+
+\begin{figure}[!htbp]
 \begin{center}
  \resizebox{\columnwidth}{!}{
   \includegraphics[width=\textwidth]{methods.png}
