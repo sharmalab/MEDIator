@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+      <TITLE>Query or Retrieve Replica Set</TITLE>
+</head>
+<body>
+  <form onSubmit="return checkAnswer();">
+  <input id="replicaSetID" type="text" class="box" autofocus />
+  <input type="submit" class="submit" value="Get Replica Set" />
+  </form>
+
+  <script>
+  function checkAnswer(){
+      var response = document.getElementById('replicaSetID').value;
+      location = response;
+      return false;
+  }
+  </script>
+</body>
+</html>
