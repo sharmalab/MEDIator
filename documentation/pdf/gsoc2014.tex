@@ -8,6 +8,8 @@
 \usepackage{listings}  
 \usepackage{color}  
 \usepackage{textcomp}  
+\usepackage{url}  
+
 \definecolor{listinggray}{gray}{0.98}  
 \definecolor{lbcolor}{rgb}{0.98,0.98,0.98}  
 \lstset{  
@@ -194,7 +196,8 @@ TCIA public API provides methods to retrieve the images and meta data of differe
 
 \section{Evaluation}
 \section{Conclusion}
-\balance
+Storing a selected sub set of data items that matches a specific criteria as a replica set is an optimal way to bookmark large data sources. Users should be able to create and update their replica sets, and share it with others using a unique identifier. While different data sources have different interfaces, a generic data replication and synchronization tool will be convenient, such that sharing of replica sets across heterogeneous data sources will be possible. This project researched the possibilities of such a replication and data synchronization tool, exploiting the in-memory data grid projects, and implements a data synchronization and replication tool\footnote{The source code can be accessed from \url{https://bitbucket.org/BMI/datareplicationsystem}} with Infinispan while consuming data sources such as TCIA via their public APIs.
+
 
 %\begin{thebibliography}{1}
 %\end{thebibliography}
