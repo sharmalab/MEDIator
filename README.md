@@ -23,7 +23,6 @@ Make sure to include log4j2-test.xml into your class path to be able to configur
 
 ## Dependencies
 This project depends on the below major projects.
--------------------------------------------------
 * Infinispan
 * Apache Tomcat (Embedded)
 * Apache HTTP Client
