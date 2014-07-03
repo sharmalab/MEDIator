@@ -32,11 +32,7 @@ public class DataRetriever {
     private static DataProSpecs dataProSpecs;
 
 
-    public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException,
-            LifecycleException {
-        System.out.println("Starting Tomcat ..");
-        new TomcatEmbeddedRunner().startServer();
-
+    public static void main(String[] args) throws FileNotFoundException, LifecycleException {
         logInInitiator = new TciaLogInInitiator();
         logInInitiator.login(userId);
 
@@ -81,13 +77,17 @@ public class DataRetriever {
 
             response = tciaInvoker.getManufacturerValues("json", null, "BRAIN", "MR");
             logger.info("\n\n[getManufacturerValues]: " + response.getBody());
+            createReplicaSets();
 
-        } catch (UnirestException e) {
+            logInInitiator.login(userId);
+
+        } catch (Exception e) {
             logger.error("Failed invoking the request", e);
         }
-        createReplicaSets();
 
-        logInInitiator.login(userId);
+        System.out.println("Starting Tomcat ..");
+        new TomcatEmbeddedRunner().startServer();
+
     }
 
     public static void createReplicaSets() {
