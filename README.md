@@ -16,6 +16,8 @@ Executing
 ---------
 $ sh modules/repl-server/target/bin/webapp
 
+Remarks
+---------
 Make sure to include log4j2-test.xml into your class path to be able to view the logs.
 
 In an IDE, you may simply add the conf folder to the class path, or mark it as a source directory.
