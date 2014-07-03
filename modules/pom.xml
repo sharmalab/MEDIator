@@ -12,7 +12,6 @@
   
   <modules>
     <module>repl-server</module>
-    <!--module>repl-client</module-->
   </modules>
 
   <build>

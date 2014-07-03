@@ -15,7 +15,6 @@ public class TomcatEmbeddedRunner {
 		Tomcat tomcat = new Tomcat();
 		tomcat.setPort(9090);
 		File base = new File(System.getProperty("user.dir"));
-//		File base = new File(System.getProperty("java.io.tmpdir"));
 
         Context rootCtx = tomcat.addContext("/", base.getAbsolutePath());
 
@@ -24,8 +23,6 @@ public class TomcatEmbeddedRunner {
         rootCtx.addServletMapping("/init", "initServlet");
 
         Wrapper defaultServlet = rootCtx.createWrapper();
-
-        defaultServlet = rootCtx.createWrapper();
         defaultServlet.setName("default");
         defaultServlet.setServletClass("org.apache.catalina.servlets.DefaultServlet");
         defaultServlet.addInitParameter("debug", "0");
