@@ -44,7 +44,7 @@ public class InitServlet extends HttpServlet {
             logger.info("\n\n[getSeries]: " + response1.getBody());
             out.println(output);
         } catch (Exception e) {
-            logger.error("Exception in getting the response from the TCIA invoker", e);
+            logger.warn("Exception in getting the response from the TCIA invoker", e);
             out.println("<body>");
 
             out.println("Patient ID: " +
