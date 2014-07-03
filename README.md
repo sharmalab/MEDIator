@@ -14,6 +14,8 @@ Executing
 ---------
 $ sh modules/repl-server/target/bin/webapp
 
+Go to http://localhost:9090/ using your browser to access the Data Replication and Synchronization Tool.
+
 Logging
 -------
 Make sure to include log4j2-test.xml into your class path to be able to configure and view the logs. Default log level is [WARN].
