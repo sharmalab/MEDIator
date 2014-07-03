@@ -13,7 +13,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -98,6 +97,15 @@ public class UIGenerator {
      * Prints the series into the html page.
      * @param response, the response
      */
+    public static String returnSeriesOutput(HttpResponse response) {
+        getSeriesContext(response);
+        return returnPrintable("series.vm");
+    }
+
+    /**
+     * Prints the series into the html page.
+     * @param response, the response
+     */
     public static void printSeries(HttpResponse response) {
         getSeriesContext(response);
         printToFile("series.vm", "series.html");
@@ -119,6 +127,25 @@ public class UIGenerator {
     public static void printPatients(HttpResponse response) {
         getPatientsContext(response);
         printToFile("patients.vm", "patients.html");
+    }
+
+    /**
+     * Returns a printable HTML Output
+     * @return printable HTML output String
+     * @param context VelocityContext
+     * @param templateName template file
+     */
+    public static String returnPrintable(VelocityContext context, String templateName) {
+        Template template = velocityEngine.getTemplate(templateName);
+        StringWriter writer = new StringWriter();
+
+        template.merge(context, writer);
+
+        return writer.toString();
+    }
+
+    private static String returnPrintable(String templateName) {
+        return returnPrintable(context, templateName);
     }
 
     /**
