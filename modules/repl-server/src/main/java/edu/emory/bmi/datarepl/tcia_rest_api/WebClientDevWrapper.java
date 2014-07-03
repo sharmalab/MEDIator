@@ -1,3 +1,7 @@
+/**
+ * Code borrowed with thanks, from http://javaskeleton.blogspot.pt/2010/07/avoiding-peer-not-authenticated-with.html?m=1
+ */
+
 package edu.emory.bmi.datarepl.tcia_rest_api;
 
 import org.apache.http.client.HttpClient;
@@ -13,9 +17,9 @@ import javax.net.ssl.X509TrustManager;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
-/*
-This code is public domain: you are free to use, link and/or modify it in any way you want, for all purposes including commercial applications.
-*/
+/**
+ * Overcoming the SSLPeerUnverifiedException.
+ */
 public class WebClientDevWrapper {
 
     public static HttpClient wrapClient(HttpClient base) {
