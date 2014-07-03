@@ -10,6 +10,7 @@ package edu.emory.bmi.datarepl.ui;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import edu.emory.bmi.datarepl.container.TomcatEmbeddedRunner;
 import edu.emory.bmi.datarepl.interfacing.TciaInvoker;
 import edu.emory.bmi.datarepl.tcia.DataProSpecs;
 import edu.emory.bmi.datarepl.tcia.TciaLogInInitiator;
@@ -18,7 +19,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
-
+import org.apache.catalina.LifecycleException;
 
 /**
  * Sample Main class to test the implementation
@@ -31,7 +32,11 @@ public class DataRetriever {
     private static DataProSpecs dataProSpecs;
 
 
-    public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
+    public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException,
+            LifecycleException {
+        System.out.println("Starting Tomcat ..");
+        new TomcatEmbeddedRunner().startServer();
+
         logInInitiator = new TciaLogInInitiator();
         logInInitiator.login(userId);
 
