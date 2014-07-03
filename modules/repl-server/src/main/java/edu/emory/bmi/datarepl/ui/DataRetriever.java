@@ -85,7 +85,7 @@ public class DataRetriever {
             logger.error("Failed invoking the request", e);
         }
 
-        System.out.println("Starting Tomcat ..");
+        logger.info("Starting Tomcat ..");
         new TomcatEmbeddedRunner().startServer();
 
     }
