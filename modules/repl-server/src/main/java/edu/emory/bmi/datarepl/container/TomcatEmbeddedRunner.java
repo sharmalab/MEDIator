@@ -10,6 +10,9 @@ import org.apache.catalina.startup.Tomcat;
 import edu.emory.bmi.datarepl.servlet.InitServlet;
 import org.apache.tomcat.util.http.mapper.Mapper;
 
+/**
+ * Defines the Embedded Tomcat Instance.
+ */
 public class TomcatEmbeddedRunner {
 	public void startServer() throws LifecycleException {
 		Tomcat tomcat = new Tomcat();
@@ -19,7 +22,6 @@ public class TomcatEmbeddedRunner {
         Context rootCtx = tomcat.addContext("/", base.getAbsolutePath());
 
 		Tomcat.addServlet(rootCtx, "initServlet", new InitServlet());
-//        rootCtx.addWelcomeFile("searchSeries.html");
         rootCtx.addServletMapping("/init", "initServlet");
 
         Wrapper defaultServlet = rootCtx.createWrapper();
