@@ -24,7 +24,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 /**
- * Generates HTML pages using the velocity templates.
+ * Generates HTML pages and outputs using velocity templates.
  */
 public class UIGenerator {
 
