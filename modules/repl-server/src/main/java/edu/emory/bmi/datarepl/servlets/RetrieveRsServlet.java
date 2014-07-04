@@ -26,8 +26,6 @@ import java.io.PrintWriter;
  */
 public class RetrieveRsServlet extends HttpServlet{
     private static Logger logger = LogManager.getLogger(RetrieveRsServlet.class.getName());
-    private static DataProSpecs dataProSpecs;
-    private static String userId;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -38,8 +36,6 @@ public class RetrieveRsServlet extends HttpServlet{
 
         Long replicaSetID = Long.parseLong(request.getParameter("replicaSetID"));
 
-        dataProSpecs = (DataProSpecs) DataProSpecs.getInfiniCore();
-        userId = DataRetriever.getUserId();
         logger.info("Retrieving the replica set for the user..");
 
         String output = TciaLogInInitiator.retrieveReplicaSet(replicaSetID);
