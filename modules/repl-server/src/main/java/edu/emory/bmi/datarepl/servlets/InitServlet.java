@@ -1,4 +1,12 @@
-package edu.emory.bmi.datarepl.servlet;
+/*
+ * Title:        Data Replication Server
+ * Description:  Data Replication / Synchronization Tools.
+ * Licence:      Apache License Version 2.0 - http://www.apache.org/licenses/
+ *
+ * Copyright (c) 2014, Pradeeban Kathiravelu <pradeeban.kathiravelu@tecnico.ulisboa.pt>
+ */
+
+package edu.emory.bmi.datarepl.servlets;
 
 import edu.emory.bmi.datarepl.interfacing.TciaInvoker;
 import edu.emory.bmi.datarepl.ui.DataRetriever;
@@ -48,12 +56,10 @@ public class InitServlet extends HttpServlet {
             logger.warn("Exception in getting the response from the TCIA invoker", e);
             out.println("<body>");
 
-            out.println("Patient ID: " +
-                     patientID + "  " +
-                    "Collection Name: " + collectionName + " " +
-                    "Modality: "  + modality + " " +
-                    "Body Part Examined: " + studyInstanceUID);
-
+            out.println("Collection Name: " + collectionName + " " +
+                    "Patient ID: " + patientID + "  " +
+                    "Study Instance UID: " + studyInstanceUID + " " +
+                    "Modality: " + modality);
         }
         out.println("<CENTER>\n" +
                 "       <button type=\"button\"  onclick=\"location.href='createReplicaSet.html' \">Create Replica Set</button> \n" +
