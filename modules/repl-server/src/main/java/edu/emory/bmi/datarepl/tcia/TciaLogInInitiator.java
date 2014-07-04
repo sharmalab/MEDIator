@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class TciaLogInInitiator extends LogInInitiator {
     private static Logger logger = LogManager.getLogger(TciaLogInInitiator.class.getName());
-    private DataProSpecs dataProSpecs;
+    private static DataProSpecs dataProSpecs;
 
     /**
      * When the user logs in, retrieve the stored replica sets
@@ -34,10 +34,6 @@ public class TciaLogInInitiator extends LogInInitiator {
         tciaInvoker = new TciaInvoker(userId);
 
         Long[] replicaSetIDs = dataProSpecs.getUserReplicaSets(userId);
-        String[] collectionNames = {};
-        String[] patientIDs = {};
-        String[] studyInstanceUIDs = {};
-        String[] seriesInstanceUIDs = {};
 
         //currently getting all the replicaSets.
         if (replicaSetIDs != null) {
@@ -45,25 +41,34 @@ public class TciaLogInInitiator extends LogInInitiator {
             UIGenerator.printReplicaSetList(replicaSetIDs);
 
             for (Long aReplicaSetID : replicaSetIDs) {
-                logger.info("ReplicaSetID: " + aReplicaSetID);
-
-                Boolean[] metaMap = dataProSpecs.getMetaMap(aReplicaSetID);
-                if (metaMap[0]) {
-                    collectionNames = dataProSpecs.getCollectionsSet(aReplicaSetID);
-                }
-                if (metaMap[1]) {
-                    patientIDs = dataProSpecs.getPatientsSet(aReplicaSetID);
-                }
-                if (metaMap[2]) {
-                    studyInstanceUIDs = dataProSpecs.getStudiesSet(aReplicaSetID);
-                }
-                if (metaMap[3]) {
-                    seriesInstanceUIDs = dataProSpecs.getSeriesSet(aReplicaSetID);
-                }
-                ReplicaSetRetriever.retrieveReplicaSet(aReplicaSetID, collectionNames, patientIDs, studyInstanceUIDs,
-                        seriesInstanceUIDs);
+                retrieveReplicaSet(aReplicaSetID);
             }
         }
+    }
+
+    public static String retrieveReplicaSet(Long aReplicaSetID) {
+        logger.info("ReplicaSetID: " + aReplicaSetID);
+
+        String[] collectionNames = {};
+        String[] patientIDs = {};
+        String[] studyInstanceUIDs = {};
+        String[] seriesInstanceUIDs = {};
+
+        Boolean[] metaMap = dataProSpecs.getMetaMap(aReplicaSetID);
+        if (metaMap[0]) {
+            collectionNames = dataProSpecs.getCollectionsSet(aReplicaSetID);
+        }
+        if (metaMap[1]) {
+            patientIDs = dataProSpecs.getPatientsSet(aReplicaSetID);
+        }
+        if (metaMap[2]) {
+            studyInstanceUIDs = dataProSpecs.getStudiesSet(aReplicaSetID);
+        }
+        if (metaMap[3]) {
+            seriesInstanceUIDs = dataProSpecs.getSeriesSet(aReplicaSetID);
+        }
+        return ReplicaSetRetriever.retrieveReplicaSet(aReplicaSetID, collectionNames, patientIDs, studyInstanceUIDs,
+                seriesInstanceUIDs);
     }
 
 }

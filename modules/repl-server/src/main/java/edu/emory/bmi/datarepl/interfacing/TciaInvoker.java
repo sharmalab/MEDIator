@@ -192,6 +192,13 @@ public class TciaInvoker extends InterfaceManager {
         return getHttpResponse(query);
     }
 
+    /**
+     * Gets the Http Response string for the given query, with mashap or direct rest api invocation
+     * @param query the query to be invoked
+     * @return response
+     * @throws UnirestException, if invocation failed in mashape mode
+     * @throws IOException IO issues
+     */
     public String getHttpResponse(String query) throws UnirestException, IOException {
         if (isMashapeMode) {
             HttpResponse response =
@@ -224,21 +231,12 @@ public class TciaInvoker extends InterfaceManager {
      * /GET Image
      *
      * @param seriesInstanceUID, instance ID of the series. Mandatory
-     * @return image as a zip
+     * @return image
      * @throws UnirestException
      */
-    public HttpResponse getImage(String seriesInstanceUID) throws UnirestException {
+    public String getImage(String seriesInstanceUID) throws UnirestException, IOException {
         String query = "getImage?SeriesInstanceUID=" + seriesInstanceUID;
 
-        HttpResponse request = (HttpResponse) Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).
-                header("X-Mashape-Authorization", TCIAConstants.MASHAPE_AUTHORIZATION).
-                header("api_key", TCIAConstants.API_KEY).
-                asBinary();
-//        try {
-//            TciaUtil.saveTo(request.getBody(), seriesInstanceUID + ".zip", ".");
-//        } catch (IOException e) {
-//            logger.error("Error when downloading the image", e);
-//        }
-        return request;
+        return getHttpResponse(query);
     }
 }

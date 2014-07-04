@@ -16,6 +16,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.velocity.VelocityContext;
 
+import java.io.IOException;
+
 /**
  * Retrieves the replicaSets with different granularity.
  */
@@ -36,7 +38,7 @@ public class ReplicaSetRetriever {
      * @param studyInstanceUIDs array of study instance UIDs
      * @param seriesInstanceUIDs array of series instance UIDs
      */
-    public static void retrieveReplicaSet(Long replicaSetID, String[] collectionNames, String[] patientIDs,
+    public static String retrieveReplicaSet(Long replicaSetID, String[] collectionNames, String[] patientIDs,
                                           String[] studyInstanceUIDs, String[] seriesInstanceUIDs) {
         tciaInvoker = DataRetriever.getTciaInvoker();
         context = new VelocityContext();
@@ -49,9 +51,11 @@ public class ReplicaSetRetriever {
                 tciaInvoker.getImage(aSeriesInstanceUID);
             } catch (UnirestException e) {
                 logger.error("Exception while retrieving the images for the replicaSet", e);
+            } catch (IOException e) {
+                logger.error("IO Exception occurred while retrieving the images for the replicaSet", e);
             }
         }
         context.put("title", "ReplicaSetID: " + replicaSetID.toString());
-        UIGenerator.printToFile(context, "replicaSet.vm", replicaSetID.toString());
+        return UIGenerator.returnPrintable(context, "replicaSet.vm");
     }
 }

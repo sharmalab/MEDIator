@@ -4,18 +4,17 @@
 <meta charset=utf-8 />
       <TITLE>Query or Retrieve Replica Set</TITLE>
 </head>
-<body>
-  <form onSubmit="return checkAnswer();">
-  <input id="replicaSetID" type="text" class="box" autofocus />
-  <input type="submit" class="submit" value="Get Replica Set" />
-  </form>
 
-  <script>
-  function checkAnswer(){
-      var response = document.getElementById('replicaSetID').value;
-      location = response;
-      return false;
-  }
-  </script>
-</body>
+<BODY>
+<H2>Retrieve Replica Set</H2>
+<p>Enter the ReplicaSet ID..</p>
+
+<form method="GET" action="/retrieveRs">
+    <p> ReplicaSet ID <input type="text" name="replicaSetID" size="20"></p>
+    <p><input type="submit" value="Retrieve ReplicaSet" name="B1"></p>
+</form>
+<p>&nbsp;</p>
+
+</BODY>
+
 </html>

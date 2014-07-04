@@ -12,6 +12,7 @@ import java.io.File;
 
 import edu.emory.bmi.datarepl.constants.CommonConstants;
 import edu.emory.bmi.datarepl.servlets.CreateRsServlet;
+import edu.emory.bmi.datarepl.servlets.RetrieveRsServlet;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.Wrapper;
@@ -36,6 +37,9 @@ public class TomcatEmbeddedRunner {
 
 		Tomcat.addServlet(rootCtx, "createRsServlet", new CreateRsServlet());
         rootCtx.addServletMapping("/createRs", "createRsServlet");
+
+		Tomcat.addServlet(rootCtx, "retrieveRsServlet", new RetrieveRsServlet());
+        rootCtx.addServletMapping("/retrieveRs", "retrieveRsServlet");
 
         Wrapper defaultServlet = rootCtx.createWrapper();
         defaultServlet.setName("default");

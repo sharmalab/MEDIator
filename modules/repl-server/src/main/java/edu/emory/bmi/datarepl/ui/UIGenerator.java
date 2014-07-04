@@ -54,6 +54,17 @@ public class UIGenerator {
     }
 
 
+    /**
+     * Return printable output of the replica set
+     * @param replicaSetIDs, an array of replicaSet IDs.
+     * @return replica sets
+     */
+    public static String returnReplicaSetOutput(Long[] replicaSetIDs) {
+        context = new VelocityContext();
+        context.put("rsList", replicaSetIDs);
+        return returnPrintable("replicaSets.vm");
+    }
+
     private static void getSeriesContext(String response) {
         context = new VelocityContext();
         JSONArray jsonMainArr = new JSONArray(response);
