@@ -10,6 +10,7 @@ package edu.emory.bmi.datarepl.servlets;
 
 import edu.emory.bmi.datarepl.tcia.DataProSpecs;
 import edu.emory.bmi.datarepl.ui.DataRetriever;
+import edu.emory.bmi.datarepl.ui.UIGenerator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,12 +47,9 @@ public class CreateRsServlet extends HttpServlet {
 
         Long[] replicaSets = dataProSpecs.getUserReplicaSets(userId);
 
-        out.println("<HTML>    <BODY>\n");
+        String output = UIGenerator.returnReplicaSetOutput(replicaSets);
 
-        out.println("Replica Sets of the User: ");
-        for (Long aReplicaSet : replicaSets) {
-            out.println(aReplicaSet);
-        }
-        out.println("</body></html>");
+        logger.info("Listing the Replica Sets of the User");
+        out.println(output);
     }
 }
