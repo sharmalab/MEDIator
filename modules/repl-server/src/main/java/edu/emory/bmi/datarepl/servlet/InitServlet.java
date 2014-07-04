@@ -37,7 +37,7 @@ public class InitServlet extends HttpServlet {
         String studyInstanceUID = request.getParameter("iStudyInstanceUID");
         String modality = request.getParameter("iModality");
 
-
+        out.println("<HTML>    <BODY>\n");
         try {
 //            response1 = tciaInvoker.getSeries("json", "TCGA-GBM", "TCGA-06-6701", null, null);
             response1 = tciaInvoker.getSeries("json", collectionName, patientID, studyInstanceUID, modality);
@@ -53,7 +53,11 @@ public class InitServlet extends HttpServlet {
                     "Collection Name: " + collectionName + " " +
                     "Modality: "  + modality + " " +
                     "Body Part Examined: " + studyInstanceUID);
-            out.println("</body></html>");
+
         }
+        out.println("<CENTER>\n" +
+                "       <button type=\"button\"  onclick=\"location.href='createReplicaSet.html' \">Create Replica Set</button> \n" +
+                "</CENTER>");
+        out.println("</body></html>");
     }
 }
