@@ -8,6 +8,8 @@
 
 package edu.emory.bmi.datarepl.servlets;
 
+import edu.emory.bmi.datarepl.tcia.DataProSpecs;
+import edu.emory.bmi.datarepl.ui.DataRetriever;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,6 +25,8 @@ import java.io.PrintWriter;
  */
 public class CreateRsServlet extends HttpServlet {
     private static Logger logger = LogManager.getLogger(CreateRsServlet.class.getName());
+    private static DataProSpecs dataProSpecs;
+    private static String userId;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -30,18 +34,24 @@ public class CreateRsServlet extends HttpServlet {
 
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        String lCollectionName = request.getParameter("iCollection");
-        String lPatientID = request.getParameter("iPatientID");
-        String lStudyInstanceUID = request.getParameter("iStudyInstanceUID");
-        String lSeriesInstanceUID = request.getParameter("iSeriesInstanceUID");
+        String[] lCollectionName = request.getParameter("iCollection").split(",");
+        String[] lPatientID = request.getParameter("iPatientID").split(",");
+        String[] lStudyInstanceUID = request.getParameter("iStudyInstanceUID").split(",");
+        String[] lSeriesInstanceUID = request.getParameter("iSeriesInstanceUID").split(",");
+
+        dataProSpecs = (DataProSpecs) DataProSpecs.getInfiniCore();
+        userId = DataRetriever.getUserId();
+        logger.info("Creating the replica set for the user..");
+        dataProSpecs.createReplicaSet(userId,lCollectionName,lPatientID,lStudyInstanceUID,lSeriesInstanceUID);
+
+        Long[] replicaSets = dataProSpecs.getUserReplicaSets(userId);
 
         out.println("<HTML>    <BODY>\n");
 
-            out.println("Collection Names: " + lCollectionName +
-                    "Patient ID: " + lPatientID + " " +
-                    "Study Instance UID: "  + lStudyInstanceUID + " " +
-                    "Series Instance UID: " + lSeriesInstanceUID);
-
+        out.println("Replica Sets of the User: ");
+        for (Long aReplicaSet : replicaSets) {
+            out.println(aReplicaSet);
+        }
         out.println("</body></html>");
     }
 }

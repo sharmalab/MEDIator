@@ -105,4 +105,8 @@ public class DataRetriever {
     public static TciaInvoker getTciaInvoker() {
         return tciaInvoker;
     }
+
+    public static String getUserId() {
+        return userId;
+    }
 }
