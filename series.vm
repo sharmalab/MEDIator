@@ -10,17 +10,10 @@
       <TABLE  border="1">
         <tr>
           <th>#</th>
-          <th>Ver.</th>
-          <th>ProtocolName</th>
-          <th>Model</th>
           <th>StudyInstanceUID</th>
           <th>SeriesInstanceUID</th>
-          <th>Description</th>
           <th>Image Count</th>
-          <th>Series Date</th>
-          <th>Manufacturer</th>
           <th>Collection</th>
-          <th>Series Number</th>
           <th>Visibility</th>
           <th>Modality</th>
           <th>Body Part</th>
@@ -28,17 +21,10 @@
         #foreach( $series in $seriesList )
           <TR  style="border-bottom:1px solid black">
             <TD>$count</TD>
-            <TD>$series.SoftwareVersions</TD>
-            <TD>$series.ProtocolName</TD>
-            <TD>$series.ManufacturerModelName</TD>
             <TD>$series.StudyInstanceUID</TD>
             <TD>$series.SeriesInstanceUID</TD>
-            <TD>$series.SeriesDescription</TD>
             <TD>$series.ImageCount</TD>
-            <TD>$series.SeriesDate</TD>
-            <TD>$series.Manufacturer</TD>
             <TD>$series.Collection</TD>
-            <TD>$series.SeriesNumber</TD>
             <TD>$series.Visibility</TD>
             <TD>$series.Modality</TD>
             <TD>$series.BodyPartExamined</TD>
