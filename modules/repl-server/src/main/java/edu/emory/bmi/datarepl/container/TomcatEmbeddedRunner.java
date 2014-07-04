@@ -8,7 +8,6 @@ import org.apache.catalina.Wrapper;
 import org.apache.catalina.startup.Tomcat;
 
 import edu.emory.bmi.datarepl.servlet.InitServlet;
-import org.apache.tomcat.util.http.mapper.Mapper;
 
 /**
  * Defines the Embedded Tomcat Instance.

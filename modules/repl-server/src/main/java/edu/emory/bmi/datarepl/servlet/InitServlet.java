@@ -1,6 +1,5 @@
 package edu.emory.bmi.datarepl.servlet;
 
-import com.mashape.unirest.http.HttpResponse;
 import edu.emory.bmi.datarepl.interfacing.TciaInvoker;
 import edu.emory.bmi.datarepl.ui.DataRetriever;
 import edu.emory.bmi.datarepl.ui.UIGenerator;
@@ -29,19 +28,21 @@ public class InitServlet extends HttpServlet {
             throws ServletException, IOException {
         tciaInvoker = DataRetriever.getTciaInvoker();
 
-        HttpResponse response1;
+        String response1;
 
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        String patientID = request.getParameter("iPatientID");
         String collectionName = request.getParameter("iCollection");
+        String patientID = request.getParameter("iPatientID");
+        String studyInstanceUID = request.getParameter("iStudyInstanceUID");
         String modality = request.getParameter("iModality");
-        String bodyPartExamined = request.getParameter("iBodyPartExamined");
+
 
         try {
-            response1 = tciaInvoker.getSeries("json", "TCGA-GBM", "TCGA-06-6701", null, null);
+//            response1 = tciaInvoker.getSeries("json", "TCGA-GBM", "TCGA-06-6701", null, null);
+            response1 = tciaInvoker.getSeries("json", collectionName, patientID, studyInstanceUID, modality);
             String output = UIGenerator.returnSeriesOutput(response1);
-            logger.info("\n\n[getSeries]: " + response1.getBody());
+            logger.info("\n\n[getSeries]: " + response1);
             out.println(output);
         } catch (Exception e) {
             logger.warn("Exception in getting the response from the TCIA invoker", e);
@@ -51,7 +52,7 @@ public class InitServlet extends HttpServlet {
                      patientID + "  " +
                     "Collection Name: " + collectionName + " " +
                     "Modality: "  + modality + " " +
-                    "Body Part Examined: " + bodyPartExamined);
+                    "Body Part Examined: " + studyInstanceUID);
             out.println("</body></html>");
         }
     }

@@ -37,7 +37,7 @@ public class TCIAClientImpl implements ITCIAClient {
         httpClient = WebClientDevWrapper.wrapClient(httpClient);
     }
 
-    static String convertStreamToString(java.io.InputStream is) {
+    public static String convertStreamToString(java.io.InputStream is) {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
@@ -60,8 +60,7 @@ public class TCIAClientImpl implements ITCIAClient {
             uriBuilder.addParameter("format", format.name());
 
             URI uri = uriBuilder.build();
-            InputStream is = getRawData(uri);
-            return convertStreamToString(is);
+            return getString(uri);
 
         }
         catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
@@ -73,7 +72,7 @@ public class TCIAClientImpl implements ITCIAClient {
 
     }
 
-    private InputStream getRawData(URI uri) throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException, ClientProtocolException, IOException
+    public InputStream getRawData(URI uri) throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException, ClientProtocolException, IOException
     {
 // create a new HttpGet request
         HttpGet request = new HttpGet(uri);
@@ -125,8 +124,7 @@ public class TCIAClientImpl implements ITCIAClient {
             uriBuilder.addParameter("format", format.name());
 
             URI uri = uriBuilder.build();
-            InputStream is = getRawData(uri);
-            return convertStreamToString(is);
+            return getString(uri);
 
         }
         catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
@@ -136,6 +134,12 @@ public class TCIAClientImpl implements ITCIAClient {
             throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException( e , baseUrl);
         }
     }
+
+    public String getString(URI uri) throws TCIAClientException, IOException {
+        InputStream is = getRawData(uri);
+        return convertStreamToString(is);
+    }
+
     public String getCollectionValues(OutputFormat format)
             throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
@@ -144,8 +148,7 @@ public class TCIAClientImpl implements ITCIAClient {
             uriBuilder.addParameter("format", format.name());
 
             URI uri = uriBuilder.build();
-            InputStream is = getRawData(uri);
-            return convertStreamToString(is);
+            return getString(uri);
 
         }
         catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
@@ -173,8 +176,7 @@ public class TCIAClientImpl implements ITCIAClient {
             uriBuilder.addParameter("format", format.name());
 
             URI uri = uriBuilder.build();
-            InputStream is = getRawData(uri);
-            return convertStreamToString(is);
+            return getString(uri);
 
         }
         catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
@@ -204,8 +206,7 @@ public class TCIAClientImpl implements ITCIAClient {
             uriBuilder.addParameter("format", format.name());
 
             URI uri = uriBuilder.build();
-            InputStream is = getRawData(uri);
-            return convertStreamToString(is);
+            return getString(uri);
 
         }
         catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
@@ -235,8 +236,7 @@ public class TCIAClientImpl implements ITCIAClient {
             uriBuilder.addParameter("format", format.name());
 
             URI uri = uriBuilder.build();
-            InputStream is = getRawData(uri);
-            return convertStreamToString(is);
+            return getString(uri);
 
         }
         catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
@@ -258,8 +258,7 @@ public class TCIAClientImpl implements ITCIAClient {
             uriBuilder.addParameter("format", format.name());
 
             URI uri = uriBuilder.build();
-            InputStream is = getRawData(uri);
-            return convertStreamToString(is);
+            return getString(uri);
 
         }
         catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {

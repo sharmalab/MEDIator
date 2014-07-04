@@ -8,7 +8,7 @@
 
 package edu.emory.bmi.datarepl.ui;
 
-import com.mashape.unirest.http.HttpResponse;
+import org.apache.http.HttpResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.velocity.Template;
@@ -17,10 +17,7 @@ import org.apache.velocity.app.VelocityEngine;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -57,9 +54,9 @@ public class UIGenerator {
     }
 
 
-    private static void getSeriesContext(HttpResponse response) {
+    private static void getSeriesContext(String response) {
         context = new VelocityContext();
-        JSONArray jsonMainArr = new JSONArray(response.getBody().toString());
+        JSONArray jsonMainArr = new JSONArray(response);
 
         ArrayList list = new ArrayList();
         for (int i = 0; i < jsonMainArr.length(); i++) {
@@ -71,7 +68,7 @@ public class UIGenerator {
 
     private static void getStudiesContext(HttpResponse response) {
         context = new VelocityContext();
-        JSONArray jsonMainArr = new JSONArray(response.getBody().toString());
+        JSONArray jsonMainArr = new JSONArray(response.toString());
 
         ArrayList list = new ArrayList();
         for (int i = 0; i < jsonMainArr.length(); i++) {
@@ -83,7 +80,7 @@ public class UIGenerator {
 
     private static void getPatientsContext(HttpResponse response) {
         context = new VelocityContext();
-        JSONArray jsonMainArr = new JSONArray(response.getBody().toString());
+        JSONArray jsonMainArr = new JSONArray(response.toString());
 
         ArrayList list = new ArrayList();
         for (int i = 0; i < jsonMainArr.length(); i++) {
@@ -97,7 +94,7 @@ public class UIGenerator {
      * Prints the series into the html page.
      * @param response, the response
      */
-    public static String returnSeriesOutput(HttpResponse response) {
+    public static String returnSeriesOutput(String response) {
         getSeriesContext(response);
         return returnPrintable("series.vm");
     }
@@ -106,7 +103,7 @@ public class UIGenerator {
      * Prints the series into the html page.
      * @param response, the response
      */
-    public static void printSeries(HttpResponse response) {
+    public static void printSeries(String response) {
         getSeriesContext(response);
         printToFile("series.vm", "series.html");
     }
