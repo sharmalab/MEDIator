@@ -9,8 +9,6 @@
 package edu.emory.bmi.datarepl.servlets;
 
 import edu.emory.bmi.datarepl.tcia.DataProSpecs;
-import edu.emory.bmi.datarepl.tcia.TciaLogInInitiator;
-import edu.emory.bmi.datarepl.ui.DataRetriever;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -38,9 +36,9 @@ public class RetrieveRsServlet extends HttpServlet{
 
         logger.info("Retrieving the replica set for the user..");
 
-        String output = TciaLogInInitiator.retrieveReplicaSet(replicaSetID);
+        DataProSpecs dataProSpecs = (DataProSpecs) DataProSpecs.getInfiniCore();
+        String output = dataProSpecs.getReplicaSet(replicaSetID);
 
-        logger.info("\n\n[retriveReplicaSet]: " + output);
         out.println(output);
     }
 }

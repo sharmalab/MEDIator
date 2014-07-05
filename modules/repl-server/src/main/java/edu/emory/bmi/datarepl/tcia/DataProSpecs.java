@@ -99,6 +99,114 @@ public class DataProSpecs extends InfDataAccessIntegration {
     }
 
     /**
+     * GET /get the replicaSet of the given replicaSetID
+     * @param aReplicaSetID replicaSet ID
+     * @return replicaSet as a printable output
+     */
+    public String getReplicaSet(Long aReplicaSetID) {
+        logger.info("Getting the ReplicaSet with ID: " + aReplicaSetID);
+
+        String[] collectionNames = {};
+        String[] patientIDs = {};
+        String[] studyInstanceUIDs = {};
+        String[] seriesInstanceUIDs = {};
+
+        Boolean[] metaMap = getMetaMap(aReplicaSetID);
+        if (metaMap[0]) {
+            collectionNames = getCollectionsSet(aReplicaSetID);
+        }
+        if (metaMap[1]) {
+            patientIDs = getPatientsSet(aReplicaSetID);
+        }
+        if (metaMap[2]) {
+            studyInstanceUIDs = getStudiesSet(aReplicaSetID);
+        }
+        if (metaMap[3]) {
+            seriesInstanceUIDs = getSeriesSet(aReplicaSetID);
+        }
+        return ReplicaSetRetriever.retrieveReplicaSet(aReplicaSetID, collectionNames, patientIDs, studyInstanceUIDs,
+                seriesInstanceUIDs);
+    }
+
+    /**
+     * DELETE /deleteReplicaSet
+     *
+     * @param replicaSetId the id of the replica to be evicted.
+     * @return true, if evicted now. False, if not available.
+     */
+    @Override
+    public boolean deleteReplicaSet(String userId, long replicaSetId) {
+        if (tciaMetaMap.get(replicaSetId) == null) {
+            return false;
+        } else {
+            Long[] replicas = userReplicasMap.get(userId);
+            Long[] newReplicas = new Long[replicas.length - 1];
+            int j = 0;
+            for (Long replica : replicas) {
+                if (replica != replicaSetId) {
+                    newReplicas[j] = replica;
+                    j++;
+                }
+            }
+            userReplicasMap.put(userId, newReplicas);
+
+            tciaMetaMap.remove(replicaSetId);
+            collectionsMap.remove(replicaSetId);
+            patientsMap.remove(replicaSetId);
+            studiesMap.remove(replicaSetId);
+            seriesMap.remove(replicaSetId);
+            return true;
+        }
+    }
+
+    /**
+     * PUSH /updateReplicaSet
+     *
+     * @param replicaSetId,     the id of the replica to be modified.
+     * @param collection        collection names
+     * @param patientID         String[]
+     * @param studyInstanceUID  String[]
+     * @param seriesInstanceUID String[]
+     * @return the updated replica set.
+     */
+    public Boolean[] updateReplicaSet(long replicaSetId, String[] collection, String[] patientID,
+                                      String[] studyInstanceUID, String[] seriesInstanceUID) {
+        Boolean[] metaMap = new Boolean[4];
+        metaMap[0] = collection != null;
+        metaMap[1] = patientID != null;
+        metaMap[2] = studyInstanceUID != null;
+        metaMap[3] = seriesInstanceUID != null;
+
+        putMetaMap(replicaSetId, metaMap);
+        putCollectionSet(replicaSetId, collection);
+        putPatientSet(replicaSetId, patientID);
+        putStudiesSet(replicaSetId, studyInstanceUID);
+        putSeriesSet(replicaSetId, seriesInstanceUID);
+        return metaMap;
+    }
+
+
+    /**
+     * Makes a duplicate of an existing replica set.
+     *
+     * @param replicaSetId the id of the replica set to be duplicated.
+     * @param userId       the user who is duplicating the replica.
+     * @return the id of the duplicate replica set.
+     */
+    @Override
+    public long duplicateReplicaSet(long replicaSetId, String userId) {
+        long duplicateReplicaSetId = UUID.randomUUID().getLeastSignificantBits();
+        Boolean[] replicaSet = getMetaMap(replicaSetId);
+        tciaMetaMap.put(duplicateReplicaSetId, replicaSet);
+        addToUserReplicasMap(userId, duplicateReplicaSetId);
+        collectionsMap.put(duplicateReplicaSetId, getCollectionsSet(replicaSetId));
+        patientsMap.put(duplicateReplicaSetId, getPatientsSet(replicaSetId));
+        studiesMap.put(duplicateReplicaSetId, getStudiesSet(replicaSetId));
+        seriesMap.put(duplicateReplicaSetId, getSeriesSet(replicaSetId));
+        return duplicateReplicaSetId;
+    }
+
+    /**
      * PUT /putMetaMap
      *
      * @param replicaSetId, the id of the replica set.
@@ -206,83 +314,5 @@ public class DataProSpecs extends InfDataAccessIntegration {
      */
     public String[] getSeriesSet(long replicaSetId) {
         return seriesMap.get(replicaSetId);
-    }
-
-    /**
-     * DELETE /deleteReplicaSet
-     *
-     * @param replicaSetId the id of the replica to be evicted.
-     * @return true, if evicted now. False, if not available.
-     */
-    @Override
-    public boolean deleteReplicaSet(String userId, long replicaSetId) {
-        if (tciaMetaMap.get(replicaSetId) == null) {
-            return false;
-        } else {
-            Long[] replicas = userReplicasMap.get(userId);
-            Long[] newReplicas = new Long[replicas.length - 1];
-            int j = 0;
-            for (Long replica : replicas) {
-                if (replica != replicaSetId) {
-                    newReplicas[j] = replica;
-                    j++;
-                }
-            }
-            userReplicasMap.put(userId, newReplicas);
-
-            tciaMetaMap.remove(replicaSetId);
-            collectionsMap.remove(replicaSetId);
-            patientsMap.remove(replicaSetId);
-            studiesMap.remove(replicaSetId);
-            seriesMap.remove(replicaSetId);
-            return true;
-        }
-    }
-
-    /**
-     * PUSH /updateReplicaSet
-     *
-     * @param replicaSetId,     the id of the replica to be modified.
-     * @param collection        collection names
-     * @param patientID         String[]
-     * @param studyInstanceUID  String[]
-     * @param seriesInstanceUID String[]
-     * @return the updated replica set.
-     */
-    public Boolean[] updateReplicaSet(long replicaSetId, String[] collection, String[] patientID,
-                                      String[] studyInstanceUID, String[] seriesInstanceUID) {
-        Boolean[] metaMap = new Boolean[4];
-        metaMap[0] = collection != null;
-        metaMap[1] = patientID != null;
-        metaMap[2] = studyInstanceUID != null;
-        metaMap[3] = seriesInstanceUID != null;
-
-        putMetaMap(replicaSetId, metaMap);
-        putCollectionSet(replicaSetId, collection);
-        putPatientSet(replicaSetId, patientID);
-        putStudiesSet(replicaSetId, studyInstanceUID);
-        putSeriesSet(replicaSetId, seriesInstanceUID);
-        return metaMap;
-    }
-
-
-    /**
-     * Makes a duplicate of an existing replica set.
-     *
-     * @param replicaSetId the id of the replica set to be duplicated.
-     * @param userId       the user who is duplicating the replica.
-     * @return the id of the duplicate replica set.
-     */
-    @Override
-    public long duplicateReplicaSet(long replicaSetId, String userId) {
-        long duplicateReplicaSetId = UUID.randomUUID().getLeastSignificantBits();
-        Boolean[] replicaSet = getMetaMap(replicaSetId);
-        tciaMetaMap.put(duplicateReplicaSetId, replicaSet);
-        addToUserReplicasMap(userId, duplicateReplicaSetId);
-        collectionsMap.put(duplicateReplicaSetId, getCollectionsSet(replicaSetId));
-        patientsMap.put(duplicateReplicaSetId, getPatientsSet(replicaSetId));
-        studiesMap.put(duplicateReplicaSetId, getStudiesSet(replicaSetId));
-        seriesMap.put(duplicateReplicaSetId, getSeriesSet(replicaSetId));
-        return duplicateReplicaSetId;
     }
 }
