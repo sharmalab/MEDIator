@@ -22,6 +22,9 @@
           #set( $count = $count + 1 )
         #end
       </TABLE>
+<CENTER>
+       <button type="button"  onclick="location.href='updateReplicaSet.html' ">Update Replica Set</button>
+</CENTER>
 
     </BODY>
   </HTML>

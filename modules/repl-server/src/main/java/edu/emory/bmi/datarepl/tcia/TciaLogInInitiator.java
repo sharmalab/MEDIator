@@ -46,6 +46,11 @@ public class TciaLogInInitiator extends LogInInitiator {
         }
     }
 
+    /**
+     * Retrieve the replicaSet of the given replicaSetID
+     * @param aReplicaSetID replicaSet ID
+     * @return replicaSet as a printable output
+     */
     public static String retrieveReplicaSet(Long aReplicaSetID) {
         logger.info("ReplicaSetID: " + aReplicaSetID);
 
