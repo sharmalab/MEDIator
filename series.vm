@@ -16,7 +16,6 @@
           <th>Collection</th>
           <th>Visibility</th>
           <th>Modality</th>
-          <th>Body Part</th>
         </tr>
         #foreach( $series in $seriesList )
           <TR  style="border-bottom:1px solid black">
@@ -27,7 +26,6 @@
             <TD>$series.Collection</TD>
             <TD>$series.Visibility</TD>
             <TD>$series.Modality</TD>
-            <TD>$series.BodyPartExamined</TD>
           </TR>
           #set( $count = $count + 1 )
         #end
