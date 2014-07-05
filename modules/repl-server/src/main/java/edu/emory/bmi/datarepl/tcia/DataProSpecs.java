@@ -73,7 +73,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
      * @param seriesInstanceUID String[]
      */
     public void createReplicaSet(String userId, String[] collection, String[] patientID,
-                                        String[] studyInstanceUID, String[] seriesInstanceUID) {
+                                 String[] studyInstanceUID, String[] seriesInstanceUID) {
         long replicaSetId = UUID.randomUUID().getLeastSignificantBits();
 
         Boolean[] metaMap = new Boolean[4];
@@ -83,16 +83,16 @@ public class DataProSpecs extends InfDataAccessIntegration {
         metaMap[3] = seriesInstanceUID != null;
 
         putMetaMap(replicaSetId, metaMap);
-        if (collection!=null) {
+        if (collection != null) {
             putCollectionSet(replicaSetId, collection);
         }
-        if (patientID!= null) {
+        if (patientID != null) {
             putPatientSet(replicaSetId, patientID);
         }
-        if (studyInstanceUID!= null) {
+        if (studyInstanceUID != null) {
             putStudiesSet(replicaSetId, studyInstanceUID);
         }
-        if (seriesInstanceUID!=null) {
+        if (seriesInstanceUID != null) {
             putSeriesSet(replicaSetId, seriesInstanceUID);
         }
         addToUserReplicasMap(userId, replicaSetId);
@@ -215,15 +215,26 @@ public class DataProSpecs extends InfDataAccessIntegration {
      * @return true, if evicted now. False, if not available.
      */
     @Override
-    public boolean deleteReplicaSet(long replicaSetId) {
+    public boolean deleteReplicaSet(String userId, long replicaSetId) {
         if (tciaMetaMap.get(replicaSetId) == null) {
             return false;
         } else {
-            tciaMetaMap.evict(replicaSetId);
-            collectionsMap.evict(replicaSetId);
-            patientsMap.evict(replicaSetId);
-            studiesMap.evict(replicaSetId);
-            seriesMap.evict(replicaSetId);
+            Long[] replicas = userReplicasMap.get(userId);
+            Long[] newReplicas = new Long[0];
+            int j = 0;
+            for (Long replica : replicas) {
+                if (replica != replicaSetId) {
+                    newReplicas[j] = replica;
+                    j++;
+                }
+            }
+            userReplicasMap.put(userId, newReplicas);
+
+            tciaMetaMap.remove(replicaSetId);
+            collectionsMap.remove(replicaSetId);
+            patientsMap.remove(replicaSetId);
+            studiesMap.remove(replicaSetId);
+            seriesMap.remove(replicaSetId);
             return true;
         }
     }

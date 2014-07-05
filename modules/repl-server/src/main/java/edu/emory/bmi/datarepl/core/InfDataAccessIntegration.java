@@ -155,11 +155,21 @@ public class InfDataAccessIntegration implements PubConsAPI {
      * @param replicaSetId the id of the replica to be evicted.
      * @return true, if evicted now. False, if not available.
      */
-    public boolean deleteReplicaSet(long replicaSetId) {
+    public boolean deleteReplicaSet(String userId, long replicaSetId) {
         if (replicaSetsMap.get(replicaSetId) == null) {
             return false;
         } else {
-            replicaSetsMap.evict(replicaSetId);
+            replicaSetsMap.remove(replicaSetId);
+            Long[] replicas = userReplicasMap.get(userId);
+            Long[] newReplicas = new Long[0];
+            int j = 0;
+            for (Long replica : replicas) {
+                if (replica != replicaSetId) {
+                    newReplicas[j] = replica;
+                    j++;
+                }
+            }
+            userReplicasMap.put(userId, newReplicas);
             return true;
         }
     }
