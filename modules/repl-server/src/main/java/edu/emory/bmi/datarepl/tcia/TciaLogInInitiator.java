@@ -29,9 +29,7 @@ public class TciaLogInInitiator extends LogInInitiator {
     public void login(String userId) {
         dataProSpecs = (DataProSpecs) DataProSpecs.getInfiniCore();
 
-        logger.info("user, " + userId + " logs in..");
-
-        tciaInvoker = new TciaInvoker(userId);
+        tciaInvoker = new TciaInvoker();
 
         Long[] replicaSetIDs = dataProSpecs.getUserReplicaSets(userId);
 
@@ -44,6 +42,14 @@ public class TciaLogInInitiator extends LogInInitiator {
                 retrieveReplicaSet(aReplicaSetID);
             }
         }
+    }
+
+    /**
+     * Initiate replication and synchronization tool at the start time, without the user id.
+     */
+    public void init() {
+        dataProSpecs = (DataProSpecs) DataProSpecs.getInfiniCore();
+        tciaInvoker = new TciaInvoker();
     }
 
     /**

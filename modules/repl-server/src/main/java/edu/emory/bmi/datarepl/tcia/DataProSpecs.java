@@ -220,7 +220,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
             return false;
         } else {
             Long[] replicas = userReplicasMap.get(userId);
-            Long[] newReplicas = new Long[0];
+            Long[] newReplicas = new Long[replicas.length - 1];
             int j = 0;
             for (Long replica : replicas) {
                 if (replica != replicaSetId) {

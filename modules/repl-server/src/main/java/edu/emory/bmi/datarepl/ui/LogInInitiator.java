@@ -30,7 +30,7 @@ public abstract class LogInInitiator {
      */
     public void login(String userId) {
         infDataAccessIntegration = InfDataAccessIntegration.getInfiniCore();
-        tciaInvoker = new TciaInvoker(userId);
+        tciaInvoker = new TciaInvoker();
         tciaInvoker.setMashapeMode(false);
 
         Long[] replicaSetIDs = infDataAccessIntegration.getUserReplicaSets(userId);

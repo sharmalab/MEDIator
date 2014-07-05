@@ -27,7 +27,6 @@ import java.net.URISyntaxException;
  */
 public class TciaInvoker extends InterfaceManager {
     private static Logger logger = LogManager.getLogger(TciaInvoker.class.getName());
-    private String userId;
     private boolean isMashapeMode;
 
     private TCIAClientImpl client;
@@ -36,9 +35,6 @@ public class TciaInvoker extends InterfaceManager {
         this.isMashapeMode = isMashapeMode;
     }
 
-    public TciaInvoker(String userId) {
-        this.userId = userId;
-    }
 
     /**
      * /GET the collection values

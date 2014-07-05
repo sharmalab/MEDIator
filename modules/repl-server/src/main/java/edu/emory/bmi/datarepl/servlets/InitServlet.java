@@ -28,13 +28,12 @@ import javax.servlet.http.HttpServletResponse;
 public class InitServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static Logger logger = LogManager.getLogger(InitServlet.class.getName());
-    private static TciaInvoker tciaInvoker;
 
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        tciaInvoker = DataRetriever.getTciaInvoker();
+        TciaInvoker tciaInvoker = DataRetriever.getTciaInvoker();
 
         String response1;
 
@@ -47,7 +46,6 @@ public class InitServlet extends HttpServlet {
 
         out.println("<HTML>    <BODY>\n");
         try {
-//            response1 = tciaInvoker.getSeries("json", "TCGA-GBM", "TCGA-06-6701", null, null);
             response1 = tciaInvoker.getSeries("json", collectionName, patientID, studyInstanceUID, modality);
             String output = UIGenerator.returnSeriesOutput(response1);
             logger.info("\n\n[getSeries]: " + response1);

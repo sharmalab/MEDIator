@@ -1,7 +1,6 @@
 package edu.emory.bmi.datarepl.servlets;
 
 import edu.emory.bmi.datarepl.tcia.DataProSpecs;
-import edu.emory.bmi.datarepl.ui.DataRetriever;
 import edu.emory.bmi.datarepl.ui.UIGenerator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,8 +17,6 @@ import java.io.PrintWriter;
  */
 public class DeleteRsServlet extends HttpServlet {
     private static Logger logger = LogManager.getLogger(DeleteRsServlet.class.getName());
-    private static DataProSpecs dataProSpecs;
-    private static String userId;
 
 
     @Override
@@ -30,10 +27,9 @@ public class DeleteRsServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         Long replicaSetID = Long.parseLong(request.getParameter("replicaSetID"));
+        String userId = request.getParameter("userID");
 
-
-        dataProSpecs = (DataProSpecs) DataProSpecs.getInfiniCore();
-        userId = DataRetriever.getUserId();
+        DataProSpecs dataProSpecs = (DataProSpecs) DataProSpecs.getInfiniCore();
 
         logger.info("Deleting the replica set of the user..");
         boolean deleted = dataProSpecs.deleteReplicaSet(userId, replicaSetID);
