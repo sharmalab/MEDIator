@@ -26,7 +26,7 @@ public class DeleteRsServlet extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
-        Long replicaSetID = Long.parseLong(request.getParameter("replicaSetID"));
+        long replicaSetID = Long.parseLong(request.getParameter("replicaSetID"));
         String userId = request.getParameter("userID");
 
         DataProSpecs dataProSpecs = (DataProSpecs) DataProSpecs.getInfiniCore();

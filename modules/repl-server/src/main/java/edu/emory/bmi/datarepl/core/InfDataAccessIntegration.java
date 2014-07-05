@@ -103,17 +103,17 @@ public class InfDataAccessIntegration implements PubConsAPI {
     /**
      * /PUSH add replicaSetId to the userReplicasMap
      * @param userId Id of the user
-     * @param repicaSetId new replicaSetIds to be added
+     * @param replicaSetId new replicaSetIds to be added
      */
-    public void addToUserReplicasMap(String userId, long repicaSetId) {
+    public void addToUserReplicasMap(String userId, long replicaSetId) {
         Long replicaSetIDs[];
         if (userReplicasMap.get(userId) != null) {
             replicaSetIDs = Arrays.copyOf(userReplicasMap.get(userId), userReplicasMap.get(userId).length + 1);
-            replicaSetIDs[replicaSetIDs.length - 1] = repicaSetId;
+            replicaSetIDs[replicaSetIDs.length - 1] = replicaSetId;
         }
         else {
             replicaSetIDs = new Long[1];
-            replicaSetIDs[0] = repicaSetId;
+            replicaSetIDs[0] = replicaSetId;
         }
         userReplicasMap.put(userId, replicaSetIDs);
     }
@@ -181,7 +181,7 @@ public class InfDataAccessIntegration implements PubConsAPI {
      * @return the updated replica set.
      */
     public String updateReplicaSet(long replicaSetId, String newReplicaSet) {
-        replicaSetsMap.put(replicaSetId, newReplicaSet); //TODO: this could be adding some changes. Not merely replacing.
+        replicaSetsMap.put(replicaSetId, newReplicaSet);
         return newReplicaSet;
     }
 
