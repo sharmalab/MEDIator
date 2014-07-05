@@ -44,17 +44,22 @@ public class CreateRsServlet extends HttpServlet {
         if (request.getParameter("iRsID")==null || request.getParameter("iRsID").trim().length()==0) {
             logger.info("Creating the replica set for the user..");
             dataProSpecs.createReplicaSet(userId, lCollectionName, lPatientID, lStudyInstanceUID, lSeriesInstanceUID);
+
+            Long[] replicaSets = dataProSpecs.getUserReplicaSets(userId);
+
+            String output = UIGenerator.returnReplicaSetOutput(replicaSets);
+
+            logger.info("Listing the Replica Sets of the User");
+            out.println(output);
         } else {
             logger.info("Updating the replica set for the user..");
             Long rsID = Long.parseLong(request.getParameter("iRsID").trim());
             dataProSpecs.updateReplicaSet(rsID, lCollectionName, lPatientID, lStudyInstanceUID, lSeriesInstanceUID);
+
+            out.println("<HTML>    <BODY>\n");
+            out.println("Successfully updated the replicaSet with ID: " + rsID);
+            out.println("</body></html>");
         }
 
-        Long[] replicaSets = dataProSpecs.getUserReplicaSets(userId);
-
-        String output = UIGenerator.returnReplicaSetOutput(replicaSets);
-
-        logger.info("Listing the Replica Sets of the User");
-        out.println(output);
     }
 }
