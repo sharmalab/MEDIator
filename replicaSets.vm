@@ -16,7 +16,7 @@
         #foreach( $rs in $rsList )
           <TR  style="border-bottom:1px solid black">
             <TD>$count</TD>
-            <TD><a href="queryOut.php?rsID=$rs">$rs</a></TD>
+            <TD><a href="retrieveRs?replicaSetID=$rs">$rs</a></TD>
             </script>
           </TR>
           #set( $count = $count + 1 )
