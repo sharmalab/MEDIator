@@ -11,15 +11,11 @@ package edu.emory.bmi.datarepl.container;
 import java.io.File;
 
 import edu.emory.bmi.datarepl.constants.CommonConstants;
-import edu.emory.bmi.datarepl.servlets.CreateRsServlet;
-import edu.emory.bmi.datarepl.servlets.DeleteRsServlet;
-import edu.emory.bmi.datarepl.servlets.RetrieveRsServlet;
+import edu.emory.bmi.datarepl.servlets.*;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.Wrapper;
 import org.apache.catalina.startup.Tomcat;
-
-import edu.emory.bmi.datarepl.servlets.InitServlet;
 
 /**
  * Defines the Embedded Tomcat Instance and registers the servlets and mappings.
@@ -44,6 +40,9 @@ public class TomcatEmbeddedRunner {
 
         Tomcat.addServlet(rootCtx, "deleteRsServlet", new DeleteRsServlet());
         rootCtx.addServletMapping("/deleteRs", "deleteRsServlet");
+
+        Tomcat.addServlet(rootCtx, "duplicateRsServlet", new DuplicateRsServlet());
+        rootCtx.addServletMapping("/duplicateRs", "duplicateRsServlet");
 
         Wrapper defaultServlet = rootCtx.createWrapper();
         defaultServlet.setName("default");
