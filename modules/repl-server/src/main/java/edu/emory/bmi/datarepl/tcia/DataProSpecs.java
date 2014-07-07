@@ -39,7 +39,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
      */
     protected DataProSpecs() throws IOException {
         super();
-        tciaMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
+        tciaMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_META);
         collectionsMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_COLLECTIONS);
         patientsMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_PATIENTS);
         studiesMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_STUDIES);

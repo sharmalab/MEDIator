@@ -8,6 +8,7 @@
 
 package edu.emory.bmi.datarepl.core;
 
+import edu.emory.bmi.datarepl.constants.InfConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.infinispan.Cache;
@@ -36,9 +37,9 @@ public class InfDataAccessIntegration implements PubConsAPI {
      * @throws IOException, if getting the cache failed.
      */
     protected InfDataAccessIntegration() throws IOException {
-        manager = new DefaultCacheManager(edu.emory.bmi.datarepl.constants.InfConstants.INFINISPAN_CONFIG_FILE);
-        replicaSetsMap = manager.getCache(edu.emory.bmi.datarepl.constants.InfConstants.TRANSACTIONAL_CACHE);
-        userReplicasMap = manager.getCache(edu.emory.bmi.datarepl.constants.InfConstants.TRANSACTIONAL_CACHE);
+        manager = new DefaultCacheManager(InfConstants.INFINISPAN_CONFIG_FILE);
+        userReplicasMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
+        replicaSetsMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_RS);
         logger.info("Initialized the Infinispan Cache for the Data Replication Tool..");
     }
 

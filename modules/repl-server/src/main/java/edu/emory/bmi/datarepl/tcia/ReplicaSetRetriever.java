@@ -32,27 +32,30 @@ public class ReplicaSetRetriever {
 
     /**
      * Prints the replicaSets into an HTML page
-     * @param replicaSetID replica Set ID
-     * @param collectionNames array of collection names
-     * @param patientIDs array of patient IDs
-     * @param studyInstanceUIDs array of study instance UIDs
+     *
+     * @param replicaSetID       replica Set ID
+     * @param collectionNames    array of collection names
+     * @param patientIDs         array of patient IDs
+     * @param studyInstanceUIDs  array of study instance UIDs
      * @param seriesInstanceUIDs array of series instance UIDs
      */
     public static String retrieveReplicaSet(Long replicaSetID, String[] collectionNames, String[] patientIDs,
-                                          String[] studyInstanceUIDs, String[] seriesInstanceUIDs) {
+                                            String[] studyInstanceUIDs, String[] seriesInstanceUIDs) {
         tciaInvoker = DataRetriever.getTciaInvoker();
         context = new VelocityContext();
         context.put("collectionsList", collectionNames);
         context.put("patientsList", patientIDs);
         context.put("studiesList", studyInstanceUIDs);
         context.put("seriesList", seriesInstanceUIDs);
-        for (String aSeriesInstanceUID : seriesInstanceUIDs) {
-            try {
-                tciaInvoker.getImage(aSeriesInstanceUID);
-            } catch (UnirestException e) {
-                logger.error("Exception while retrieving the images for the replicaSet", e);
-            } catch (IOException e) {
-                logger.error("IO Exception occurred while retrieving the images for the replicaSet", e);
+        if (seriesInstanceUIDs != null) {
+            for (String aSeriesInstanceUID : seriesInstanceUIDs) {
+                try {
+                    tciaInvoker.getImage(aSeriesInstanceUID);
+                } catch (UnirestException e) {
+                    logger.error("Exception while retrieving the images for the replicaSet", e);
+                } catch (IOException e) {
+                    logger.error("IO Exception occurred while retrieving the images for the replicaSet", e);
+                }
             }
         }
         context.put("title", "ReplicaSetID: " + replicaSetID.toString());
