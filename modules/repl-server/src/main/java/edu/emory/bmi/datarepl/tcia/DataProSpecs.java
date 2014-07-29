@@ -10,11 +10,16 @@ package edu.emory.bmi.datarepl.tcia;
 
 import edu.emory.bmi.datarepl.constants.InfConstants;
 import edu.emory.bmi.datarepl.core.InfDataAccessIntegration;
+import edu.emory.bmi.datarepl.interfacing.TciaInvoker;
+import edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.infinispan.Cache;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -25,6 +30,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
     private static DataProSpecs infDataAccessIntegration = null;
 
     private static Logger logger = LogManager.getLogger(DataProSpecs.class.getName());
+    private static TciaInvoker tciaInvoker = new TciaInvoker();
 
     protected static Cache<Long, Boolean[]> tciaMetaMap;
     protected static Cache<Long, String[]> collectionsMap;
@@ -100,6 +106,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
 
     /**
      * GET /get the replicaSet of the given replicaSetID
+     *
      * @param aReplicaSetID replicaSet ID
      * @return replicaSet as a printable output
      */
@@ -127,6 +134,146 @@ public class DataProSpecs extends InfDataAccessIntegration {
         return ReplicaSetRetriever.retrieveReplicaSet(aReplicaSetID, collectionNames, patientIDs, studyInstanceUIDs,
                 seriesInstanceUIDs);
     }
+
+    /**
+     * Gets the Raw Data for the replicaSetID
+     * @param aReplicaSetID, the replicaSetID to be queried for the raw data.
+     * @return raw data as a list of InputStream
+     */
+    public List<InputStream> getRawData(Long aReplicaSetID) {
+        logger.info("Getting the raw data for the ReplicaSet with ID: " + aReplicaSetID);
+        List<InputStream> inputStreams = new ArrayList<>();
+        String[] collectionNames;
+        String[] patientIDs;
+        String[] studyInstanceUIDs;
+        String[] seriesInstanceUIDs;
+
+        Boolean[] metaMap = getMetaMap(aReplicaSetID);
+        if (metaMap[0]) {
+            collectionNames = getCollectionsSet(aReplicaSetID);
+            for (String aCollection : collectionNames) {
+                if (getRawPatientsOfTheCollection("json", aCollection) != null) {
+                    inputStreams.add(getRawPatientsOfTheCollection("json", aCollection));
+                }
+            }
+        }
+
+        if (metaMap[1]) {
+            patientIDs = getPatientsSet(aReplicaSetID);
+            for (String patientID : patientIDs) {
+                if (getRawStudiesOfThePatient("json", null, patientID, null) != null) {
+                    inputStreams.add(getRawStudiesOfThePatient("json", null, patientID, null));
+                }
+            }
+        }
+
+        if (metaMap[2]) {
+            studyInstanceUIDs = getStudiesSet(aReplicaSetID);
+            for (String studyInstanceUID : studyInstanceUIDs) {
+                if (getRawSeriesOfTheStudies("json", null, null, studyInstanceUID, null) != null) {
+                    inputStreams.add(getRawSeriesOfTheStudies("json", null, null, studyInstanceUID, null));
+                }
+            }
+        }
+
+        if (metaMap[3]) {
+            seriesInstanceUIDs = getSeriesSet(aReplicaSetID);
+            for (String seriesInstanceUID : seriesInstanceUIDs) {
+                if (getRawImagesOfTheSeries(seriesInstanceUID) != null) {
+                    inputStreams.add(getRawImagesOfTheSeries(seriesInstanceUID));
+                }
+            }
+        }
+        return inputStreams;
+    }
+
+    /**
+     * Get Patients of the Collection
+     * @param iFormat format
+     * @param iCollection collection name
+     * @return raw data as Input Stream
+     */
+    public static InputStream getRawPatientsOfTheCollection(String iFormat, String iCollection) {
+        InputStream inputStream = null;
+
+        String query = tciaInvoker.getPatientsOfTheCollectionString(iFormat, iCollection);
+        try {
+            inputStream = tciaInvoker.getRawData(query);
+        } catch (IOException e) {
+            logger.error("IOException in retrieving the patients", e);
+        } catch (TCIAClientException e) {
+            logger.error("TCIAClientException in retrieving the patients", e);
+        }
+        return inputStream;
+    }
+
+    /**
+     * Get Studies of the Patient
+     * @param iFormat format
+     * @param iCollection collection name
+     * @param iPatientID patient id
+     * @param iStudyInstanceUID study instance uid
+     * @return raw data as Input Stream
+     */
+    public static InputStream getRawStudiesOfThePatient(String iFormat, String iCollection,
+                                                        String iPatientID, String iStudyInstanceUID) {
+        InputStream inputStream = null;
+
+        String query = tciaInvoker.getStudiesOfThePatientString(iFormat, iCollection, iPatientID, iStudyInstanceUID);
+        try {
+            inputStream = tciaInvoker.getRawData(query);
+        } catch (IOException e) {
+            logger.error("IOException in retrieving the studies", e);
+        } catch (TCIAClientException e) {
+            logger.error("TCIAClientException in retrieving the studies", e);
+        }
+        return inputStream;
+    }
+
+    /**
+     * Get Series of the Study
+     * @param iFormat format
+     * @param iCollection collection name
+     * @param iPatientID patient id
+     * @param iStudyInstanceUID study instance uid
+     * @param iModality modality
+     * @return raw data as Input Stream
+     */
+    public static InputStream getRawSeriesOfTheStudies(String iFormat, String iCollection, String iPatientID,
+                                                       String iStudyInstanceUID, String iModality) {
+        InputStream inputStream = null;
+
+        String query = tciaInvoker.getSeriesOfTheStudyString(iFormat, iCollection, iPatientID,
+                iStudyInstanceUID, iModality);
+        try {
+            inputStream = tciaInvoker.getRawData(query);
+        } catch (IOException e) {
+            logger.error("IOException in retrieving the series", e);
+        } catch (TCIAClientException e) {
+            logger.error("TCIAClientException in retrieving the series", e);
+        }
+        return inputStream;
+    }
+
+    /**
+     * Get Images of the Series
+     * @param seriesInstanceUID series instance UID
+     * @return raw data as Input Stream
+     */
+    public static InputStream getRawImagesOfTheSeries(String seriesInstanceUID) {
+        InputStream inputStream = null;
+
+        String query = tciaInvoker.getImagesOfTheSeriesString(seriesInstanceUID);
+        try {
+            inputStream = tciaInvoker.getRawData(query);
+        } catch (IOException e) {
+            logger.error("IOException in retrieving the images");
+        } catch (TCIAClientException e) {
+            logger.error("TCIAClientException in retrieving the images");
+        }
+        return inputStream;
+    }
+
 
     /**
      * DELETE /deleteReplicaSet

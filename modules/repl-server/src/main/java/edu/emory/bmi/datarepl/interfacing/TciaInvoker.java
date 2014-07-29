@@ -130,13 +130,24 @@ public class TciaInvoker extends InterfaceManager {
      * @throws UnirestException
      */
     public String getPatient(String iFormat, String iCollection) throws UnirestException, IOException {
+        String query = getPatientsOfTheCollectionString(iFormat, iCollection);
+
+        return getHttpResponse(query);
+    }
+
+    /**
+     * Get patient query
+     * @param iFormat format value. optional.
+     * @param iCollection collection value. optional.
+     * @return patient query
+     */
+    public String getPatientsOfTheCollectionString(String iFormat, String iCollection) {
         String query = "getPatient";
         String temp = "";
         temp = TciaUtil.addParam(temp, TCIAConstants.FORMAT, iFormat);
         temp = TciaUtil.addParam(temp, TCIAConstants.COLLECTION, iCollection);
         query += temp;
-
-        return getHttpResponse(query);
+        return query;
     }
 
     /**
@@ -151,6 +162,21 @@ public class TciaInvoker extends InterfaceManager {
      */
     public String getPatientStudy(String iFormat, String iCollection, String iPatientID,
                                   String iStudyInstanceUID) throws UnirestException, IOException {
+        String query = getStudiesOfThePatientString(iFormat, iCollection, iPatientID, iStudyInstanceUID);
+
+        return getHttpResponse(query);
+    }
+
+    /**
+     * Get studies query
+     * @param iFormat format value. optional.
+     * @param iCollection collection value. optional.
+     * @param iPatientID patient id, optional
+     * @param iStudyInstanceUID study instance uid, optional
+     * @return studies query
+     */
+    public String getStudiesOfThePatientString(
+            String iFormat, String iCollection, String iPatientID, String iStudyInstanceUID) {
         String query = "getPatientStudy";
         String temp = "";
         temp = TciaUtil.addParam(temp, TCIAConstants.FORMAT, iFormat);
@@ -158,8 +184,7 @@ public class TciaInvoker extends InterfaceManager {
         temp = TciaUtil.addParam(temp, TCIAConstants.PATIENT_ID, iPatientID);
         temp = TciaUtil.addParam(temp, TCIAConstants.STUDY_INSTANCE_UID, iStudyInstanceUID);
         query += temp;
-
-        return getHttpResponse(query);
+        return query;
     }
 
 
@@ -176,6 +201,22 @@ public class TciaInvoker extends InterfaceManager {
      */
     public String getSeries(String iFormat, String iCollection, String iPatientID,
                             String iStudyInstanceUID, String iModality) throws UnirestException, IOException {
+        String query = getSeriesOfTheStudyString(iFormat, iCollection, iPatientID, iStudyInstanceUID, iModality);
+
+        return getHttpResponse(query);
+    }
+
+    /**
+     * Get series query
+     * @param iFormat format value. optional.
+     * @param iCollection collection value. optional.
+     * @param iPatientID patient id, optional
+     * @param iStudyInstanceUID study instance uid, optional
+     * @param iModality modality value. optional.
+     * @return series query
+     */
+    public String getSeriesOfTheStudyString(
+            String iFormat, String iCollection, String iPatientID, String iStudyInstanceUID, String iModality) {
         String query = "getSeries";
         String temp = "";
         temp = TciaUtil.addParam(temp, TCIAConstants.FORMAT, iFormat);
@@ -184,8 +225,7 @@ public class TciaInvoker extends InterfaceManager {
         temp = TciaUtil.addParam(temp, TCIAConstants.STUDY_INSTANCE_UID, iStudyInstanceUID);
         temp = TciaUtil.addParam(temp, TCIAConstants.MODALITY, iModality);
         query += temp;
-
-        return getHttpResponse(query);
+        return query;
     }
 
     /**
@@ -204,24 +244,34 @@ public class TciaInvoker extends InterfaceManager {
                             asJson();
             return response.toString();
         } else {
-            URI uri = null;
             try {
-                uri = new URI(TCIAConstants.BASE_URL + "/" + query);
-            } catch (URISyntaxException e) {
-                logger.error("URI syntax was wrong", e);
-            }
-            client = new TCIAClientImpl(TCIAConstants.API_KEY, TCIAConstants.API_KEY);
-
-            try {
-                InputStream is = client.getRawData(uri);
+                InputStream is = getRawData(query);
                 return TCIAClientImpl.convertStreamToString(is);
-
             } catch (TCIAClientException e) {
                 logger.error("Exception in invoking the TCIA Client", e);
             }
             return null;
         }
     }
+
+    /**
+     * Returns the Raw Data for the query.
+     * @param query the search query
+     * @return InputStream
+     * @throws IOException
+     * @throws TCIAClientException
+     */
+    public InputStream getRawData(String query) throws IOException, TCIAClientException {
+        URI uri = null;
+        try {
+            uri = new URI(TCIAConstants.BASE_URL + "/" + query);
+        } catch (URISyntaxException e) {
+            logger.error("URI syntax was wrong", e);
+        }
+        client = new TCIAClientImpl(TCIAConstants.API_KEY, TCIAConstants.API_KEY);
+
+        return client.getRawData(uri);
+        }
 
     /**
      * /GET Image
@@ -231,8 +281,17 @@ public class TciaInvoker extends InterfaceManager {
      * @throws UnirestException
      */
     public String getImage(String seriesInstanceUID) throws UnirestException, IOException {
-        String query = "getImage?SeriesInstanceUID=" + seriesInstanceUID;
+        String query = getImagesOfTheSeriesString(seriesInstanceUID);
 
         return getHttpResponse(query);
+    }
+
+    /**
+     * Get image query
+     * @param seriesInstanceUID, instance ID of the series. Mandatory
+     * @return image query.
+     */
+    public String getImagesOfTheSeriesString(String seriesInstanceUID) {
+        return "getImage?SeriesInstanceUID=" + seriesInstanceUID;
     }
 }
