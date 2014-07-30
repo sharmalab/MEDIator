@@ -7,6 +7,15 @@
  *
  * Copyright (c) 2014, Pradeeban Kathiravelu <pradeeban.kathiravelu@tecnico.ulisboa.pt>
  */
+/*
+ * Title:        Cloud2Sim
+ * Description:  Distributed and Concurrent Cloud Simulation
+ *                Toolkit for Modeling and Simulation
+ *                of Clouds - Enhanced version of CloudSim.
+ * Licence:      GPL - http://www.gnu.org/copyleft/gpl.html
+ *
+ * Copyright (c) 2014, Pradeeban Kathiravelu <pradeeban.kathiravelu@tecnico.ulisboa.pt>
+ */
 
 package edu.emory.bmi.datarepl.csv;
 
@@ -20,30 +29,46 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * Reads the CSV Meta File
+ * Parses the CSV Meta File and stores the meta data into Infinispan.
  */
-public class Reader {
-    private static Logger logger = LogManager.getLogger(Reader.class.getName());
+public class CSVParser {
+    private static Logger logger = LogManager.getLogger(CSVParser.class.getName());
+    private static final int index = 58;
+    private static final int dataStartLine = 2;
+    private static final String NA = "[Not Available]";
+    private static final int maxLines = 500;
 
-    public static void readCSV() {
+    public static void parseCSV() {
 
         BufferedReader br = null;
         String line = "";
         String cvsSplitBy = ",";
+        int currentLine = 1;
 
         try {
-
             br = new BufferedReader(new FileReader(CommonConstants.META_CSV_FILE));
             while ((line = br.readLine()) != null) {
+                if (currentLine >= dataStartLine) {
 
-                String[] entry = line.split(cvsSplitBy);
-                int length = entry.length;
+                    String[] entry = line.split(cvsSplitBy);
+                    int length = entry.length;
 
-                String[] metaArray = new String[length - 1];
-                System.arraycopy(entry, 1, metaArray, 0, length - 1);
-
-                CSVInfDai.getCsvMetaMap().put(entry[0], metaArray);
-
+                    String[] metaArray = new String[length - 1];
+                    int j = 0;
+                    for (int i = 0; i < length - 1; i++) {
+                        if (j != index) {
+                            metaArray[i] = entry[j];
+                            j++;
+                        }
+                    }
+                    if (!entry[58].contains(NA)) {
+                        CSVInfDai.getCsvMetaMap().put(entry[58], metaArray);
+                    }
+                }
+                currentLine++;
+                if (currentLine >= maxLines) {
+                    break;
+                }
             }
 
             //loop map

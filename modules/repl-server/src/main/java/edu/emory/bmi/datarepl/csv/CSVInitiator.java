@@ -24,7 +24,7 @@ public class CSVInitiator {
         InfDataAccessIntegration infDataAccessIntegration = CSVInfDai.getInfiniCore();
         logger.info("Infinispan Initiator instance started..");
 
-        Reader.readCSV();
+        CSVParser.parseCSV();
     }
 
 }
