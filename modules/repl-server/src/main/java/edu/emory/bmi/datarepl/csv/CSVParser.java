@@ -1,18 +1,7 @@
 /*
- * Title:        Cloud2Sim
- * Description:  Distributed and Concurrent Cloud Simulation
- *                Toolkit for Modeling and Simulation
- *                of Clouds - Enhanced version of CloudSim.
- * Licence:      GPL - http://www.gnu.org/copyleft/gpl.html
- *
- * Copyright (c) 2014, Pradeeban Kathiravelu <pradeeban.kathiravelu@tecnico.ulisboa.pt>
- */
-/*
- * Title:        Cloud2Sim
- * Description:  Distributed and Concurrent Cloud Simulation
- *                Toolkit for Modeling and Simulation
- *                of Clouds - Enhanced version of CloudSim.
- * Licence:      GPL - http://www.gnu.org/copyleft/gpl.html
+ * Title:        Data Replication Server
+ * Description:  Data Replication / Synchronization Tools.
+ * Licence:      Apache License Version 2.0 - http://www.apache.org/licenses/
  *
  * Copyright (c) 2014, Pradeeban Kathiravelu <pradeeban.kathiravelu@tecnico.ulisboa.pt>
  */
@@ -26,57 +15,44 @@ import org.apache.logging.log4j.Logger;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * Parses the CSV Meta File and stores the meta data into Infinispan.
  */
 public class CSVParser {
     private static Logger logger = LogManager.getLogger(CSVParser.class.getName());
-    private static final int index = 58;
-    private static final int dataStartLine = 2;
-    private static final String NA = "[Not Available]";
-    private static final int maxLines = 500;
 
+    /**
+     * Parsing the CSV Meta file
+     */
     public static void parseCSV() {
 
         BufferedReader br = null;
         String line = "";
-        String cvsSplitBy = ",";
         int currentLine = 1;
 
         try {
             br = new BufferedReader(new FileReader(CommonConstants.META_CSV_FILE));
             while ((line = br.readLine()) != null) {
-                if (currentLine >= dataStartLine) {
+                if (currentLine >= ParsingConstants.DATA_START_LINE) {
 
-                    String[] entry = line.split(cvsSplitBy);
+                    String[] entry = line.split(ParsingConstants.CSV_SPLIT_BY);
                     int length = entry.length;
 
                     String[] metaArray = new String[length - 1];
                     int j = 0;
                     for (int i = 0; i < length - 1; i++) {
-                        if (j != index) {
+                        if (j != ParsingConstants.INDEX) {
                             metaArray[i] = entry[j];
                             j++;
                         }
                     }
-                    if (!entry[58].contains(NA)) {
-                        CSVInfDai.getCsvMetaMap().put(entry[58], metaArray);
-                    }
+                    updateMetaData(entry, metaArray);
                 }
                 currentLine++;
-                if (currentLine >= maxLines) {
+                if (currentLine >= ParsingConstants.MAX_LINES) {
                     break;
                 }
-            }
-
-            //loop map
-            for (Map.Entry<String, String[]> entry : CSVInfDai.getCsvMetaMap().entrySet()) {
-
-                logger.info("ID:= " + entry.getKey() + " , length="
-                        + entry.getValue().length + "]");
-
             }
 
         } catch (IOException e) {
@@ -91,5 +67,29 @@ public class CSVParser {
             }
         }
         logger.info("Done parsing the CSV file..");
+    }
+
+    /**
+     * Update meta data
+     * @param entry, entry to be updated as a string array of properties
+     * @param metaArray, meta array to be stored
+     */
+    public static void updateMetaData(String[] entry, String[] metaArray) {
+        if (!entry[58].contains(ParsingConstants.NA)) {
+            CSVInfDai.getCsvMetaMap().put(entry[ParsingConstants.INDEX], metaArray);
+            if (CSVInfDai.getMetaMap().get(entry[ParsingConstants.INDEX]) != null) {
+                Boolean[] temp = CSVInfDai.getMetaMap().get(entry[ParsingConstants.INDEX]);
+                if (temp[3]) {
+                    CSVInfDai.getMetaMap().put(entry[ParsingConstants.INDEX], ParsingConstants.EXISTING_EVERYWHERE);
+                    logger.info("Existing entry is updated in the map.." + entry[ParsingConstants.INDEX]);
+                } else {
+                    CSVInfDai.getMetaMap().put(entry[ParsingConstants.INDEX], ParsingConstants.DOES_NOT_EXIST_IN_S3);
+                    logger.info("Entry without S3, is updated in the map.." + entry[ParsingConstants.INDEX]);
+                }
+            } else {
+                CSVInfDai.getMetaMap().putIfAbsent(entry[ParsingConstants.INDEX], ParsingConstants.NEW_ENTRY);
+                logger.info("Adding new entry to the meta map.." + entry[ParsingConstants.INDEX]);
+            }
+        }
     }
 }

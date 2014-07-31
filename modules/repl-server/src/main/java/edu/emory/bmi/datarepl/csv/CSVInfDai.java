@@ -1,9 +1,7 @@
 /*
- * Title:        Cloud2Sim
- * Description:  Distributed and Concurrent Cloud Simulation
- *                Toolkit for Modeling and Simulation
- *                of Clouds - Enhanced version of CloudSim.
- * Licence:      GPL - http://www.gnu.org/copyleft/gpl.html
+ * Title:        Data Replication Server
+ * Description:  Data Replication / Synchronization Tools.
+ * Licence:      Apache License Version 2.0 - http://www.apache.org/licenses/
  *
  * Copyright (c) 2014, Pradeeban Kathiravelu <pradeeban.kathiravelu@tecnico.ulisboa.pt>
  */
@@ -26,6 +24,7 @@ public class CSVInfDai extends InfDataAccessIntegration{
 
     private static Logger logger = LogManager.getLogger(CSVInfDai.class.getName());
 
+    protected static Cache<String, Boolean[]> metaMap; /*csv, ca, tcia, s3*/
     protected static Cache<String, String[]> csvMetaMap;
 
     /**
@@ -35,6 +34,7 @@ public class CSVInfDai extends InfDataAccessIntegration{
      */
     protected CSVInfDai() throws IOException {
         super();
+        metaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
         csvMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_META);
         logger.info("Initialized the Infinispan Cache for the TCIA Data Replication Tool..");
     }
@@ -55,5 +55,9 @@ public class CSVInfDai extends InfDataAccessIntegration{
 
     public static Cache<String, String[]> getCsvMetaMap() {
         return csvMetaMap;
+    }
+
+    public static Cache<String, Boolean[]> getMetaMap() {
+        return metaMap;
     }
 }
