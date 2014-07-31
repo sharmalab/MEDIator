@@ -6,7 +6,7 @@
  * Copyright (c) 2014, Pradeeban Kathiravelu <pradeeban.kathiravelu@tecnico.ulisboa.pt>
  */
 
-package edu.emory.bmi.datarepl.csv;
+package edu.emory.bmi.datarepl.datasources;
 
 import edu.emory.bmi.datarepl.core.InfDataAccessIntegration;
 import org.apache.logging.log4j.LogManager;

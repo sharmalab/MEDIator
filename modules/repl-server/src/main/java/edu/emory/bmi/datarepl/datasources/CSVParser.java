@@ -6,7 +6,7 @@
  * Copyright (c) 2014, Pradeeban Kathiravelu <pradeeban.kathiravelu@tecnico.ulisboa.pt>
  */
 
-package edu.emory.bmi.datarepl.csv;
+package edu.emory.bmi.datarepl.datasources;
 
 import edu.emory.bmi.datarepl.constants.CommonConstants;
 import org.apache.logging.log4j.LogManager;
@@ -47,7 +47,8 @@ public class CSVParser {
                             j++;
                         }
                     }
-                    updateMetaData(entry, metaArray);
+                    String key = entry[ParsingConstants.INDEX];
+                    updateMetaData(key, metaArray);
                 }
                 currentLine++;
                 if (currentLine >= ParsingConstants.MAX_LINES) {
@@ -71,25 +72,13 @@ public class CSVParser {
 
     /**
      * Update meta data
-     * @param entry, entry to be updated as a string array of properties
+     * @param key, patient ID
      * @param metaArray, meta array to be stored
      */
-    public static void updateMetaData(String[] entry, String[] metaArray) {
-        if (!entry[58].contains(ParsingConstants.NA)) {
-            CSVInfDai.getCsvMetaMap().put(entry[ParsingConstants.INDEX], metaArray);
-            if (CSVInfDai.getMetaMap().get(entry[ParsingConstants.INDEX]) != null) {
-                Boolean[] temp = CSVInfDai.getMetaMap().get(entry[ParsingConstants.INDEX]);
-                if (temp[3]) {
-                    CSVInfDai.getMetaMap().put(entry[ParsingConstants.INDEX], ParsingConstants.EXISTING_EVERYWHERE);
-                    logger.info("Existing entry is updated in the map.." + entry[ParsingConstants.INDEX]);
-                } else {
-                    CSVInfDai.getMetaMap().put(entry[ParsingConstants.INDEX], ParsingConstants.DOES_NOT_EXIST_IN_S3);
-                    logger.info("Entry without S3, is updated in the map.." + entry[ParsingConstants.INDEX]);
-                }
-            } else {
-                CSVInfDai.getMetaMap().putIfAbsent(entry[ParsingConstants.INDEX], ParsingConstants.NEW_ENTRY);
-                logger.info("Adding new entry to the meta map.." + entry[ParsingConstants.INDEX]);
-            }
+    public static void updateMetaData(String key, String[] metaArray) {
+        if (!key.contains(ParsingConstants.NA)) {
+            CSVInfDai.getCsvMetaMap().put(key, metaArray);
+            DataSourcesIntegrator.updateExistenceInDataSource(key, ParsingConstants.CSV_META_POSITION, true);
         }
     }
 }
