@@ -32,10 +32,10 @@ public class Reader {
 
         try {
 
-            br = new BufferedReader(new FileReader(CommonConstants.META_CSV_FILE));
+            br = new BufferedReader(new FileReader(DataSourcesConstants.META_CSV_FILE));
             while ((line = br.readLine()) != null) {
 
-                String[] entry = line.split(ParsingConstants.CSV_SPLIT_BY);
+                String[] entry = line.split(DataSourcesConstants.CSV_SPLIT_BY);
                 int length = entry.length;
 
                 String[] metaArray = new String[length - 1];

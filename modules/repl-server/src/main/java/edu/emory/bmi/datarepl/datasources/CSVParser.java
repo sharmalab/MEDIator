@@ -8,7 +8,6 @@
 
 package edu.emory.bmi.datarepl.datasources;
 
-import edu.emory.bmi.datarepl.constants.CommonConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,7 +33,7 @@ public class CSVParser {
         try {
             br = new BufferedReader(new FileReader(fileName));
             while ((line = br.readLine()) != null) {
-                if (currentLine >= ParsingConstants.DATA_START_LINE) {
+                if (currentLine >= DataSourcesConstants.DATA_START_LINE) {
 
                     String[] entry = line.split(splitBy);
                     int length = entry.length;
@@ -51,7 +50,7 @@ public class CSVParser {
                     updateMetaData(key, metaArray, meta);
                 }
                 currentLine++;
-                if (currentLine >= ParsingConstants.MAX_LINES) {
+                if (currentLine >= DataSourcesConstants.MAX_LINES) {
                     break;
                 }
             }
@@ -78,9 +77,9 @@ public class CSVParser {
      * @param meta,      location in the meta array
      */
     public static void updateMetaData(String key, String[] metaArray, int meta) {
-        if (meta == ParsingConstants.CSV_META_POSITION) {
+        if (meta == DataSourcesConstants.CSV_META_POSITION) {
             updateMetaDataWithCSV(key, metaArray);
-        } else if (meta == ParsingConstants.S3_META_POSITION) {
+        } else if (meta == DataSourcesConstants.S3_META_POSITION) {
             updateMetaDataWithS3Entry(key, metaArray);
         }
     }
@@ -92,9 +91,9 @@ public class CSVParser {
      * @param metaArray, meta array to be stored
      */
     public static void updateMetaDataWithCSV(String key, String[] metaArray) {
-        if (!key.contains(ParsingConstants.NA)) {
+        if (!key.contains(DataSourcesConstants.NA)) {
             CSVInfDai.getCsvMetaMap().put(key, metaArray);
-            DataSourcesIntegrator.updateExistenceInDataSource(key, ParsingConstants.CSV_META_POSITION, true);
+            DataSourcesIntegrator.updateExistenceInDataSource(key, DataSourcesConstants.CSV_META_POSITION, true);
         }
     }
 
@@ -106,6 +105,6 @@ public class CSVParser {
      */
     public static void updateMetaDataWithS3Entry(String key, String[] metaArray) {
 //        CSVInfDai.getS3MetaMap().put(key, metaArray); todo
-        DataSourcesIntegrator.updateExistenceInDataSource(key, ParsingConstants.S3_META_POSITION, true);
+        DataSourcesIntegrator.updateExistenceInDataSource(key, DataSourcesConstants.S3_META_POSITION, true);
     }
 }

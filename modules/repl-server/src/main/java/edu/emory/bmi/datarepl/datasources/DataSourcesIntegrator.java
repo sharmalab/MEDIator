@@ -32,7 +32,7 @@ public class DataSourcesIntegrator {
         try {
             tciaInvoker.getPatientStudy("json", null, patientID, null);
             output = tciaInvoker.getStudiesOfThePatientString("json", null, patientID, null);
-            updateExistenceInDataSource(patientID, ParsingConstants.TCIA_META_POSITION, true);
+            updateExistenceInDataSource(patientID, DataSourcesConstants.TCIA_META_POSITION, true);
         } catch (UnirestException e) {
             logger.info("UniRest Exception while invoking the patient study retrieval", e);
         } catch (IOException e) {
@@ -47,8 +47,8 @@ public class DataSourcesIntegrator {
      * @param patientID, id of the patient
      */
     public static String getPatientStudiesFromCAMicroscope(String patientID) {
-        String url = ParsingConstants.CA_MICROSCOPE_BASE_URL + ParsingConstants.CA_MICROSCOPE_QUERY_URL + patientID;
-        updateExistenceInDataSource(patientID, ParsingConstants.CA_META_POSITION, true);
+        String url = DataSourcesConstants.CA_MICROSCOPE_BASE_URL + DataSourcesConstants.CA_MICROSCOPE_QUERY_URL + patientID;
+        updateExistenceInDataSource(patientID, DataSourcesConstants.CA_META_POSITION, true);
         return url;
     }
 
@@ -57,9 +57,10 @@ public class DataSourcesIntegrator {
      *
      * @param patientID, id of the patient
      */
-    public static void getPatientStudiesFromS3(String patientID) {
-        S3Retriever.retrieveData(patientID);
-        updateExistenceInDataSource(patientID, ParsingConstants.S3_META_POSITION, true);
+    public static String getPatientStudiesFromS3(String patientID) {
+        String url = S3Retriever.retrieveUrl(patientID);
+        updateExistenceInDataSource(patientID, DataSourcesConstants.S3_META_POSITION, true);
+        return url;
     }
 
     /**

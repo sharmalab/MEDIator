@@ -20,12 +20,12 @@ public class S3Retriever {
     public static String retrieveUrl(String patientID) {
         String fileName = CSVInfDai.getS3MetaMap().get(patientID);
         String url;
-        if (fileName.contains(ParsingConstants.S3_LEVEL2)) {
-            url = ParsingConstants.S3_BASE_URL + ParsingConstants.S3_LEVEL2 + ParsingConstants.URL_SEPARATOR + fileName;
-        } else if (fileName.contains(ParsingConstants.S3_LEVEL3)) {
-            url = ParsingConstants.S3_BASE_URL + ParsingConstants.S3_LEVEL3 + ParsingConstants.URL_SEPARATOR + fileName;
+        if (fileName.contains(DataSourcesConstants.S3_LEVEL2)) {
+            url = DataSourcesConstants.S3_BASE_URL + DataSourcesConstants.S3_LEVEL2 + DataSourcesConstants.URL_SEPARATOR + fileName;
+        } else if (fileName.contains(DataSourcesConstants.S3_LEVEL3)) {
+            url = DataSourcesConstants.S3_BASE_URL + DataSourcesConstants.S3_LEVEL3 + DataSourcesConstants.URL_SEPARATOR + fileName;
         } else {
-            url = ParsingConstants.S3_BASE_URL + ParsingConstants.S3_LEVEL1 + ParsingConstants.URL_SEPARATOR + fileName;
+            url = DataSourcesConstants.S3_BASE_URL + DataSourcesConstants.S3_LEVEL1 + DataSourcesConstants.URL_SEPARATOR + fileName;
         }
         return url;
     }

@@ -13,6 +13,4 @@ package edu.emory.bmi.datarepl.constants;
  */
 public final class CommonConstants {
     public static final int EMBEDDED_TOMCAT_PORT = 9090;
-
-    public static final String META_CSV_FILE = "getAllDataAsCSV";
 }

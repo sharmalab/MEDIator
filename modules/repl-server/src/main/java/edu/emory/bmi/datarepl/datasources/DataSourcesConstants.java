@@ -9,9 +9,11 @@
 package edu.emory.bmi.datarepl.datasources;
 
 /**
- * Constants related to parsing CSV.
+ * Constants related to data sources.
  */
-public final class ParsingConstants {
+public final class DataSourcesConstants {
+    public static final String META_CSV_FILE = "getAllDataAsCSV";
+
     public static final int INDEX = 58;
     public static final int DATA_START_LINE = 2;
     public static final String NA = "[Not Available]";
