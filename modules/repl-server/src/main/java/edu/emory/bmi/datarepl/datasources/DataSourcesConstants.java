@@ -13,11 +13,16 @@ package edu.emory.bmi.datarepl.datasources;
  */
 public final class DataSourcesConstants {
     public static final String META_CSV_FILE = "getAllDataAsCSV";
+    public static final String S3_META_CSV_FILE = "FILE_SAMPLE_MAP.txt";
 
-    public static final int INDEX = 58;
+    public static final int CSV_META_INDEX = 58;
+    public static final int S3_META_INDEX = 1;
+
     public static final int DATA_START_LINE = 2;
     public static final String NA = "[Not Available]";
     public static final String CSV_SPLIT_BY = ",";
+    public static final String S3_SPLIT_BY = "\t";
+
 
     public static final int MAX_LINES = 50000;
     public static final Boolean[] EXISTS_EVERYWHERE = {true, true, true, true};

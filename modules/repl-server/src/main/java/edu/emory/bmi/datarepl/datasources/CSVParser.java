@@ -46,8 +46,15 @@ public class CSVParser {
                             j++;
                         }
                     }
-                    String key = entry[parsingIndex];
-                    updateMetaData(key, metaArray, meta);
+                    try {
+                        String key = entry[parsingIndex];
+                        updateMetaData(key, metaArray, meta);
+                    } catch (ArrayIndexOutOfBoundsException ignored) {
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Exception in parsing the line", ignored);
+                        }
+                        break;
+                    }
                 }
                 currentLine++;
                 if (currentLine >= DataSourcesConstants.MAX_LINES) {
@@ -100,11 +107,12 @@ public class CSVParser {
     /**
      * Update meta data with CSV entry
      *
-     * @param key,       patient ID
+     * @param longKey,   contains patient ID
      * @param metaArray, meta array to be stored
      */
-    public static void updateMetaDataWithS3Entry(String key, String[] metaArray) {
-//        CSVInfDai.getS3MetaMap().put(key, metaArray); todo
-        DataSourcesIntegrator.updateExistenceInDataSource(key, DataSourcesConstants.S3_META_POSITION, true);
+    public static void updateMetaDataWithS3Entry(String longKey, String[] metaArray) {
+        String patientID = longKey.substring(0, 12);
+        CSVInfDai.getS3MetaMap().put(patientID, metaArray[0]);
+        DataSourcesIntegrator.updateExistenceInDataSource(patientID, DataSourcesConstants.S3_META_POSITION, true);
     }
 }

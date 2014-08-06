@@ -17,6 +17,7 @@ public final class InfConstants {
     public static String TRANSACTIONAL_CACHE = "transactional";
     public static String TRANSACTIONAL_CACHE_RS = "transactional_rs";
     public static String TRANSACTIONAL_CACHE_META = "transactional_meta";
+    public static String TRANSACTIONAL_CACHE_S3 = "transactional_s3";
     public static String TRANSACTIONAL_CACHE_COLLECTIONS = "transactional_collections";
     public static String TRANSACTIONAL_CACHE_PATIENTS = "transactional_patients";
     public static String TRANSACTIONAL_CACHE_STUDIES = "transactional_studies";

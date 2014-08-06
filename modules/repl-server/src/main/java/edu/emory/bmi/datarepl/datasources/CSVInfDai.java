@@ -37,6 +37,7 @@ public class CSVInfDai extends InfDataAccessIntegration{
         super();
         metaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
         csvMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_META);
+        s3MetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_S3);
         logger.info("Initialized the Infinispan Cache for the TCIA Data Replication Tool..");
     }
 
