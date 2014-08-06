@@ -29,4 +29,11 @@ public final class ParsingConstants {
     public static final int TCIA_META_POSITION = 2;
     public static final int S3_META_POSITION = 3;
 
+    public static final String S3_BASE_URL = "https://s3.amazonaws.com/dataReplServer/";
+    public static final String S3_LEVEL1 = "level1";
+    public static final String S3_LEVEL2 = "level2";
+    public static final String S3_LEVEL3 = "level3";
+    public static final String URL_SEPARATOR = "/";
+
+
 }

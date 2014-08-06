@@ -26,6 +26,7 @@ public class CSVInfDai extends InfDataAccessIntegration{
 
     protected static Cache<String, Boolean[]> metaMap; /*csv, ca, tcia, s3*/
     protected static Cache<String, String[]> csvMetaMap;
+    protected static Cache<String, String> s3MetaMap;
 
     /**
      * Singleton. Prevents initialization from outside the class.
@@ -59,5 +60,9 @@ public class CSVInfDai extends InfDataAccessIntegration{
 
     public static Cache<String, Boolean[]> getMetaMap() {
         return metaMap;
+    }
+
+    public static Cache<String, String> getS3MetaMap() {
+        return s3MetaMap;
     }
 }
