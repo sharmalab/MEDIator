@@ -25,7 +25,7 @@ public class CSVParser {
     /**
      * Parsing the CSV Meta file
      */
-    public static void parseCSV(String fileName, int meta) {
+    public static void parseCSV(String fileName, int meta, int parsingIndex, String splitBy) {
 
         BufferedReader br = null;
         String line = "";
@@ -36,18 +36,18 @@ public class CSVParser {
             while ((line = br.readLine()) != null) {
                 if (currentLine >= ParsingConstants.DATA_START_LINE) {
 
-                    String[] entry = line.split(ParsingConstants.CSV_SPLIT_BY);
+                    String[] entry = line.split(splitBy);
                     int length = entry.length;
 
                     String[] metaArray = new String[length - 1];
                     int j = 0;
                     for (int i = 0; i < length - 1; i++) {
-                        if (j != ParsingConstants.INDEX) {
+                        if (j != parsingIndex) {
                             metaArray[i] = entry[j];
                             j++;
                         }
                     }
-                    String key = entry[ParsingConstants.INDEX];
+                    String key = entry[parsingIndex];
                     updateMetaData(key, metaArray, meta);
                 }
                 currentLine++;
@@ -78,9 +78,10 @@ public class CSVParser {
      * @param meta,      location in the meta array
      */
     public static void updateMetaData(String key, String[] metaArray, int meta) {
-        if (!key.contains(ParsingConstants.NA)) {
-            CSVInfDai.getCsvMetaMap().put(key, metaArray);
-            DataSourcesIntegrator.updateExistenceInDataSource(key, meta, true);
+        if (meta == ParsingConstants.CSV_META_POSITION) {
+            updateMetaDataWithCSV(key, metaArray);
+        } else if (meta == ParsingConstants.S3_META_POSITION) {
+            updateMetaDataWithS3Entry(key, metaArray);
         }
     }
 
@@ -91,7 +92,10 @@ public class CSVParser {
      * @param metaArray, meta array to be stored
      */
     public static void updateMetaDataWithCSV(String key, String[] metaArray) {
-        updateMetaData(key, metaArray, ParsingConstants.CSV_META_POSITION);
+        if (!key.contains(ParsingConstants.NA)) {
+            CSVInfDai.getCsvMetaMap().put(key, metaArray);
+            DataSourcesIntegrator.updateExistenceInDataSource(key, ParsingConstants.CSV_META_POSITION, true);
+        }
     }
 
     /**
@@ -101,6 +105,7 @@ public class CSVParser {
      * @param metaArray, meta array to be stored
      */
     public static void updateMetaDataWithS3Entry(String key, String[] metaArray) {
-        updateMetaData(key, metaArray, ParsingConstants.S3_META_POSITION);
+//        CSVInfDai.getS3MetaMap().put(key, metaArray); todo
+        DataSourcesIntegrator.updateExistenceInDataSource(key, ParsingConstants.S3_META_POSITION, true);
     }
 }

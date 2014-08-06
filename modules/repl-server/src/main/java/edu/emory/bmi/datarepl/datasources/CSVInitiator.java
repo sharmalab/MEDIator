@@ -23,6 +23,7 @@ public class CSVInitiator {
         InfDataAccessIntegration infDataAccessIntegration = CSVInfDai.getInfiniCore();
         logger.info("Infinispan Initiator instance started..");
 
-        CSVParser.parseCSV(CommonConstants.META_CSV_FILE, ParsingConstants.CSV_META_POSITION);
+        CSVParser.parseCSV(CommonConstants.META_CSV_FILE, ParsingConstants.CSV_META_POSITION,
+                ParsingConstants.INDEX, ParsingConstants.CSV_SPLIT_BY);
     }
 }
