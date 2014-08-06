@@ -17,7 +17,7 @@ public final class ParsingConstants {
     public static final String NA = "[Not Available]";
     public static final String CSV_SPLIT_BY = ",";
 
-    public static final int MAX_LINES = 500;
+    public static final int MAX_LINES = 50000;
     public static final Boolean[] EXISTS_EVERYWHERE = {true, true, true, true};
     public static final Boolean[] NOT_KNOWN_YET = {false, false, false, false};
 

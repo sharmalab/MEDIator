@@ -8,6 +8,7 @@
 
 package edu.emory.bmi.datarepl.datasources;
 
+import edu.emory.bmi.datarepl.constants.CommonConstants;
 import edu.emory.bmi.datarepl.core.InfDataAccessIntegration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,6 +23,6 @@ public class CSVInitiator {
         InfDataAccessIntegration infDataAccessIntegration = CSVInfDai.getInfiniCore();
         logger.info("Infinispan Initiator instance started..");
 
-        CSVParser.parseCSV();
+        CSVParser.parseCSV(CommonConstants.META_CSV_FILE, ParsingConstants.CSV_META_POSITION);
     }
 }

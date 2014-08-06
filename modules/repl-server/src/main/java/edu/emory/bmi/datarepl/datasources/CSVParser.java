@@ -25,14 +25,14 @@ public class CSVParser {
     /**
      * Parsing the CSV Meta file
      */
-    public static void parseCSV() {
+    public static void parseCSV(String fileName, int meta) {
 
         BufferedReader br = null;
         String line = "";
         int currentLine = 1;
 
         try {
-            br = new BufferedReader(new FileReader(CommonConstants.META_CSV_FILE));
+            br = new BufferedReader(new FileReader(fileName));
             while ((line = br.readLine()) != null) {
                 if (currentLine >= ParsingConstants.DATA_START_LINE) {
 
@@ -48,7 +48,7 @@ public class CSVParser {
                         }
                     }
                     String key = entry[ParsingConstants.INDEX];
-                    updateMetaData(key, metaArray);
+                    updateMetaData(key, metaArray, meta);
                 }
                 currentLine++;
                 if (currentLine >= ParsingConstants.MAX_LINES) {
@@ -72,13 +72,35 @@ public class CSVParser {
 
     /**
      * Update meta data
-     * @param key, patient ID
+     *
+     * @param key,       patient ID
      * @param metaArray, meta array to be stored
+     * @param meta,      location in the meta array
      */
-    public static void updateMetaData(String key, String[] metaArray) {
+    public static void updateMetaData(String key, String[] metaArray, int meta) {
         if (!key.contains(ParsingConstants.NA)) {
             CSVInfDai.getCsvMetaMap().put(key, metaArray);
-            DataSourcesIntegrator.updateExistenceInDataSource(key, ParsingConstants.CSV_META_POSITION, true);
+            DataSourcesIntegrator.updateExistenceInDataSource(key, meta, true);
         }
+    }
+
+    /**
+     * Update meta data with CSV entry
+     *
+     * @param key,       patient ID
+     * @param metaArray, meta array to be stored
+     */
+    public static void updateMetaDataWithCSV(String key, String[] metaArray) {
+        updateMetaData(key, metaArray, ParsingConstants.CSV_META_POSITION);
+    }
+
+    /**
+     * Update meta data with CSV entry
+     *
+     * @param key,       patient ID
+     * @param metaArray, meta array to be stored
+     */
+    public static void updateMetaDataWithS3Entry(String key, String[] metaArray) {
+        updateMetaData(key, metaArray, ParsingConstants.S3_META_POSITION);
     }
 }
