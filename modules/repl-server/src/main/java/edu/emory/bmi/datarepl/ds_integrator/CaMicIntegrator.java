@@ -16,8 +16,8 @@ import org.apache.logging.log4j.Logger;
 /**
  * Integrates with CA Microscope
  */
-public class CaIntegrator extends DataSourcesIntegrator {
-    private static Logger logger = LogManager.getLogger(CaIntegrator.class.getName());
+public class CaMicIntegrator extends DataSourcesIntegrator {
+    private static Logger logger = LogManager.getLogger(CaMicIntegrator.class.getName());
 
     /**
      * Get patient studies from CA Microscope
