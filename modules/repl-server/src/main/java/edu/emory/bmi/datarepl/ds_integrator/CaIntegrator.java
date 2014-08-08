@@ -39,7 +39,7 @@ public class CaIntegrator extends DataSourcesIntegrator {
     /**
      * /PUSH Update meta data with CA entry
      *
-     * @param key,       patient ID
+     * @param key,   id of the meta data
      * @param object, object value
      */
     public static void updateMetaData(String key, String object) {
@@ -49,7 +49,7 @@ public class CaIntegrator extends DataSourcesIntegrator {
     /**
      * /GET Get meta data for CA Microscope
      *
-     * @param id, id of the patient
+     * @param id, id of the meta data
      */
     public static String getMetaData(String id) {
         if (DataSourcesIntegrator.doesExistInDataSource(id, DataSourcesConstants.CA_META_POSITION)) {
@@ -63,7 +63,7 @@ public class CaIntegrator extends DataSourcesIntegrator {
     /**
      * /PUT Create meta data with CA entry
      *
-     * @param key,       patient ID
+     * @param key,       id of the meta data
      * @param object, object value
      */
     public static void putMetaData(String key, String object) {
@@ -74,11 +74,12 @@ public class CaIntegrator extends DataSourcesIntegrator {
     /**
      * /DELETE Delete meta data for CA Microscope
      *
-     * @param id, id of the patient
+     * @param id, id of the meta data
      */
     public static void deleteMetaData(String id) {
         if (DataSourcesIntegrator.doesExistInDataSource(id, DataSourcesConstants.CA_META_POSITION)) {
             CSVInfDai.getCaMetaMap().remove(id);
+            updateExistenceInDataSource(id, DataSourcesConstants.CSV_META_POSITION, false);
         } else {
             logger.info("Meta data does not exist in the map for the key, " + id);
         }

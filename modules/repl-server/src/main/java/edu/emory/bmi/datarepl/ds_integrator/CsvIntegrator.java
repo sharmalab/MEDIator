@@ -10,11 +10,15 @@ package edu.emory.bmi.datarepl.ds_integrator;
 
 import edu.emory.bmi.datarepl.ds_impl.CSVInfDai;
 import edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Integrates with CSV
  */
 public class CsvIntegrator extends DataSourcesIntegrator {
+    private static Logger logger = LogManager.getLogger(CsvIntegrator.class.getName());
+
     /**
      * Update meta data with CSV entry
      *
@@ -28,6 +32,46 @@ public class CsvIntegrator extends DataSourcesIntegrator {
                     DataSourcesConstants.CSV_META_POSITION, true);
         }
     }
+
+    /**
+     * /GET Get meta data
+     *
+     * @param id, id of the patient
+     */
+    public static String[] getMetaData(String id) {
+        if (DataSourcesIntegrator.doesExistInDataSource(id, DataSourcesConstants.CSV_META_POSITION)) {
+            return CSVInfDai.getCsvMetaMap().get(id);
+        } else {
+            logger.info("Meta data does not exist in the map for the key, " + id);
+            return null;
+        }
+    }
+
+    /**
+     * /PUT Create meta data
+     *
+     * @param key,      id of the meta data
+     * @param metaArray, object value
+     */
+    public static void putMetaData(String key, String metaArray[]) {
+        updateMetaData(key, metaArray);
+        updateExistenceInDataSource(key, DataSourcesConstants.CSV_META_POSITION, true);
+    }
+
+    /**
+     * /DELETE Delete meta data
+     *
+     * @param id, id of the patient
+     */
+    public static void deleteMetaData(String id) {
+        if (DataSourcesIntegrator.doesExistInDataSource(id, DataSourcesConstants.CSV_META_POSITION)) {
+            CSVInfDai.getCaMetaMap().remove(id);
+            updateExistenceInDataSource(id, DataSourcesConstants.CSV_META_POSITION, false);
+        } else {
+            logger.info("Meta data does not exist in the map for the key, " + id);
+        }
+    }
+
 
     /**
      * Get patient studies from CA Microscope

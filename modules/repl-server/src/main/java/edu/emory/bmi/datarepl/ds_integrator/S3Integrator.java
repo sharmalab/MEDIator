@@ -46,7 +46,7 @@ public class S3Integrator extends DataSourcesIntegrator {
     /**
      * Update meta data with CSV entry
      *
-     * @param key, patient ID
+     * @param key, id of the meta data
      * @param meta, meta to be stored
      */
     public static void updateMetaData(String key, String meta) {
@@ -55,11 +55,11 @@ public class S3Integrator extends DataSourcesIntegrator {
 
     /**
      * Gets the S3 storage url for the given patient
-     * @param patientID, the patient ID
+     * @param id, id of the meta data
      * @return url.
      */
-    public static String retrieveUrl(String patientID) {
-        String fileName = CSVInfDai.getS3MetaMap().get(patientID);
+    public static String retrieveUrl(String id) {
+        String fileName = CSVInfDai.getS3MetaMap().get(id);
         String url;
         if (fileName.contains(DataSourcesConstants.S3_LEVEL2)) {
             url = DataSourcesConstants.S3_BASE_URL + DataSourcesConstants.S3_LEVEL2 +
@@ -78,7 +78,7 @@ public class S3Integrator extends DataSourcesIntegrator {
     /**
      * /GET Get meta data for CA Microscope
      *
-     * @param id, id of the patient
+     * @param id, id of the meta data
      */
     public static String getMetaData(String id) {
         if (DataSourcesIntegrator.doesExistInDataSource(id, DataSourcesConstants.S3_META_POSITION)) {
@@ -92,7 +92,7 @@ public class S3Integrator extends DataSourcesIntegrator {
     /**
      * /PUT Create meta data with CA entry
      *
-     * @param key,       patient ID
+     * @param key,       id of the meta data
      * @param object, object value
      */
     public static void putMetaData(String key, String object) {
@@ -103,11 +103,12 @@ public class S3Integrator extends DataSourcesIntegrator {
     /**
      * /DELETE Delete meta data for CA Microscope
      *
-     * @param id, id of the patient
+     * @param id, id of the meta data
      */
     public static void deleteMetaData(String id) {
         if (DataSourcesIntegrator.doesExistInDataSource(id, DataSourcesConstants.S3_META_POSITION)) {
             CSVInfDai.getS3MetaMap().remove(id);
+            updateExistenceInDataSource(id, DataSourcesConstants.S3_META_POSITION, false);
         } else {
             logger.info("Meta data does not exist in the map for the key, " + id);
         }
