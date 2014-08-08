@@ -20,44 +20,7 @@ import java.io.IOException;
  * Integrate with the data sources
  */
 public abstract class DataSourcesIntegrator implements Integrator {
-    private static TciaInvoker tciaInvoker = new TciaInvoker();
     private static Logger logger = LogManager.getLogger(DataSourcesIntegrator.class.getName());
-
-    /**
-     * Integrate with TCIA
-     *
-     * @param patientID, id of the patient
-     */
-    public static String getPatientStudiesFromTCIA(String patientID) {
-        String output = "";
-        try {
-            tciaInvoker.getPatientStudy("json", null, patientID, null);
-            output = tciaInvoker.getStudiesOfThePatientString("json", null, patientID, null);
-            S3Integrator.updateExistenceInDataSource(patientID, edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.TCIA_META_POSITION, true);
-        } catch (UnirestException e) {
-            logger.info("UniRest Exception while invoking the patient study retrieval", e);
-        } catch (IOException e) {
-            logger.info("IO Exception while invoking the patient study retrieval", e);
-        }
-        return output;
-    }
-
-    /**
-     * Integrate with CA Microscope
-     *
-     * @param patientID, id of the patient
-     */
-    public static String getPatientStudiesFromCAMicroscope(String patientID) {
-        if (edu.emory.bmi.datarepl.ds_impl.CSVInfDai.getCaMetaMap().get(patientID)!=null) {
-            return edu.emory.bmi.datarepl.ds_impl.CSVInfDai.getCaMetaMap().get(patientID);
-        } else {
-            String url = edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.CA_MICROSCOPE_BASE_URL + edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.CA_MICROSCOPE_QUERY_URL +
-                    patientID;
-            edu.emory.bmi.datarepl.ds_impl.CSVInfDai.getCaMetaMap().put(patientID, url);
-            S3Integrator.updateExistenceInDataSource(patientID, edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.CA_META_POSITION, true);
-            return url;
-        }
-    }
 
 
     /**
@@ -90,4 +53,14 @@ public abstract class DataSourcesIntegrator implements Integrator {
             S3Integrator.updateMetaDataWithS3Entry(key, metaArray);
         }
     }
+
+    /**
+     * Get patient studies
+     *
+     * @param patientID, id of the patient
+     */
+    public static String getPatientStudies(String patientID) {
+        return null;
+    }
+
 }

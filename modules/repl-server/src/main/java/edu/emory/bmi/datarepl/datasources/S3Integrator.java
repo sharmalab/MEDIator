@@ -1,3 +1,11 @@
+/*
+ * Title:        Data Replication Server
+ * Description:  Data Replication / Synchronization Tools.
+ * Licence:      Apache License Version 2.0 - http://www.apache.org/licenses/
+ *
+ * Copyright (c) 2014, Pradeeban Kathiravelu <pradeeban.kathiravelu@tecnico.ulisboa.pt>
+ */
+
 package edu.emory.bmi.datarepl.datasources;
 
 import edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants;
@@ -20,18 +28,20 @@ public class S3Integrator extends DataSourcesIntegrator {
     public static void updateMetaDataWithCSV(String key, String[] metaArray) {
         if (!key.contains(edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.NA)) {
             edu.emory.bmi.datarepl.ds_impl.CSVInfDai.getCsvMetaMap().put(key, metaArray);
-            updateExistenceInDataSource(key, edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.CSV_META_POSITION, true);
+            updateExistenceInDataSource(key,
+                    edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.CSV_META_POSITION, true);
         }
     }
 
     /**
-     * Integrate with S3
+     * Get patient studies from S3
      *
      * @param patientID, id of the patient
      */
-    public static String getPatientStudiesFromS3(String patientID) {
+    public static String getPatientStudies(String patientID) {
         String url = retrieveUrl(patientID);
-        updateExistenceInDataSource(patientID, edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.S3_META_POSITION, true);
+        updateExistenceInDataSource(patientID,
+                edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.S3_META_POSITION, true);
         return url;
     }
 
