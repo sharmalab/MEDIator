@@ -63,6 +63,17 @@ public interface Integrator {
     }
 
     /**
+     * /PUSH Update the value against the key in the map.
+     *
+     * @param key,    id of the object.
+     * @param object, value of the object
+     * @return the object
+     */
+    public static String updateMetaData(String key, String object) {
+        return null;
+    }
+
+    /**
      * /DELETE Delete the value stored in the map.
      *
      * @param key,    id of the object.

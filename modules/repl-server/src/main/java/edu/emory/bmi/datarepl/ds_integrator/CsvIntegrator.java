@@ -79,7 +79,11 @@ public class CsvIntegrator extends DataSourcesIntegrator {
      * @param patientID, id of the patient
      */
     public static String getPatientStudies(String patientID) {
-        return null; //todo return meta complete string <- strig array
+        String metaAsString = "";
+        String[] metaArray = getMetaData(patientID);
+        for (String metaEntry : metaArray) {
+            metaAsString += metaEntry;
+        }
+        return metaAsString;
     }
-
 }
