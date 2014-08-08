@@ -34,8 +34,8 @@ public abstract class DataSourcesIntegrator implements Integrator {
         if (edu.emory.bmi.datarepl.ds_impl.CSVInfDai.getMetaMap().get(key) == null) {
             return false;
         } else {
-            Boolean[] temp = edu.emory.bmi.datarepl.ds_impl.CSVInfDai.getMetaMap().get(key);
-            return temp[metaArrayIndex];
+            Boolean[] existence = edu.emory.bmi.datarepl.ds_impl.CSVInfDai.getMetaMap().get(key);
+            return existence[metaArrayIndex];
         }
     }
 
