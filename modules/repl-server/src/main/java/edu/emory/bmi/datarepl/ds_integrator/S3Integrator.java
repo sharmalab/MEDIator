@@ -44,6 +44,16 @@ public class S3Integrator extends DataSourcesIntegrator {
     }
 
     /**
+     * Update meta data with CSV entry
+     *
+     * @param key, patient ID
+     * @param meta, meta to be stored
+     */
+    public static void updateMetaData(String key, String meta) {
+        CSVInfDai.getS3MetaMap().put(key, meta);
+    }
+
+    /**
      * Gets the S3 storage url for the given patient
      * @param patientID, the patient ID
      * @return url.
@@ -63,4 +73,44 @@ public class S3Integrator extends DataSourcesIntegrator {
         }
         return url;
     }
+
+
+    /**
+     * /GET Get meta data for CA Microscope
+     *
+     * @param id, id of the patient
+     */
+    public static String getMetaData(String id) {
+        if (DataSourcesIntegrator.doesExistInDataSource(id, DataSourcesConstants.S3_META_POSITION)) {
+            return CSVInfDai.getS3MetaMap().get(id);
+        } else {
+            logger.info("Meta data does not exist in the map for the key, " + id);
+            return null;
+        }
+    }
+
+    /**
+     * /PUT Create meta data with CA entry
+     *
+     * @param key,       patient ID
+     * @param object, object value
+     */
+    public static void putMetaData(String key, String object) {
+        updateMetaData(key, object);
+        updateExistenceInDataSource(key, DataSourcesConstants.S3_META_POSITION, true);
+    }
+
+    /**
+     * /DELETE Delete meta data for CA Microscope
+     *
+     * @param id, id of the patient
+     */
+    public static void deleteMetaData(String id) {
+        if (DataSourcesIntegrator.doesExistInDataSource(id, DataSourcesConstants.S3_META_POSITION)) {
+            CSVInfDai.getS3MetaMap().remove(id);
+        } else {
+            logger.info("Meta data does not exist in the map for the key, " + id);
+        }
+    }
+
 }
