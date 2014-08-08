@@ -20,20 +20,6 @@ public class S3Integrator extends DataSourcesIntegrator {
 
 
     /**
-     * Update meta data with CSV entry
-     *
-     * @param key,       patient ID
-     * @param metaArray, meta array to be stored
-     */
-    public static void updateMetaDataWithCSV(String key, String[] metaArray) {
-        if (!key.contains(edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.NA)) {
-            edu.emory.bmi.datarepl.ds_impl.CSVInfDai.getCsvMetaMap().put(key, metaArray);
-            updateExistenceInDataSource(key,
-                    edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.CSV_META_POSITION, true);
-        }
-    }
-
-    /**
      * Get patient studies from S3
      *
      * @param patientID, id of the patient
@@ -74,7 +60,7 @@ public class S3Integrator extends DataSourcesIntegrator {
      * @param longKey,   contains patient ID
      * @param metaArray, meta array to be stored
      */
-    public static void updateMetaDataWithS3Entry(String longKey, String[] metaArray) {
+    public static void updateMetaData(String longKey, String[] metaArray) {
         String patientID = longKey.substring(0, 12);
         edu.emory.bmi.datarepl.ds_impl.CSVInfDai.getS3MetaMap().put(patientID, metaArray[0]);
         updateExistenceInDataSource(patientID, DataSourcesConstants.S3_META_POSITION, true);

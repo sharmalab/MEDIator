@@ -8,13 +8,9 @@
 
 package edu.emory.bmi.datarepl.datasources;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
 import edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants;
-import edu.emory.bmi.datarepl.interfacing.TciaInvoker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.io.IOException;
 
 /**
  * Integrate with the data sources
@@ -48,9 +44,9 @@ public abstract class DataSourcesIntegrator implements Integrator {
      */
     public static void updateMetaData(String key, String[] metaArray, int meta) {
         if (meta == edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.CSV_META_POSITION) {
-            S3Integrator.updateMetaDataWithCSV(key, metaArray);
+            CsvIntegrator.updateMetaData(key, metaArray);
         } else if (meta == DataSourcesConstants.S3_META_POSITION) {
-            S3Integrator.updateMetaDataWithS3Entry(key, metaArray);
+            S3Integrator.updateMetaData(key, metaArray);
         }
     }
 
