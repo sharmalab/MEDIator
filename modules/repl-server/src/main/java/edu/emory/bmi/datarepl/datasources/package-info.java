@@ -1,5 +1,6 @@
 /*
- * Integrates with all the data sources. Reads meta data from csv and configures the Infinispan cluster accordingly.
+ * Integrates with all the data sources. Provides a high level API.
+ * Reads meta data from csv and configures the Infinispan cluster accordingly.
  *
  */
 

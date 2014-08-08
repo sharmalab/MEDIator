@@ -19,7 +19,7 @@ import java.io.IOException;
 /**
  * Integrate with the data sources
  */
-public class DataSourcesIntegrator implements Integrator {
+public abstract class DataSourcesIntegrator implements Integrator {
     private static TciaInvoker tciaInvoker = new TciaInvoker();
     private static Logger logger = LogManager.getLogger(DataSourcesIntegrator.class.getName());
 
