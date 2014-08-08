@@ -8,6 +8,7 @@
 
 package edu.emory.bmi.datarepl.ds_integrator;
 
+import edu.emory.bmi.datarepl.ds_impl.CSVInfDai;
 import edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,8 +27,7 @@ public class S3Integrator extends DataSourcesIntegrator {
      */
     public static String getPatientStudies(String patientID) {
         String url = retrieveUrl(patientID);
-        updateExistenceInDataSource(patientID,
-                edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.S3_META_POSITION, true);
+        updateExistenceInDataSource(patientID, DataSourcesConstants.S3_META_POSITION, true);
         return url;
     }
 
@@ -39,7 +39,7 @@ public class S3Integrator extends DataSourcesIntegrator {
      */
     public static void updateMetaData(String longKey, String[] metaArray) {
         String patientID = longKey.substring(0, 12);
-        edu.emory.bmi.datarepl.ds_impl.CSVInfDai.getS3MetaMap().put(patientID, metaArray[0]);
+        CSVInfDai.getS3MetaMap().put(patientID, metaArray[0]);
         updateExistenceInDataSource(patientID, DataSourcesConstants.S3_META_POSITION, true);
     }
 
@@ -49,19 +49,16 @@ public class S3Integrator extends DataSourcesIntegrator {
      * @return url.
      */
     public static String retrieveUrl(String patientID) {
-        String fileName = edu.emory.bmi.datarepl.ds_impl.CSVInfDai.getS3MetaMap().get(patientID);
+        String fileName = CSVInfDai.getS3MetaMap().get(patientID);
         String url;
         if (fileName.contains(DataSourcesConstants.S3_LEVEL2)) {
-            url = DataSourcesConstants.S3_BASE_URL +
-                    DataSourcesConstants.S3_LEVEL2 +
+            url = DataSourcesConstants.S3_BASE_URL + DataSourcesConstants.S3_LEVEL2 +
                     DataSourcesConstants.URL_SEPARATOR + fileName;
         } else if (fileName.contains(DataSourcesConstants.S3_LEVEL3)) {
-            url = DataSourcesConstants.S3_BASE_URL +
-                    DataSourcesConstants.S3_LEVEL3 +
+            url = DataSourcesConstants.S3_BASE_URL + DataSourcesConstants.S3_LEVEL3 +
                     DataSourcesConstants.URL_SEPARATOR + fileName;
         } else {
-            url = DataSourcesConstants.S3_BASE_URL +
-                    DataSourcesConstants.S3_LEVEL1 +
+            url = DataSourcesConstants.S3_BASE_URL + DataSourcesConstants.S3_LEVEL1 +
                     DataSourcesConstants.URL_SEPARATOR + fileName;
         }
         return url;

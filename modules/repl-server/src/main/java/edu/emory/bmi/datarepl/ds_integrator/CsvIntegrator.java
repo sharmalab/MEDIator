@@ -8,6 +8,9 @@
 
 package edu.emory.bmi.datarepl.ds_integrator;
 
+import edu.emory.bmi.datarepl.ds_impl.CSVInfDai;
+import edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants;
+
 /**
  * Integrates with CSV
  */
@@ -19,10 +22,10 @@ public class CsvIntegrator extends DataSourcesIntegrator {
      * @param metaArray, meta array to be stored
      */
     public static void updateMetaData(String key, String[] metaArray) {
-        if (!key.contains(edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.NA)) {
-            edu.emory.bmi.datarepl.ds_impl.CSVInfDai.getCsvMetaMap().put(key, metaArray);
+        if (!key.contains(DataSourcesConstants.NA)) {
+            CSVInfDai.getCsvMetaMap().put(key, metaArray);
             updateExistenceInDataSource(key,
-                    edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.CSV_META_POSITION, true);
+                    DataSourcesConstants.CSV_META_POSITION, true);
         }
     }
 

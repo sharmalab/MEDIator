@@ -9,6 +9,7 @@
 package edu.emory.bmi.datarepl.ds_integrator;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
+import edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants;
 import edu.emory.bmi.datarepl.interfacing.TciaInvoker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,8 +33,7 @@ public class TciaIntegrator {
         try {
             tciaInvoker.getPatientStudy("json", null, patientID, null);
             output = tciaInvoker.getStudiesOfThePatientString("json", null, patientID, null);
-            DataSourcesIntegrator.updateExistenceInDataSource(patientID,
-                    edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.TCIA_META_POSITION, true);
+            DataSourcesIntegrator.updateExistenceInDataSource(patientID, DataSourcesConstants.TCIA_META_POSITION, true);
         } catch (UnirestException e) {
             logger.info("UniRest Exception while invoking the patient study retrieval", e);
         } catch (IOException e) {
