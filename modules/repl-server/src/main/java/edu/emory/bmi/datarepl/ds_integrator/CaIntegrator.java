@@ -25,7 +25,7 @@ public class CaIntegrator extends DataSourcesIntegrator {
      * @param patientID, id of the patient
      */
     public static String getPatientStudies(String patientID) {
-        if (CSVInfDai.getCaMetaMap().get(patientID)!=null) {
+        if (DataSourcesIntegrator.doesExistInDataSource(patientID, DataSourcesConstants.CA_META_POSITION)) {
             return CSVInfDai.getCaMetaMap().get(patientID);
         } else {
             String url = DataSourcesConstants.CA_MICROSCOPE_BASE_URL + DataSourcesConstants.CA_MICROSCOPE_QUERY_URL +
@@ -37,13 +37,27 @@ public class CaIntegrator extends DataSourcesIntegrator {
     }
 
     /**
-     * Update meta data with CA entry
+     * /PUSH Update meta data with CA entry
      *
      * @param key,       patient ID
      * @param object, object value
      */
     public static void updateMetaData(String key, String object) {
         CSVInfDai.getCaMetaMap().put(key, object);
+    }
+
+    /**
+     * /GET Get meta data for CA Microscope
+     *
+     * @param id, id of the patient
+     */
+    public static String getMetaData(String id) {
+        if (DataSourcesIntegrator.doesExistInDataSource(id, DataSourcesConstants.CA_META_POSITION)) {
+            return CSVInfDai.getCaMetaMap().get(id);
+        } else {
+            logger.info("Meta data does not exist in the map for the key, " + id);
+            return null;
+        }
     }
 
     /**
@@ -54,23 +68,19 @@ public class CaIntegrator extends DataSourcesIntegrator {
      */
     public static void putMetaData(String key, String object) {
         updateMetaData(key, object);
-
-
-
+        updateExistenceInDataSource(key, DataSourcesConstants.CA_META_POSITION, true);
     }
 
     /**
-     * Get meta data for CA Microscope
+     * /DELETE Delete meta data for CA Microscope
      *
      * @param id, id of the patient
      */
-    public static String getMetaData(String id) {
-        if (CSVInfDai.getCaMetaMap().get(id)!=null) {
-            return CSVInfDai.getCaMetaMap().get(id);
+    public static void deleteMetaData(String id) {
+        if (DataSourcesIntegrator.doesExistInDataSource(id, DataSourcesConstants.CA_META_POSITION)) {
+            CSVInfDai.getCaMetaMap().remove(id);
         } else {
             logger.info("Meta data does not exist in the map for the key, " + id);
-            return null;
         }
     }
-
 }
