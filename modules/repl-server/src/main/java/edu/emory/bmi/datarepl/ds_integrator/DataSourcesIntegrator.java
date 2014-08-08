@@ -8,6 +8,7 @@
 
 package edu.emory.bmi.datarepl.ds_integrator;
 
+import edu.emory.bmi.datarepl.ds_impl.CSVInfDai;
 import edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,10 +28,10 @@ public abstract class DataSourcesIntegrator implements Integrator {
      * @return if exists.
      */
     public static boolean doesExistInDataSource(String key, int metaArrayIndex) {
-        if (edu.emory.bmi.datarepl.ds_impl.CSVInfDai.getMetaMap().get(key) == null) {
+        if (CSVInfDai.getMetaMap().get(key) == null) {
             return false;
         } else {
-            Boolean[] existence = edu.emory.bmi.datarepl.ds_impl.CSVInfDai.getMetaMap().get(key);
+            Boolean[] existence = CSVInfDai.getMetaMap().get(key);
             return existence[metaArrayIndex];
         }
     }
@@ -43,7 +44,7 @@ public abstract class DataSourcesIntegrator implements Integrator {
      * @param meta,      location in the meta array
      */
     public static void updateMetaData(String key, String[] metaArray, int meta) {
-        if (meta == edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.CSV_META_POSITION) {
+        if (meta == DataSourcesConstants.CSV_META_POSITION) {
             CsvIntegrator.updateMetaData(key, metaArray);
         } else if (meta == DataSourcesConstants.S3_META_POSITION) {
             S3Integrator.updateMetaData(key, metaArray);
@@ -59,4 +60,26 @@ public abstract class DataSourcesIntegrator implements Integrator {
         return null;
     }
 
+    /**
+     * Updating the existing data source
+     *
+     * @param key,            patientID
+     * @param metaArrayIndex, index in the meta array
+     * @param existence,      if exists
+     */
+    public static void updateExistenceInDataSource(String key, int metaArrayIndex, boolean existence) {
+        Boolean[] newEntry = {false, false, false, false};
+        newEntry[metaArrayIndex] = existence;
+
+        if (CSVInfDai.getMetaMap().get(key) == null) {
+            CSVInfDai.getMetaMap().put(key, newEntry);
+            logger.info("Adding new entry to the meta map.." + key);
+        } else {
+            Boolean[] existingEntry = CSVInfDai.getMetaMap().get(key);
+            existingEntry[metaArrayIndex] = existence;
+            CSVInfDai.getMetaMap().put(key, existingEntry);
+            logger.info("Existing entry is updated in the map.." + key);
+
+        }
+    }
 }

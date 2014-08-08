@@ -32,7 +32,7 @@ public class TciaIntegrator {
         try {
             tciaInvoker.getPatientStudy("json", null, patientID, null);
             output = tciaInvoker.getStudiesOfThePatientString("json", null, patientID, null);
-            S3Integrator.updateExistenceInDataSource(patientID,
+            DataSourcesIntegrator.updateExistenceInDataSource(patientID,
                     edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.TCIA_META_POSITION, true);
         } catch (UnirestException e) {
             logger.info("UniRest Exception while invoking the patient study retrieval", e);

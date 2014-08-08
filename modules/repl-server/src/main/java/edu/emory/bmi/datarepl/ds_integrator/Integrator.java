@@ -47,7 +47,7 @@ public interface Integrator {
      * @param key, id of the object.
      * @return the object
      */
-    public static String getData(String key) {
+    public static String getMetaData(String key) {
         return null;
     }
 
@@ -58,8 +58,16 @@ public interface Integrator {
      * @param object, value of the object
      * @return the object
      */
-    public static String putData(String key, String object) {
+    public static String putMetaData(String key, String object) {
         return null;
+    }
+
+    /**
+     * /DELETE Delete the value stored in the map.
+     *
+     * @param key,    id of the object.
+     */
+    public static void deleteMetaData(String key) {
     }
 
 }

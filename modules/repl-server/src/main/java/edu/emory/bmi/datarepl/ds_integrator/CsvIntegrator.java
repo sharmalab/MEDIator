@@ -21,8 +21,18 @@ public class CsvIntegrator extends DataSourcesIntegrator {
     public static void updateMetaData(String key, String[] metaArray) {
         if (!key.contains(edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.NA)) {
             edu.emory.bmi.datarepl.ds_impl.CSVInfDai.getCsvMetaMap().put(key, metaArray);
-            S3Integrator.updateExistenceInDataSource(key,
+            updateExistenceInDataSource(key,
                     edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.CSV_META_POSITION, true);
         }
     }
+
+    /**
+     * Get patient studies from CA Microscope
+     *
+     * @param patientID, id of the patient
+     */
+    public static String getPatientStudies(String patientID) {
+        return null; //todo return meta complete string <- strig array
+    }
+
 }
