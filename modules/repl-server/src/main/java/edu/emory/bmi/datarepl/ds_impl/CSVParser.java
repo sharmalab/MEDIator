@@ -8,7 +8,7 @@
 
 package edu.emory.bmi.datarepl.ds_impl;
 
-import edu.emory.bmi.datarepl.datasources.DataSourcesIntegrator;
+import edu.emory.bmi.datarepl.ds_integrator.DataSourcesIntegrator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,14 +21,13 @@ import java.io.IOException;
  */
 public class CSVParser {
     private static Logger logger = LogManager.getLogger(CSVParser.class.getName());
+    private static BufferedReader br = null;
+    private static String line = "";
 
     /**
      * Parsing the CSV Meta file
      */
     public static void parseCSV(String fileName, int meta, int parsingIndex, String splitBy) {
-
-        BufferedReader br = null;
-        String line = "";
         int currentLine = 1;
 
         try {
@@ -66,15 +65,46 @@ public class CSVParser {
         } catch (IOException e) {
             logger.error("Error in getting the CSV file", e);
         } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    logger.error("Error in closing the file", e);
-                }
-            }
+            closeFile();
         }
         logger.info("Done parsing the CSV file..");
     }
 
+    private static void closeFile() {
+        if (br != null) {
+            try {
+                br.close();
+            } catch (IOException e) {
+                logger.error("Error in closing the file", e);
+            }
+        }
+    }
+
+
+    /**
+     * Parsing the CSV Meta file
+     */
+    public static void readCSV() {
+        try {
+
+            br = new BufferedReader(new FileReader(DataSourcesConstants.META_CSV_FILE));
+            while ((line = br.readLine()) != null) {
+
+                String[] entry = line.split(DataSourcesConstants.CSV_SPLIT_BY);
+                int length = entry.length;
+
+                String[] metaArray = new String[length - 1];
+                System.arraycopy(entry, 1, metaArray, 0, length - 1);
+
+                CSVInfDai.getCsvMetaMap().put(entry[0], metaArray);
+
+            }
+
+        } catch (IOException e) {
+            logger.error("Error in getting the CSV file", e);
+        } finally {
+            closeFile();
+        }
+        logger.info("Done parsing the CSV file..");
+    }
 }

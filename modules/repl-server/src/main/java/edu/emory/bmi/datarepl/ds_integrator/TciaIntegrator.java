@@ -6,7 +6,7 @@
  * Copyright (c) 2014, Pradeeban Kathiravelu <pradeeban.kathiravelu@tecnico.ulisboa.pt>
  */
 
-package edu.emory.bmi.datarepl.datasources;
+package edu.emory.bmi.datarepl.ds_integrator;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 import edu.emory.bmi.datarepl.interfacing.TciaInvoker;
