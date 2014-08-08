@@ -27,6 +27,7 @@ public class CSVInfDai extends InfDataAccessIntegration{
     protected static Cache<String, Boolean[]> metaMap; /*csv, ca, tcia, s3*/
     protected static Cache<String, String[]> csvMetaMap;
     protected static Cache<String, String> s3MetaMap;
+    protected static Cache<String, String> caMetaMap;
 
     /**
      * Singleton. Prevents initialization from outside the class.
@@ -38,6 +39,7 @@ public class CSVInfDai extends InfDataAccessIntegration{
         metaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
         csvMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_META);
         s3MetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_S3);
+        caMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_CA);
         logger.info("Initialized the Infinispan Cache for the TCIA Data Replication Tool..");
     }
 
@@ -65,5 +67,9 @@ public class CSVInfDai extends InfDataAccessIntegration{
 
     public static Cache<String, String> getS3MetaMap() {
         return s3MetaMap;
+    }
+
+    public static Cache<String, String> getCaMetaMap() {
+        return caMetaMap;
     }
 }

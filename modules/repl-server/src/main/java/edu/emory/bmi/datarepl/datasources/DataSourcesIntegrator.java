@@ -9,6 +9,7 @@
 package edu.emory.bmi.datarepl.datasources;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
+import edu.emory.bmi.datarepl.interfacing.InterfaceAPI;
 import edu.emory.bmi.datarepl.interfacing.TciaInvoker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +19,7 @@ import java.io.IOException;
 /**
  * Integrate with the data sources
  */
-public class DataSourcesIntegrator {
+public class DataSourcesIntegrator implements Integrator {
     private static TciaInvoker tciaInvoker = new TciaInvoker();
     private static Logger logger = LogManager.getLogger(DataSourcesIntegrator.class.getName());
 
@@ -47,9 +48,15 @@ public class DataSourcesIntegrator {
      * @param patientID, id of the patient
      */
     public static String getPatientStudiesFromCAMicroscope(String patientID) {
-        String url = DataSourcesConstants.CA_MICROSCOPE_BASE_URL + DataSourcesConstants.CA_MICROSCOPE_QUERY_URL + patientID;
-        updateExistenceInDataSource(patientID, DataSourcesConstants.CA_META_POSITION, true);
-        return url;
+        if (CSVInfDai.getCaMetaMap().get(patientID)!=null) {
+            return CSVInfDai.getCaMetaMap().get(patientID);
+        } else {
+            String url = DataSourcesConstants.CA_MICROSCOPE_BASE_URL + DataSourcesConstants.CA_MICROSCOPE_QUERY_URL +
+                    patientID;
+            CSVInfDai.getCaMetaMap().put(patientID, url);
+            updateExistenceInDataSource(patientID, DataSourcesConstants.CA_META_POSITION, true);
+            return url;
+        }
     }
 
     /**
