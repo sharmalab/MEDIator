@@ -30,7 +30,7 @@ public class S3Integrator extends DataSourcesIntegrator {
      * @param patientID, id of the patient
      */
     public static String getPatientStudiesFromS3(String patientID) {
-        String url = S3Retriever.retrieveUrl(patientID);
+        String url = retrieveUrl(patientID);
         updateExistenceInDataSource(patientID, edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.S3_META_POSITION, true);
         return url;
     }
@@ -68,5 +68,29 @@ public class S3Integrator extends DataSourcesIntegrator {
         String patientID = longKey.substring(0, 12);
         edu.emory.bmi.datarepl.ds_impl.CSVInfDai.getS3MetaMap().put(patientID, metaArray[0]);
         updateExistenceInDataSource(patientID, DataSourcesConstants.S3_META_POSITION, true);
+    }
+
+    /**
+     * Gets the S3 storage url for the given patient
+     * @param patientID, the patient ID
+     * @return url.
+     */
+    public static String retrieveUrl(String patientID) {
+        String fileName = edu.emory.bmi.datarepl.ds_impl.CSVInfDai.getS3MetaMap().get(patientID);
+        String url;
+        if (fileName.contains(DataSourcesConstants.S3_LEVEL2)) {
+            url = DataSourcesConstants.S3_BASE_URL +
+                    DataSourcesConstants.S3_LEVEL2 +
+                    DataSourcesConstants.URL_SEPARATOR + fileName;
+        } else if (fileName.contains(DataSourcesConstants.S3_LEVEL3)) {
+            url = DataSourcesConstants.S3_BASE_URL +
+                    DataSourcesConstants.S3_LEVEL3 +
+                    DataSourcesConstants.URL_SEPARATOR + fileName;
+        } else {
+            url = DataSourcesConstants.S3_BASE_URL +
+                    DataSourcesConstants.S3_LEVEL1 +
+                    DataSourcesConstants.URL_SEPARATOR + fileName;
+        }
+        return url;
     }
 }
