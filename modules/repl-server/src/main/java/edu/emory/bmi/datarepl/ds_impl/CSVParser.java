@@ -6,8 +6,9 @@
  * Copyright (c) 2014, Pradeeban Kathiravelu <pradeeban.kathiravelu@tecnico.ulisboa.pt>
  */
 
-package edu.emory.bmi.datarepl.datasources;
+package edu.emory.bmi.datarepl.ds_impl;
 
+import edu.emory.bmi.datarepl.datasources.DataSourcesIntegrator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -48,7 +49,7 @@ public class CSVParser {
                     }
                     try {
                         String key = entry[parsingIndex];
-                        updateMetaData(key, metaArray, meta);
+                        DataSourcesIntegrator.updateMetaData(key, metaArray, meta);
                     } catch (ArrayIndexOutOfBoundsException ignored) {
                         if (logger.isDebugEnabled()) {
                             logger.debug("Exception in parsing the line", ignored);
@@ -76,43 +77,4 @@ public class CSVParser {
         logger.info("Done parsing the CSV file..");
     }
 
-    /**
-     * Update meta data
-     *
-     * @param key,       patient ID
-     * @param metaArray, meta array to be stored
-     * @param meta,      location in the meta array
-     */
-    public static void updateMetaData(String key, String[] metaArray, int meta) {
-        if (meta == DataSourcesConstants.CSV_META_POSITION) {
-            updateMetaDataWithCSV(key, metaArray);
-        } else if (meta == DataSourcesConstants.S3_META_POSITION) {
-            updateMetaDataWithS3Entry(key, metaArray);
-        }
-    }
-
-    /**
-     * Update meta data with CSV entry
-     *
-     * @param key,       patient ID
-     * @param metaArray, meta array to be stored
-     */
-    public static void updateMetaDataWithCSV(String key, String[] metaArray) {
-        if (!key.contains(DataSourcesConstants.NA)) {
-            CSVInfDai.getCsvMetaMap().put(key, metaArray);
-            DataSourcesIntegrator.updateExistenceInDataSource(key, DataSourcesConstants.CSV_META_POSITION, true);
-        }
-    }
-
-    /**
-     * Update meta data with CSV entry
-     *
-     * @param longKey,   contains patient ID
-     * @param metaArray, meta array to be stored
-     */
-    public static void updateMetaDataWithS3Entry(String longKey, String[] metaArray) {
-        String patientID = longKey.substring(0, 12);
-        CSVInfDai.getS3MetaMap().put(patientID, metaArray[0]);
-        DataSourcesIntegrator.updateExistenceInDataSource(patientID, DataSourcesConstants.S3_META_POSITION, true);
-    }
 }

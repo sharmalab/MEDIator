@@ -8,7 +8,7 @@
 
 package edu.emory.bmi.datarepl.datasources;
 
-import edu.emory.bmi.datarepl.constants.CommonConstants;
+import edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,7 +32,7 @@ public class Reader {
 
         try {
 
-            br = new BufferedReader(new FileReader(DataSourcesConstants.META_CSV_FILE));
+            br = new BufferedReader(new FileReader(edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.META_CSV_FILE));
             while ((line = br.readLine()) != null) {
 
                 String[] entry = line.split(DataSourcesConstants.CSV_SPLIT_BY);
@@ -41,7 +41,7 @@ public class Reader {
                 String[] metaArray = new String[length - 1];
                 System.arraycopy(entry, 1, metaArray, 0, length - 1);
 
-                CSVInfDai.getCsvMetaMap().put(entry[0], metaArray);
+                edu.emory.bmi.datarepl.ds_impl.CSVInfDai.getCsvMetaMap().put(entry[0], metaArray);
 
             }
 

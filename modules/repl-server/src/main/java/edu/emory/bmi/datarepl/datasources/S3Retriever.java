@@ -8,6 +8,8 @@
 
 package edu.emory.bmi.datarepl.datasources;
 
+import edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants;
+
 /**
  * Retrieve data from S3
  */
@@ -18,14 +20,14 @@ public class S3Retriever {
      * @return url.
      */
     public static String retrieveUrl(String patientID) {
-        String fileName = CSVInfDai.getS3MetaMap().get(patientID);
+        String fileName = edu.emory.bmi.datarepl.ds_impl.CSVInfDai.getS3MetaMap().get(patientID);
         String url;
-        if (fileName.contains(DataSourcesConstants.S3_LEVEL2)) {
-            url = DataSourcesConstants.S3_BASE_URL + DataSourcesConstants.S3_LEVEL2 + DataSourcesConstants.URL_SEPARATOR + fileName;
-        } else if (fileName.contains(DataSourcesConstants.S3_LEVEL3)) {
-            url = DataSourcesConstants.S3_BASE_URL + DataSourcesConstants.S3_LEVEL3 + DataSourcesConstants.URL_SEPARATOR + fileName;
+        if (fileName.contains(edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.S3_LEVEL2)) {
+            url = edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.S3_BASE_URL + edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.S3_LEVEL2 + edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.URL_SEPARATOR + fileName;
+        } else if (fileName.contains(edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.S3_LEVEL3)) {
+            url = edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.S3_BASE_URL + edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.S3_LEVEL3 + edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.URL_SEPARATOR + fileName;
         } else {
-            url = DataSourcesConstants.S3_BASE_URL + DataSourcesConstants.S3_LEVEL1 + DataSourcesConstants.URL_SEPARATOR + fileName;
+            url = edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.S3_BASE_URL + edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants.S3_LEVEL1 + DataSourcesConstants.URL_SEPARATOR + fileName;
         }
         return url;
     }
