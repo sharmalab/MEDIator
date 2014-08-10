@@ -95,6 +95,11 @@ Having multiple instances running over different nodes provide fault-tolerance, 
  \label{fig:deployment}
 \end{figure}
 
+\subsection{Architecture}
+Data replication and synchronization tool lets the users to create, update, retrieve, and delete replica sets, and share the replica sets with others. Replica sets are stored and processed in the Infinispan maps, where integrating with the data sources is done in two interfaces. Integrator API provides a coarse granular integration with the data sources, where Interface API provides fine grain access to the data that is stored in the data sources. PubCons API manages the replica sets.
+
+Classes extending PubConsAPI design and implement the logic of replica sets management, where integration with the data sources is done by two interfaces - Interface API and Integrator. Interface API deals with the lower level implementation such as downloading patients, studies, series, and collections by searching them for different criteria. Integrator provides a higher level API, that 
+
 \subsection{Generic Design}
 Two distributed cache instances exist in InfDataAccessIntegration.
 \begin{lstlisting}  
@@ -226,7 +231,7 @@ $DSInfDai$ a class extending $InfDataAccessIntegration$ holds the instances of m
     protected static Cache<String, String> s3MetaMap;
     protected static Cache<String, String> caMetaMap;
 \end{lstlisting} 
-The $metaMap$ stores a binary array against each of the key (such as, patientID) to point the existence of meta data in the data sources defined, in this case, CSV, CA Microscope, TCIA, and S3. $s3MetaMap$ provides the file name for the respective ID, which can be used to find the location of the file as it follows the pattern of of $S3_BASE_URL + folder_name + "/" + fileName$. Similarly, $caMetaMap$ stores the URL that the respective object is stored. $csvMetaMap$ contains the meta data loaded from the CSV files against the respective ID.
+The $metaMap$ stores a binary array against each of the key (such as, patientID) to point the existence of meta data in the data sources defined, in this case, CSV, CA Microscope, TCIA, and S3. $s3MetaMap$ provides the file name for the respective ID, which can be used to find the location of the file as it follows the pattern of of $S3\_BASE\_URL + folderName + ``/" + fileName$. Similarly, $caMetaMap$ stores the URL that the respective object is stored. $csvMetaMap$ contains the meta data loaded from the CSV files against the respective ID.
 
 Methods for updating, creating, and deleting meta data from these maps are available where creating or deleting meta data will update the availability to true/false for the respective index in the $metaMap$. $XXX\_META\_POSITION$ defines the position in the metaMap, where XXX stands for CSV, CA, TCIA, and S3. Updating the existence will flop the respective boolean value in the respective entry. The $metaMap$ ensures easy indexing, and helps to search which of the data sources contain the respective information for any given key, such as a given patient ID.
 
