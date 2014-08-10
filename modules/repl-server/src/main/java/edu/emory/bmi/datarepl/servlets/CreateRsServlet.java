@@ -9,7 +9,6 @@
 package edu.emory.bmi.datarepl.servlets;
 
 import edu.emory.bmi.datarepl.tcia.DataProSpecs;
-import edu.emory.bmi.datarepl.ui.DataRetriever;
 import edu.emory.bmi.datarepl.ui.UIGenerator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

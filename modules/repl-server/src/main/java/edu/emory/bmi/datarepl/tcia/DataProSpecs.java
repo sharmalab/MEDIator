@@ -10,7 +10,6 @@ package edu.emory.bmi.datarepl.tcia;
 
 import edu.emory.bmi.datarepl.constants.InfConstants;
 import edu.emory.bmi.datarepl.core.InfDataAccessIntegration;
-import edu.emory.bmi.datarepl.ds_integrator.Integrator;
 import edu.emory.bmi.datarepl.interfacing.TciaInvoker;
 import edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException;
 import org.apache.logging.log4j.LogManager;
