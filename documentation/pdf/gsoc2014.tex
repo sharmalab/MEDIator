@@ -206,11 +206,20 @@ Clinical data is deployed in multiple data sources such as TCIA, CA Microscope, 
  \label{fig:dsdeployment}
 \end{figure}
 
-\subsection{Developer Guide}
+
+\begin{figure}[!htbp]
+\begin{center}
+ \resizebox{\columnwidth}{!}{
+  \includegraphics[width=\textwidth]{dsclass.png}
+ }
+\end{center}
+ \caption{Class Diagram of data sources integrators along with the higher level API}
+ \label{fig:dsclass}
+\end{figure}
 
 
 \section{Evaluation}
-A prototype web application is built with the data replication and synchronization tool and TCIA REST API. Apache Velocity is used to generate the web pages for the replication tool. Apache Tomcat (Embedded) is integrated into the program such that it will get the user inputs from the HTML pages and present the output in pages formatted by Apache Velocity Templates. Respective servlets are created inside the servlets package to receive the inputs from HTML pages to the backend Java code.
+A prototype web application was built with the data replication and synchronization tool and TCIA REST API. Apache Velocity was used to generate the web pages for the replication tool. Apache Tomcat (Embedded) was integrated into the program such that it will get the user inputs from the HTML pages and present the output in pages formatted by Apache Velocity Templates. Respective servlets were created inside the servlets package to receive the inputs from HTML pages to the backend Java code.
 
 $DataRetriever$ class is invoked to retrieve the meta data from TCIA and to create and retrieve replica sets. $UIGenerator$ class invokes the Apache Velocity templates to create the web pages, presenting the data to the users. $DataRetriever$ has instances of $TciaInvoker$ and $TciaLogInInitiator$ to invoke the TCIA queries and replication tool create and retrieve replicaSets mechanisms. $TciaLogInInitiator$ has instances of $TciaInvoker$ and $DataProSpecs$, to invoke the public APIs provided by these classes for the data provider specification and publisher/consumer APIs. Figure~\ref{fig:classUX} depicts the class hierarchy involved in the user interface.
 \begin{figure}[!htbp]
@@ -241,6 +250,9 @@ This should be designed such that the already accessed images would not be downl
 
 \paragraph*{Security}
 The data replication and synchronization can be further secured with user authentication. SAML tokens can be created for user names and passwords with the membership information. The SAML tokens can be validated later. A create and validate API with user stores such as LDAP or OpenID should be designed and implemented, extending and leveraging the replication tool.
+
+\subsection{Developer Guide}
+This section describes how the future work could be done.
 
 
 %\begin{thebibliography}{1}
