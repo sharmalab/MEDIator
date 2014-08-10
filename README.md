@@ -54,8 +54,11 @@ https://wiki.cancerimagingarchive.net/display/Public/TCIA+Programmatic+Interface
 ## Connect to the EC2 Instance
 
 ssh -i pradeeban.pem ubuntu@ec2-54-237-35-248.compute-1.amazonaws.com
+
 mkdir gsoc2014
+
 cd gsoc2014
 
 nohup wget https://tcga-data.nci.nih.gov/tcgafiles/ftp_auth/distro_ftpusers/anonymous/userCreatedArchives/652ccf44-cfda-4e99-81ac-d8f4c0eca6be.tar > nohup.out &
+
 tar -zxvf 652ccf44-cfda-4e99-81ac-d8f4c0eca6be.tar
