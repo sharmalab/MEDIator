@@ -25,8 +25,6 @@ public final class DataSourcesConstants {
 
 
     public static final int MAX_LINES = 50000;
-    public static final Boolean[] EXISTS_EVERYWHERE = {true, true, true, true};
-    public static final Boolean[] NOT_KNOWN_YET = {false, false, false, false};
 
     public static final String CA_MICROSCOPE_BASE_URL = "http://imaging.cci.emory.edu/camicroscope/camicroscope/";
     public static final String CA_MICROSCOPE_QUERY_URL = "osdCamicroscope.php?tissueId=";

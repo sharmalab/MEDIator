@@ -22,9 +22,7 @@ import java.io.IOException;
  * Retrieves the replicaSets with different granularity.
  */
 public class ReplicaSetRetriever {
-    private static TciaInvoker tciaInvoker;
     private static Logger logger = LogManager.getLogger(ReplicaSetRetriever.class.getName());
-    private static VelocityContext context;
 
     public ReplicaSetRetriever() {
         UIGenerator.init();
@@ -41,8 +39,8 @@ public class ReplicaSetRetriever {
      */
     public static String retrieveReplicaSet(Long replicaSetID, String[] collectionNames, String[] patientIDs,
                                             String[] studyInstanceUIDs, String[] seriesInstanceUIDs) {
-        tciaInvoker = DataRetriever.getTciaInvoker();
-        context = new VelocityContext();
+        TciaInvoker tciaInvoker = DataRetriever.getTciaInvoker();
+        VelocityContext context = new VelocityContext();
         context.put("collectionsList", collectionNames);
         context.put("patientsList", patientIDs);
         context.put("studiesList", studyInstanceUIDs);

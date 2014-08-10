@@ -69,7 +69,7 @@ public class UIGenerator {
         context = new VelocityContext();
         JSONArray jsonMainArr = new JSONArray(response);
 
-        ArrayList list = new ArrayList();
+        ArrayList<JSONObject> list = new ArrayList<>();
         for (int i = 0; i < jsonMainArr.length(); i++) {
             JSONObject childJSONObject = jsonMainArr.getJSONObject(i);
             list.add(childJSONObject);
@@ -81,7 +81,7 @@ public class UIGenerator {
         context = new VelocityContext();
         JSONArray jsonMainArr = new JSONArray(response.toString());
 
-        ArrayList list = new ArrayList();
+        ArrayList<JSONObject> list = new ArrayList<>();
         for (int i = 0; i < jsonMainArr.length(); i++) {
             JSONObject childJSONObject = jsonMainArr.getJSONObject(i);
             list.add(childJSONObject);
@@ -93,7 +93,7 @@ public class UIGenerator {
         context = new VelocityContext();
         JSONArray jsonMainArr = new JSONArray(response.toString());
 
-        ArrayList list = new ArrayList();
+        ArrayList<JSONObject> list = new ArrayList<>();
         for (int i = 0; i < jsonMainArr.length(); i++) {
             JSONObject childJSONObject = jsonMainArr.getJSONObject(i);
             list.add(childJSONObject);

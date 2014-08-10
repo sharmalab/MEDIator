@@ -21,7 +21,6 @@ import org.apache.logging.log4j.Logger;
 public abstract class LogInInitiator {
     private static Logger logger = LogManager.getLogger(LogInInitiator.class.getName());
     protected TciaInvoker tciaInvoker;
-    private InfDataAccessIntegration infDataAccessIntegration;
 
     /**
      * When the user logs in, retrieve the stored replica sets
@@ -29,7 +28,7 @@ public abstract class LogInInitiator {
      * @param userId Id of the user.
      */
     public void login(String userId) {
-        infDataAccessIntegration = InfDataAccessIntegration.getInfiniCore();
+        InfDataAccessIntegration infDataAccessIntegration = InfDataAccessIntegration.getInfiniCore();
         tciaInvoker = new TciaInvoker();
         tciaInvoker.setMashapeMode(false);
 

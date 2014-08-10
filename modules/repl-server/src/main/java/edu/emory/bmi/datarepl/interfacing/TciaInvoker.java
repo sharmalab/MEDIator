@@ -29,8 +29,6 @@ public class TciaInvoker extends InterfaceManager {
     private static Logger logger = LogManager.getLogger(TciaInvoker.class.getName());
     private boolean isMashapeMode;
 
-    private TCIAClientImpl client;
-
     public void setMashapeMode(boolean isMashapeMode) {
         this.isMashapeMode = isMashapeMode;
     }
@@ -268,7 +266,7 @@ public class TciaInvoker extends InterfaceManager {
         } catch (URISyntaxException e) {
             logger.error("URI syntax was wrong", e);
         }
-        client = new TCIAClientImpl(TCIAConstants.API_KEY, TCIAConstants.API_KEY);
+        TCIAClientImpl client = new TCIAClientImpl(TCIAConstants.API_KEY, TCIAConstants.API_KEY);
 
         return client.getRawData(uri);
         }

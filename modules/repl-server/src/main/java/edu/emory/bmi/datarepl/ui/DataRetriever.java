@@ -22,12 +22,11 @@ import org.apache.catalina.LifecycleException;
  */
 public class DataRetriever {
     private static Logger logger = LogManager.getLogger(DataRetriever.class.getName());
-    private static TciaLogInInitiator logInInitiator;
     private static TciaInvoker tciaInvoker;
 
 
     public static void main(String[] args) throws FileNotFoundException, LifecycleException {
-        logInInitiator = new TciaLogInInitiator();
+        TciaLogInInitiator logInInitiator = new TciaLogInInitiator();
         logInInitiator.init();
 
         tciaInvoker = logInInitiator.getTciaInvoker();
