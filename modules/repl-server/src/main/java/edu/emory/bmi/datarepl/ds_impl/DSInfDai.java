@@ -17,12 +17,12 @@ import org.infinispan.Cache;
 import java.io.IOException;
 
 /**
- * Data Access Integration from CSV.
+ * Data Access Integration for multiple data sources.
  */
-public class CSVInfDai extends InfDataAccessIntegration{
-    private static CSVInfDai infDataAccessIntegration = null;
+public class DSInfDai extends InfDataAccessIntegration{
+    private static DSInfDai infDataAccessIntegration = null;
 
-    private static Logger logger = LogManager.getLogger(CSVInfDai.class.getName());
+    private static Logger logger = LogManager.getLogger(DSInfDai.class.getName());
 
     protected static Cache<String, Boolean[]> metaMap; /*csv, ca, tcia, s3*/
     protected static Cache<String, String[]> csvMetaMap;
@@ -34,7 +34,7 @@ public class CSVInfDai extends InfDataAccessIntegration{
      *
      * @throws java.io.IOException, if getting the cache failed.
      */
-    protected CSVInfDai() throws IOException {
+    protected DSInfDai() throws IOException {
         super();
         metaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
         csvMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_META);
@@ -49,7 +49,7 @@ public class CSVInfDai extends InfDataAccessIntegration{
     public static InfDataAccessIntegration getInfiniCore() {
         if (infDataAccessIntegration == null) {
             try {
-                infDataAccessIntegration = new CSVInfDai();
+                infDataAccessIntegration = new DSInfDai();
             } catch (IOException e) {
                 logger.error("Exception when trying to initialize Infinispan.", e);
             }

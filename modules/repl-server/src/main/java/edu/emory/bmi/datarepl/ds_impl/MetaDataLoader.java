@@ -17,10 +17,10 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
- * Parses the CSV Meta File and stores the meta data into Infinispan.
+ * Parses the CSV Meta File(s) and loads the meta data into Infinispan.
  */
-public class CSVParser {
-    private static Logger logger = LogManager.getLogger(CSVParser.class.getName());
+public class MetaDataLoader {
+    private static Logger logger = LogManager.getLogger(MetaDataLoader.class.getName());
     private static BufferedReader br = null;
     private static String line = "";
 
@@ -96,7 +96,7 @@ public class CSVParser {
                 String[] metaArray = new String[length - 1];
                 System.arraycopy(entry, 1, metaArray, 0, length - 1);
 
-                CSVInfDai.getCsvMetaMap().put(entry[0], metaArray);
+                DSInfDai.getCsvMetaMap().put(entry[0], metaArray);
 
             }
 

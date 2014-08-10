@@ -26,7 +26,7 @@ import java.util.UUID;
 /**
  * Extending DataAccessIntegration for Tcia.
  */
-public class DataProSpecs extends InfDataAccessIntegration implements Integrator {
+public class DataProSpecs extends InfDataAccessIntegration {
 
     private static DataProSpecs infDataAccessIntegration = null;
 

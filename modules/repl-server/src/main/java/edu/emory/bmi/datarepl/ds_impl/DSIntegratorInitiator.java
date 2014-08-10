@@ -15,17 +15,17 @@ import org.apache.logging.log4j.Logger;
 /**
  * Initiates Infinispan instance with the meta data read from the csv file.
  */
-public class CSVInitiator {
-    private static Logger logger = LogManager.getLogger(CSVInitiator.class.getName());
+public class DSIntegratorInitiator {
+    private static Logger logger = LogManager.getLogger(DSIntegratorInitiator.class.getName());
 
     public static void main(String[] args) {
-        InfDataAccessIntegration infDataAccessIntegration = CSVInfDai.getInfiniCore();
+        InfDataAccessIntegration infDataAccessIntegration = DSInfDai.getInfiniCore();
         logger.info("Infinispan Initiator instance started..");
 
-        CSVParser.parseCSV(DataSourcesConstants.META_CSV_FILE, DataSourcesConstants.CSV_META_POSITION,
+        MetaDataLoader.parseCSV(DataSourcesConstants.META_CSV_FILE, DataSourcesConstants.CSV_META_POSITION,
                 DataSourcesConstants.CSV_META_INDEX, DataSourcesConstants.CSV_SPLIT_BY);
 
-        CSVParser.parseCSV(DataSourcesConstants.S3_META_CSV_FILE, DataSourcesConstants.S3_META_POSITION,
+        MetaDataLoader.parseCSV(DataSourcesConstants.S3_META_CSV_FILE, DataSourcesConstants.S3_META_POSITION,
                 DataSourcesConstants.S3_META_INDEX, DataSourcesConstants.S3_SPLIT_BY);
     }
 }
