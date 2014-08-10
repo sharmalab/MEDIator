@@ -51,14 +51,23 @@ https://wiki.cancerimagingarchive.net/display/Public/TCIA+Programmatic+Interface
 [2.2] Infinispan MongoDB Cache Store - https://github.com/infinispan/infinispan-cachestore-mongodb
 
 
-## Connect to the EC2 Instance
+## Connect to An EC2 Instance
+If you prefer to use an EC2 Instance to upload clinical files to S3, you may follow the below steps.
 
-ssh -i pradeeban.pem ubuntu@ec2-54-237-35-248.compute-1.amazonaws.com
+Otherwise, you may directly upload the clinical files which were downloaded to your local computer.
 
-mkdir gsoc2014
+* Connect to the instance
 
-cd gsoc2014
+$ ssh -i pradeeban.pem ubuntu@ec2-54-237-35-248.compute-1.amazonaws.com
 
-nohup wget https://tcga-data.nci.nih.gov/tcgafiles/ftp_auth/distro_ftpusers/anonymous/userCreatedArchives/652ccf44-cfda-4e99-81ac-d8f4c0eca6be.tar > nohup.out &
+* Make a directory and change to the directory.
 
-tar -zxvf 652ccf44-cfda-4e99-81ac-d8f4c0eca6be.tar
+$ mkdir gsoc2014
+
+$ cd gsoc2014
+
+* Download and extract the meta data from the online repository (link sent to email. Given below is an example).
+
+$ nohup wget https://tcga-data.nci.nih.gov/tcgafiles/ftp_auth/distro_ftpusers/anonymous/userCreatedArchives/652ccf44-cfda-4e99-81ac-d8f4c0eca6be.tar > nohup.out &
+
+$ tar -zxvf 652ccf44-cfda-4e99-81ac-d8f4c0eca6be.tar
