@@ -206,6 +206,9 @@ Clinical data is deployed in multiple data sources such as TCIA, CA Microscope, 
  \label{fig:dsdeployment}
 \end{figure}
 
+Each data source is connected to the replication tool by implementing a class that extends Integrator interface. DatasourcesIntegrator is an abstract class implementing the common features of the currently implemented 4 data sources - CSV, CA Microscope, S3, and TCIA. CsvIntegrator, CaMicIntegrator, S3Integrator, and TciaIntegrator respectively implement the integrators for each of these data sources. $MetaDataLoader$ loads the CSV files and stores them into Infinispan maps, against the ID, such as the patient ID. TciaIntegrator invokes TciaInvoker to retrieve the images and meta data from TCIA.
+
+$DSInfDai$ a class extending $InfDataAccessIntegration$ holds the instances of map to store all the meta data. $DSIntegratorInitiator$ invokes the instances of $DSInfDai$, $MetaDataLoader$ and the other respective classes to start parsing the meta data, and store the instances into the respective maps. Figure~\ref{fig:dsclass} represents the class diagram of data source integrators, along with the 3 interfaces of the replication tool.
 
 \begin{figure}[!htbp]
 \begin{center}
@@ -217,6 +220,15 @@ Clinical data is deployed in multiple data sources such as TCIA, CA Microscope, 
  \label{fig:dsclass}
 \end{figure}
 
+\begin{lstlisting}  
+    protected static Cache<String, Boolean[]> metaMap; /*csv, ca, tcia, s3*/
+    protected static Cache<String, String[]> csvMetaMap;
+    protected static Cache<String, String> s3MetaMap;
+    protected static Cache<String, String> caMetaMap;
+\end{lstlisting} 
+The $metaMap$ stores a binary array against each of the key (such as, patientID) to point the existence of meta data in the data sources defined, in this case, CSV, CA Microscope, TCIA, and S3. $s3MetaMap$ provides the file name for the respective ID, which can be used to find the location of the file as it follows the pattern of of $S3_BASE_URL + folder_name + "/" + fileName$. Similarly, $caMetaMap$ stores the URL that the respective object is stored. $csvMetaMap$ contains the meta data loaded from the CSV files against the respective ID.
+
+Methods for updating, creating, and deleting meta data from these maps are available where creating or deleting meta data will update the availability to true/false for the respective index in the $metaMap$. $XXX\_META\_POSITION$ defines the position in the metaMap, where XXX stands for CSV, CA, TCIA, and S3. Updating the existence will flop the respective boolean value in the respective entry. The $metaMap$ ensures easy indexing, and helps to search which of the data sources contain the respective information for any given key, such as a given patient ID.
 
 \section{Evaluation}
 A prototype web application was built with the data replication and synchronization tool and TCIA REST API. Apache Velocity was used to generate the web pages for the replication tool. Apache Tomcat (Embedded) was integrated into the program such that it will get the user inputs from the HTML pages and present the output in pages formatted by Apache Velocity Templates. Respective servlets were created inside the servlets package to receive the inputs from HTML pages to the backend Java code.
