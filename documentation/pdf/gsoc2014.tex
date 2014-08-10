@@ -173,7 +173,7 @@ The name of the collections, patientID, studyInstanceUID, and seriesInstanceUID 
 
 TCIA public API provides methods to retrieve the images and meta data of different granularity. Figure~\ref{fig:methods} depict the methods that retrieve image and metadata at different granularity from TCIA. These methods are invoked by the replication manager tool to retrieve the images. As shown by Figure~\ref{fig:methods} an initial search on TCIA may contain parameters such as modality, in addition to collection name, patient ID, study instance ID, and series instance UID. However, each of these search returns the output in a finer granularity, and when a sub set of this finer granularity is selected, each of the selected elements are always identified by their respective identifier. Hence, storing an array of patient ID would be sufficient to identify the selected sub set of the collection including the array of patients. Similary an array of study instance UID is sufficient to represent the selected sub set of any patient, and an array of series instance UID is sufficient to represent the selected sub set of any study, as it will contain an array of series.
 
-\begin{figure}[!htbp]
+\begin{figure}[!h]
 \begin{center}
  \resizebox{\columnwidth}{!}{
   \includegraphics[width=\textwidth]{methods.png}
@@ -195,6 +195,16 @@ The methods of $DataProSpecs$ can be invoked by knowing the respective replicaSe
 $createReplicaSet()$ requires the userID along with the elements to be stored in the replica set. It returns the $replicaSetID$, which is further used to uniquely identify the replica set. $getReplicaSet()$ requires only the relevant $replicaSetID$ to return the respective replica set. Similarly, $updateReplicaSet()$ requires $replicaSetID$ as well as the elements to be stored in the $replicaSet$, replacing the previous elements. $deleteReplicaSet()$ requires both the $userID$ and $replicaSetID$. Similarly, $duplicateReplicaSet()$ requires both $replicaSetID$ and the userID of the user to whom the replicaSet is shared to. Creating, deleting, and duplicating a replication set requires modification to the user replicas map, which holds the list of the replica sets for the particular user. Hence the necessity to input the userID. ReplicaSetID is a large negative number (UUID) randomly generated. It can be safely assumed to be harder to guess. Hence, this model is assumed to provide adequate security for this prototype.
 
 \subsection{Integration with Multiple Data Sources}
+Clinical data is deployed in multiple data sources such as TCIA, CA Microscope, and Amazon S3. Figure~\ref{fig:dsdeployment} depicts the deployment of the system with multiple data sources. A set of clinical data was uploaded to S3, where the meta data mapping of $patient ID -> respective file name$ was available as a CSV file. Similarly CSV file depicting clinical information is available, as multiple properties against the UUID, such as patient ID. These files are parsed and stored into meta data maps in Infinispan. The CSV files containing meta data or $resource ID ->$ file name mapping are stored locally in the file system or in a remote repository.
+\begin{figure}[!htbp]
+\begin{center}
+ \resizebox{\columnwidth}{!}{
+  \includegraphics[width=\textwidth]{dsdeployment.png}
+ }
+\end{center}
+ \caption{Deployment Diagram of the System and the Data Sources}
+ \label{fig:dsdeployment}
+\end{figure}
 
 \subsection{Developer Guide}
 
@@ -205,8 +215,8 @@ A prototype web application is built with the data replication and synchronizati
 $DataRetriever$ class is invoked to retrieve the meta data from TCIA and to create and retrieve replica sets. $UIGenerator$ class invokes the Apache Velocity templates to create the web pages, presenting the data to the users. $DataRetriever$ has instances of $TciaInvoker$ and $TciaLogInInitiator$ to invoke the TCIA queries and replication tool create and retrieve replicaSets mechanisms. $TciaLogInInitiator$ has instances of $TciaInvoker$ and $DataProSpecs$, to invoke the public APIs provided by these classes for the data provider specification and publisher/consumer APIs. Figure~\ref{fig:classUX} depicts the class hierarchy involved in the user interface.
 \begin{figure}[!htbp]
 \begin{center}
- \resizebox{0.45\columnwidth}{!}{
-  \includegraphics[width=0.45\textwidth]{classUX.png}
+ \resizebox{0.55\columnwidth}{!}{
+  \includegraphics[width=0.55\textwidth]{classUX.png}
  }
 \end{center}
  \caption{Class Hierarchy of the User Interface}
