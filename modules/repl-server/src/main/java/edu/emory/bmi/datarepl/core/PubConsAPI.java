@@ -24,4 +24,6 @@ public interface PubConsAPI {
     public boolean deleteReplicaSet(String userId, long replicaSetId);
 
     public long duplicateReplicaSet(long replicaSetId, String userId);
+
+    public void getRawData(String key);
 }

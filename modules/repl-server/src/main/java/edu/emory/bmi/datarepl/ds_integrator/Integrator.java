@@ -27,7 +27,8 @@ public interface Integrator {
      *
      * @param key, id of the object.
      */
-    public static void downloadRawData(String key) {
+    public static void getRawData(String key) {
+        //implement the JNLP/Java Web Start code for downloading the respective file for the replicaSetIDS as a zip.
     }
 
     /**

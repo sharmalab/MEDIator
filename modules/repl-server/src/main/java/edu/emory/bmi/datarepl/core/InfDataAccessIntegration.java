@@ -200,5 +200,9 @@ public class InfDataAccessIntegration implements PubConsAPI {
         addToUserReplicasMap(userId, duplicateReplicaSetId);
         return duplicateReplicaSetId;
     }
+
+    public void getRawData(String key) {
+        //implement the JNLP/Java Web Start code for downloading the respective file for the replicaSetIDS as a zip.
+    }
 }
 

@@ -8,6 +8,10 @@
 \usepackage{color}  
 \usepackage{textcomp}  
 \usepackage{url}  
+\usepackage{array}
+\usepackage{booktabs}
+\setlength{\heavyrulewidth}{1.5pt}
+\setlength{\abovetopsep}{4pt}
 
 \definecolor{listinggray}{gray}{0.98}  
 \definecolor{lbcolor}{rgb}{0.98,0.98,0.98}  
@@ -96,11 +100,52 @@ Having multiple instances running over different nodes provide fault-tolerance, 
 \end{figure}
 
 \subsection{Architecture}
-Data replication and synchronization tool lets the users to create, update, retrieve, and delete replica sets, and share the replica sets with others. Replica sets are stored and processed in the Infinispan maps, where integrating with the data sources is done in two interfaces. Integrator API provides a coarse granular integration with the data sources, where Interface API provides fine grain access to the data that is stored in the data sources. PubCons API manages the replica sets.
+Data replication and synchronization tool lets the users to create, update, retrieve, and delete replica sets, and share the replica sets with others. Replica sets are stored and processed in the Infinispan maps, where integrating with the data sources is done by the $InterfaceAPI$ interface. $Integrator$ interface provides a coarse granular integration with the data sources, letting the users to store meta data from multiple heterogeneous sources in a coarse grain access. $PubConsAPI$ manages meta data to specific data sources, with a finer grain control.
 
-Classes extending PubConsAPI design and implement the logic of replica sets management, where integration with the data sources is done by two interfaces - Interface API and Integrator. Interface API deals with the lower level implementation such as downloading patients, studies, series, and collections by searching them for different criteria. Integrator provides a higher level API, that 
+Figure~\ref{fig:arch} depicts the architecture of the data replication and synchronization tool, showing its components and dependencies.
+\begin{figure}[!htbp]
+\begin{center}
+ \resizebox{0.5\columnwidth}{!}{
+  \includegraphics[width=0.5\textwidth]{arch.png}
+ }
+\end{center}
+ \caption{Architecture}
+ \label{fig:arch}
+\end{figure}
+
+Methods for RESTful invocations are designed for each of the interfaces defining the APIs. Methods that are defined in the interfaces should be implemented by the classes that implement these interfaces. Table~\ref{table:interfaces} depicts the methods defined for each of the interfaces
+
+\begin{table}[!t]
+\centering
+\caption{Methods defined for the Interfaces}
+\label{table:interfaces}
+\begin{tabular}{|c||c| |c|}
+
+\toprule
+\textbf{Data Source Management} & \multicolumn{2}{c}{\textbf{ReplicaSet Management}} \\
+\midrule
+
+\textbf{$InterfaceAPI$} & \textbf{$PubConsAPI$}&\textbf{$Integrator$} \\
+\hline
+retrieve & createReplicaSet&updateExistenceInDataSource \\
+  & duplicateReplicaSet&doesExistInDataSource\\
+  & getRawData&getRawData\\
+ & getReplicaSet&getMetaData \\
+ & putReplicaSet&putMetaData \\
+ & updateReplicaSet&updateMetaData \\
+ & deleteReplicaSet&deleteMetaData \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+While the interfaces of $PubConsAPI$ and $Integrator$ look similar with some common methods, they differ on what they manage. While $PubConsAPI$ provides and manages a replica set for a specific data source, $Integrator$ integrates multiple data sources and provides a meta map and maps for each of the data sources to access the relevant information for each of the entry. Hence, while $PubConsAPI$ deals with the replica sets, $Integrator$ deals with meta data of multiple data sources. $InterfaceAPI$ is often provided by the data sources, as a mean to query and retrieve the data from the remote data sources.
+
 
 \subsection{Generic Design}
+Classes extending PubConsAPI design and implement the logic of replica sets management, where integration with the data sources is done by two interfaces - Interface API and Integrator. Interface API deals with the lower level implementation such as downloading patients, studies, series, and collections by searching them for different criteria. 
+
+A generic design was created as an example implementing the Interface API and PubConsAPI.
+
 Two distributed cache instances exist in InfDataAccessIntegration.
 \begin{lstlisting}  
     protected static Cache userReplicasMap;
@@ -200,7 +245,7 @@ The methods of $DataProSpecs$ can be invoked by knowing the respective replicaSe
 $createReplicaSet()$ requires the userID along with the elements to be stored in the replica set. It returns the $replicaSetID$, which is further used to uniquely identify the replica set. $getReplicaSet()$ requires only the relevant $replicaSetID$ to return the respective replica set. Similarly, $updateReplicaSet()$ requires $replicaSetID$ as well as the elements to be stored in the $replicaSet$, replacing the previous elements. $deleteReplicaSet()$ requires both the $userID$ and $replicaSetID$. Similarly, $duplicateReplicaSet()$ requires both $replicaSetID$ and the userID of the user to whom the replicaSet is shared to. Creating, deleting, and duplicating a replication set requires modification to the user replicas map, which holds the list of the replica sets for the particular user. Hence the necessity to input the userID. ReplicaSetID is a large negative number (UUID) randomly generated. It can be safely assumed to be harder to guess. Hence, this model is assumed to provide adequate security for this prototype.
 
 \subsection{Integration with Multiple Data Sources}
-Clinical data is deployed in multiple data sources such as TCIA, CA Microscope, and Amazon S3. Figure~\ref{fig:dsdeployment} depicts the deployment of the system with multiple data sources. A set of clinical data was uploaded to S3, where the meta data mapping of $patient ID -> respective file name$ was available as a CSV file. Similarly CSV file depicting clinical information is available, as multiple properties against the UUID, such as patient ID. These files are parsed and stored into meta data maps in Infinispan. The CSV files containing meta data or $resource ID ->$ file name mapping are stored locally in the file system or in a remote repository.
+Clinical data is deployed in multiple data sources such as TCIA, CA Microscope, and Amazon S3. Figure~\ref{fig:dsdeployment} depicts the deployment of the system with multiple data sources. A set of clinical data was uploaded to S3, where the meta data mapping of $patient ID \ding{213} respective file name$ was available as a CSV file. Similarly CSV file depicting clinical information is available, as multiple properties against the UUID, such as patient ID. These files are parsed and stored into meta data maps in Infinispan. The CSV files containing meta data or $resource ID \ding{213} fileName$ mapping are stored locally in the file system or in a remote repository.
 \begin{figure}[!htbp]
 \begin{center}
  \resizebox{\columnwidth}{!}{
@@ -231,9 +276,10 @@ $DSInfDai$ a class extending $InfDataAccessIntegration$ holds the instances of m
     protected static Cache<String, String> s3MetaMap;
     protected static Cache<String, String> caMetaMap;
 \end{lstlisting} 
-The $metaMap$ stores a binary array against each of the key (such as, patientID) to point the existence of meta data in the data sources defined, in this case, CSV, CA Microscope, TCIA, and S3. $s3MetaMap$ provides the file name for the respective ID, which can be used to find the location of the file as it follows the pattern of of $S3\_BASE\_URL + folderName + ``/" + fileName$. Similarly, $caMetaMap$ stores the URL that the respective object is stored. $csvMetaMap$ contains the meta data loaded from the CSV files against the respective ID.
+The $metaMap$ stores a binary array against each of the key (such as, patientID) to point the existence of meta data in the data sources defined, in this case, CSV, CA Microscope, TCIA, and S3. $s3MetaMap$ provides the file name for the respective ID, which can be used to find the location of the file as it follows the pattern of of $S3\_BASE\_URL + folderName + ``/'' + fileName$. Similarly, $caMetaMap$ stores the URL that the respective object is stored. $csvMetaMap$ contains the meta data loaded from the CSV files against the respective ID.
 
 Methods for updating, creating, and deleting meta data from these maps are available where creating or deleting meta data will update the availability to true/false for the respective index in the $metaMap$. $XXX\_META\_POSITION$ defines the position in the metaMap, where XXX stands for CSV, CA, TCIA, and S3. Updating the existence will flop the respective boolean value in the respective entry. The $metaMap$ ensures easy indexing, and helps to search which of the data sources contain the respective information for any given key, such as a given patient ID.
+
 
 \section{Evaluation}
 A prototype web application was built with the data replication and synchronization tool and TCIA REST API. Apache Velocity was used to generate the web pages for the replication tool. Apache Tomcat (Embedded) was integrated into the program such that it will get the user inputs from the HTML pages and present the output in pages formatted by Apache Velocity Templates. Respective servlets were created inside the servlets package to receive the inputs from HTML pages to the backend Java code.
@@ -254,7 +300,7 @@ Storing a selected sub set of data items that matches a specific criteria as a r
 
 \section{Future Work}
 \paragraph*{Get the Raw Images}
-$downloadRawData(String key)$ method should be implemented in the classes implementing the interface to be able to download the raw data from the data sources such as TCIA, CA Microscope, or S3, for the given replica set, potentially using Java web start.
+$getRawData(String key)$ method should be implemented in the classes implementing the $PubConsAPI$ and $Integrator$ interfaces to be able to download the raw data from the data sources such as TCIA, CA Microscope, or S3, for the given replica set, potentially using Java web start.
 
 \paragraph*{Tracking the downloaded items}
 Currently, when a user initates download of a replica set, finishes the download, and later restart the download, the download mechanism still would download the whole replica set again, as there is no track of what has already been downloaded. A sample timeline of the events is given below.\\
@@ -271,6 +317,11 @@ The data replication and synchronization can be further secured with user authen
 \subsection{Developer Guide}
 This section describes how the future work could be done.
 
+Replica sets management is handled by both $Integrator$ and $PubConsAPI$ interfaces. If multiple data sources should be managed consecutively, having maps pointing to meta data from heterogenous sources, $Integrator$ interface should be implemented in a class with the respective distributed maps to hold the meta data. If a single data source is involved with a fine grain control over a data source, $PubConsAPI$ should be implemented. Functionality such as security with SAML token should be implemented as an Integrator, as this involves SSO for multiple data sources.
+
+Similarly, involving a time stamp for the class extending $PubConsAPI$, downloaded items can be tracked, and the diffs can be produced for the user download.
+
+$InterfaceAPI$ integrates the tool with the data source, such that the relevant data can be queried, searched, manipulated, and downloaded. Hence, respective classes should implement this interface for each of the data source. The TCIA integration by the $tcia\_rest\_api$ package stands as a decent sample on implementing this interface.
 
 %\begin{thebibliography}{1}
 %\end{thebibliography}
