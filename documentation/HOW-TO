@@ -34,6 +34,11 @@ Moreover, the meta data comes into multiple folders, with level1 as the default.
 Provide your TCIA API Key in TCIAConstants for the below field.
     public static String API_KEY = "";
 
+* CA constants.
+Check the CA microscope base url and sample query url that is used in the proto-type, in DataSourcesConstants class.
+    public static final String CA_MICROSCOPE_BASE_URL = "http://imaging.cci.emory.edu/camicroscope/camicroscope/";
+    public static final String CA_MICROSCOPE_QUERY_URL = "osdCamicroscope.php?tissueId=";
+
 * Build from the source code root:
 $ mvn package
 

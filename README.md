@@ -7,7 +7,9 @@ Please visit the website to learn more - https://bitbucket.org/BMI/datareplicati
 
 ## Providing TCIA API Key.
 Provide your TCIA API Key in TCIAConstants.
+
     public static String API_KEY = "";
+
 
 ## Building and Executing Using Apache Maven 3.x.x
 Building
