@@ -33,7 +33,7 @@ public class MetaDataLoader {
         try {
             br = new BufferedReader(new FileReader(fileName));
             while ((line = br.readLine()) != null) {
-                if (currentLine >= DataSourcesConstants.DATA_START_LINE) {
+                if (currentLine >= edu.emory.bmi.datarepl.constants.DataSourcesConstants.DATA_START_LINE) {
 
                     String[] entry = line.split(splitBy);
                     int length = entry.length;
@@ -57,7 +57,7 @@ public class MetaDataLoader {
                     }
                 }
                 currentLine++;
-                if (currentLine >= DataSourcesConstants.MAX_LINES) {
+                if (currentLine >= edu.emory.bmi.datarepl.constants.DataSourcesConstants.MAX_LINES) {
                     break;
                 }
             }
@@ -87,10 +87,10 @@ public class MetaDataLoader {
     public static void readCSV() {
         try {
 
-            br = new BufferedReader(new FileReader(DataSourcesConstants.META_CSV_FILE));
+            br = new BufferedReader(new FileReader(edu.emory.bmi.datarepl.constants.DataSourcesConstants.META_CSV_FILE));
             while ((line = br.readLine()) != null) {
 
-                String[] entry = line.split(DataSourcesConstants.CSV_SPLIT_BY);
+                String[] entry = line.split(edu.emory.bmi.datarepl.constants.DataSourcesConstants.CSV_SPLIT_BY);
                 int length = entry.length;
 
                 String[] metaArray = new String[length - 1];

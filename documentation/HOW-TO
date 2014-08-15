@@ -11,7 +11,8 @@ Download the tar, extract them, and upload to S3.
 Place all the meta data files in the root folder of the data replication system source code.
 
 * Constants
-The class edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants contains the constants.
+edu.emory.bmi.datarepl.constants package contains the constants to be modified.
+The class DataSourcesConstants contains the constants.
 
 Set the name of the CSV file that is used to load the CSV meta data into Infinispan.
     public static final String META_CSV_FILE = "getAllDataAsCSV";

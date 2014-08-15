@@ -22,10 +22,10 @@ public class DSIntegratorInitiator {
         InfDataAccessIntegration infDataAccessIntegration = DSInfDai.getInfiniCore();
         logger.info("Infinispan Initiator instance started..");
 
-        MetaDataLoader.parseCSV(DataSourcesConstants.META_CSV_FILE, DataSourcesConstants.CSV_META_POSITION,
-                DataSourcesConstants.CSV_META_INDEX, DataSourcesConstants.CSV_SPLIT_BY);
+        MetaDataLoader.parseCSV(edu.emory.bmi.datarepl.constants.DataSourcesConstants.META_CSV_FILE, edu.emory.bmi.datarepl.constants.DataSourcesConstants.CSV_META_POSITION,
+                edu.emory.bmi.datarepl.constants.DataSourcesConstants.CSV_META_INDEX, edu.emory.bmi.datarepl.constants.DataSourcesConstants.CSV_SPLIT_BY);
 
-        MetaDataLoader.parseCSV(DataSourcesConstants.S3_META_CSV_FILE, DataSourcesConstants.S3_META_POSITION,
-                DataSourcesConstants.S3_META_INDEX, DataSourcesConstants.S3_SPLIT_BY);
+        MetaDataLoader.parseCSV(edu.emory.bmi.datarepl.constants.DataSourcesConstants.S3_META_CSV_FILE, edu.emory.bmi.datarepl.constants.DataSourcesConstants.S3_META_POSITION,
+                edu.emory.bmi.datarepl.constants.DataSourcesConstants.S3_META_INDEX, edu.emory.bmi.datarepl.constants.DataSourcesConstants.S3_SPLIT_BY);
     }
 }

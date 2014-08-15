@@ -9,7 +9,7 @@
 package edu.emory.bmi.datarepl.ds_integrator;
 
 import edu.emory.bmi.datarepl.ds_impl.DSInfDai;
-import edu.emory.bmi.datarepl.ds_impl.DataSourcesConstants;
+import edu.emory.bmi.datarepl.constants.DataSourcesConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

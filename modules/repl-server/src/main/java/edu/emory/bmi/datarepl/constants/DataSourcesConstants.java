@@ -6,7 +6,7 @@
  * Copyright (c) 2014, Pradeeban Kathiravelu <pradeeban.kathiravelu@tecnico.ulisboa.pt>
  */
 
-package edu.emory.bmi.datarepl.ds_impl;
+package edu.emory.bmi.datarepl.constants;
 
 /**
  * Constants related to data sources.
