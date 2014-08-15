@@ -77,3 +77,7 @@ $ cd gsoc2014
 $ nohup wget https://tcga-data.nci.nih.gov/tcgafiles/ftp_auth/distro_ftpusers/anonymous/userCreatedArchives/652ccf44-cfda-4e99-81ac-d8f4c0eca6be.tar > nohup.out &
 
 $ tar -zxvf 652ccf44-cfda-4e99-81ac-d8f4c0eca6be.tar
+
+
+## Further customizations.
+If you wish to reproduce the system in another deployment, please refer to documentation/HOW-TO.
