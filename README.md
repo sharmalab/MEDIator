@@ -5,6 +5,10 @@ Welcome to the wiki of the Data Replication System project!
 Please visit the website to learn more - https://bitbucket.org/BMI/datareplicationsystem
 
 
+## Providing TCIA API Key.
+Provide your TCIA API Key in TCIAConstants.
+    public static String API_KEY = "";
+
 ## Building and Executing Using Apache Maven 3.x.x
 Building
 --------
