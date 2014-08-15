@@ -30,6 +30,10 @@ Moreover, the meta data comes into multiple folders, with level1 as the default.
     public static final String S3_LEVEL2 = "level2";
     public static final String S3_LEVEL3 = "level3";
 
+* API Key
+Provide your TCIA API Key in TCIAConstants for the below field.
+    public static String API_KEY = "";
+
 * Build from the source code root:
 $ mvn package
 
