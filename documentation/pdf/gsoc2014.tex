@@ -62,7 +62,7 @@ Email: ashish.sharma@emory.edu}}
 \maketitle
 
 \begin{abstract}
-Consumers download the data by searching the image repository using the browser. The information that the consumer is interested in, gets updated whenever the data producers update or add patient information. The current download tool lacks the ability to track the relevant updates to the consumer. A data replication and synchronization tool will assist automated downloads to the consumers. Users can create replica sets as a sub set of their search queries, and share their replica sets with other users, and update their replica sets periodically. Replica sets can be used as a way of tracking and sharing information. This project exploits this model to create a data replication and synchronization tool for data sources. As a proof of concept, a data replication and synchronization tool has been implemented for The Cancer Imaging Archive (TCIA).
+Big data science has more consumers and fewer producers of data. Scientific data is getting larger and larger. Sharing data among the consumers can be achieved by sharing pointers to data. Replica set is a shared pointer to a stored data, which is created, shared, and modified by the data consumers. Data replication and synchronization tool is a mechanism that allows sharing pointers to data effectively, while letting the consumers manipulate the pointers without modifying th raw data. As a proof of concept, a data replication and synchronization tool has been implemented for multiple data sources, including the Amazon S3, The Cancer Imaging Archive (TCIA), CA Microscope, and meta data from CSV files.
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
@@ -303,6 +303,8 @@ Storing a selected sub set of data items that matches a specific criteria as a r
 $getRawData(String key)$ method should be implemented in the classes implementing the $PubConsAPI$ and $Integrator$ interfaces to be able to download the raw data from the data sources such as TCIA, CA Microscope, or S3, for the given replica set, potentially using Java web start.
 
 \paragraph*{Tracking the downloaded items}
+Consumers download the data by searching the image repository using the browser. The information that the consumer is interested in, gets updated whenever the data producers update or add patient information. The current download tool lacks the ability to track the relevant updates to the consumer. A data replication and synchronization tool will assist automated downloads to the consumers. Users can create replica sets as a sub set of their search queries, and share their replica sets with other users, and update their replica sets periodically. Replica sets can be used as a way of tracking and sharing information.
+
 Currently, when a user initates download of a replica set, finishes the download, and later restart the download, the download mechanism still would download the whole replica set again, as there is no track of what has already been downloaded. A sample timeline of the events is given below.\\
  $t_{0}$: \textit{User A} Creates Replica Set $R_{1}$ with a query.\\
  $t_{1}$: \textit{User A} accesses and downloads the contents of the replica set $R_{1}$ and finds the contents to be ${A,B,C}$.\\
