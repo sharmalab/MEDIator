@@ -76,22 +76,21 @@ The sub set which is commonly known as a replica set, can be updated, duplicated
 
 
 \section{Design}
-\balance
-Having multiple instances running over different nodes provide fault-tolerance, as when one node terminates, the other nodes have the backup replica of the partitions stored in the terminated node. 
-
-\subsection{Architecture}
-Data replication and synchronization tool lets the users to create, update, retrieve, and delete replica sets, and share the replica sets with others. Replica sets are stored and processed in the Infinispan maps, where integrating with the data sources is done by the $InterfaceAPI$ interface. $Integrator$ interface provides a coarse granular integration with the data sources, letting the users to store meta data from multiple heterogeneous sources in a coarse grain access. $PubConsAPI$ manages meta data to specific data sources, with a finer grain control.
-
-Figure~\ref{fig:arch} depicts the architecture of the data replication and synchronization tool, showing its components and dependencies.
+Multiple nodes running Infinipsan are leveraged and configured to create a cluster of the data replication and synchronization tool. Having multiple instances running over different nodes provide fault-tolerance, as when one node terminates, the other nodes have the backup replica of the partitions stored in the terminated node. Figure~\ref{fig:deployment} shows the higher level deployment view of the solution.
 \begin{figure}[!htbp]
 \begin{center}
- \resizebox{0.5\columnwidth}{!}{
-  \includegraphics[width=0.5\textwidth]{arch.png}
+ \resizebox{0.6\columnwidth}{!}{
+  \includegraphics[width=0.6\textwidth]{deployment.png}
  }
 \end{center}
- \caption{Architecture}
- \label{fig:arch}
+ \caption{Deployment}
+ \label{fig:deployment}
 \end{figure}
+
+The data replication and synchronization tool consists of 3 APIs, to be able to connect to specific data source, to integrate multiple data sources and meta data into the system, and to create replica sets for the data sources. While $PubConsAPI$ provides and manages a replica set for a specific data source, $Integrator$ integrates multiple data sources and provides a meta map and maps for each of the data sources to access the relevant information for each of the entry. Hence, while $PubConsAPI$ deals with the replica sets, $Integrator$ deals with meta data of multiple data sources. $InterfaceAPI$ is often provided by the data sources, as a mean to query and retrieve the data from the remote data sources.
+
+
+The data replication and synchronization tool lets the users to create, update, retrieve, and delete replica sets, and share the replica sets with others. Replica sets are stored and processed in the Infinispan maps, where integrating with the data sources is done by the $InterfaceAPI$ interface. $Integrator$ interface provides a coarse granular integration with the data sources, letting the users to store meta data from multiple heterogeneous sources in a coarse grain access. 
 
 Methods for RESTful invocations are designed for each of the interfaces defining the APIs. Methods that are defined in the interfaces should be implemented by the classes that implement these interfaces. Table~\ref{table:interfaces} depicts the methods defined for each of the interfaces
 
@@ -118,11 +117,10 @@ retrieve & createReplicaSet&updateExistenceInDataSource \\
 \end{tabular}
 \end{table}
 
-While the interfaces of $PubConsAPI$ and $Integrator$ look similar with some common methods, they differ on what they manage. While $PubConsAPI$ provides and manages a replica set for a specific data source, $Integrator$ integrates multiple data sources and provides a meta map and maps for each of the data sources to access the relevant information for each of the entry. Hence, while $PubConsAPI$ deals with the replica sets, $Integrator$ deals with meta data of multiple data sources. $InterfaceAPI$ is often provided by the data sources, as a mean to query and retrieve the data from the remote data sources.
-
+While the interfaces of $PubConsAPI$ and $Integrator$ look similar with some common methods, they differ on what they manage. 
 
 \subsection{Generic Design}
-Classes extending PubConsAPI design and implement the logic of replica sets management, where integration with the data sources is done by two interfaces - Interface API and Integrator. Interface API deals with the lower level implementation such as downloading patients, studies, series, and collections by searching them for different criteria. 
+Classes extending PubConsAPI design and implement the logic of replica sets management, where integration with the data sources is done by two interfaces - Interface API and Integrator. Interface API provides data retrieval from the data source, where Integrator integrates multiple data sources into the system and store the meta data of the data sources into Infinispan.
 
 A generic design was created as an example implementing the Interface API and PubConsAPI.
 
@@ -142,7 +140,7 @@ $InfDataAccessIntegration$ implements the PubConsAPI for publisher/consumer, whe
 The Replication Tool is multi-tenanted, and it is aware of the multiple tenants or users using the system. Each user co-exist in the replication tool at the same time, without the knowledge of existence of the other users, sharing the same cache space. 
 
 \paragraph*{DataProSpecs - PubConsAPI}
-The methods of $DataProSpecs$ can be invoked by knowing the respective replicaSetID of the replica set and the user ID of the user who owns the replica set. User ID is a random string that is input by the user. Probably this can be some 'secret' or pass from the user. userIDs serve as the keys of the userReplicasMap. Apart from that, there is no data structure to hold the list of users.
+The methods of $DataProSpecs$ can be invoked by knowing the respective replicaSetID of the replica set and the user ID of the user who owns the replica set. User ID is a random string that is input by the user. Probably this can be some `secret' or pass from the user. userIDs serve as the keys of the userReplicasMap. Apart from that, there is no data structure to hold the list of users.
 
 $createReplicaSet()$ requires the userID along with the elements to be stored in the replica set. It returns the $replicaSetID$, which is further used to uniquely identify the replica set. $getReplicaSet()$ requires only the relevant $replicaSetID$ to return the respective replica set. Similarly, $updateReplicaSet()$ requires $replicaSetID$ as well as the elements to be stored in the $replicaSet$, replacing the previous elements. $deleteReplicaSet()$ requires both the $userID$ and $replicaSetID$. Similarly, $duplicateReplicaSet()$ requires both $replicaSetID$ and the userID of the user to whom the replicaSet is shared to. Creating, deleting, and duplicating a replication set requires modification to the user replicas map, which holds the list of the replica sets for the particular user. Hence the necessity to input the userID. ReplicaSetID is a large negative number (UUID) randomly generated. It can be safely assumed to be harder to guess. Hence, this model is assumed to provide adequate security for this prototype.
 
@@ -182,8 +180,27 @@ The $metaMap$ stores a binary array against each of the key (such as, patientID)
 
 Methods for updating, creating, and deleting meta data from these maps are available where creating or deleting meta data will update the availability to true/false for the respective index in the $metaMap$. $XXX\_META\_POSITION$ defines the position in the metaMap, where XXX stands for CSV, CA, TCIA, and S3. Updating the existence will flop the respective boolean value in the respective entry. The $metaMap$ ensures easy indexing, and helps to search which of the data sources contain the respective information for any given key, such as a given patient ID.
 
+
+\subsection{Software Architecture}
+Figure~\ref{fig:arch} depicts the architecture of the data replication and synchronization tool, showing its components and dependencies.
+\begin{figure}[!htbp]
+\begin{center}
+ \resizebox{0.5\columnwidth}{!}{
+  \includegraphics[width=0.5\textwidth]{arch.png}
+ }
+\end{center}
+ \caption{Architecture}
+ \label{fig:arch}
+\end{figure}
+
+Dependencies are used unmodified. Dependencies such as Apache HTTP Client and Mashape Unirest are configured and leveraged by the InteraceAPI, to query and retrieve the raw data from the data sources. Infinispan, as the core dependency, is configured and exploited as the shared storage and distributed execution medium. Presentation layer dependencies such aS Embedded Tomcat, Apache Velocity, and Log4j2 facilitate prototype application development with web pages, and configurable logging. Apache Maven is used as the project management dependency to build, deploy, and execute the project effectively.
+
+Data sources access layer consists of means of accessing the data sources, such as querying and downloading the data stored in Amazon S3 or TCIA, via the REST API. Utilities such as MetaDataLoader and TciaUtil provide utility methods and functionalities for the tool throughout its execution.
+
+InterfaceAPIs, Integrators, and PubConsAPIs are implemented at the top level, extending their respective base classes. The presentation layer consists of the Intiiators that function as the starting point of the prototype applications. Servlets and UI Generators generate the presentation layer of the tool.
+
 \section{Implementation}
-Different complex data sources require custom development extending the generic framework. As creating and customizing the replicaSet require a more specific data structure, further implementations are done, extending the core class hierarchy. 
+Different complex data sources require custom development extending the generic framework. As creating and customizing the replicaSet require a more specific data structure, further implementations are done, extending the core class hierarchy\footnote{The source code can be accessed from \url{https://bitbucket.org/BMI/datareplicationsystem}}. 
 
 \subsection{Generic Implementation}
 Base classes of the APIs were implemented to provide a generic synchronization tool, that stores the entire search queries of any data source as the replica set. When the user logs in, $logIn()$ checks whether the user has already stored replicaSets from the Infinispan distributed Cache. If so, execute them all again. This would be changed later as we do not have to execute all. Rather, we need to execute for the diffs. When the user performs new searches, for the images, series, collections, and the other meta data, the results will be returned to the user, and the user can chose ta subset of the returned results to create a replicaSet.
@@ -280,7 +297,8 @@ $DataRetriever$ class is invoked to retrieve the meta data from TCIA and to crea
 \end{figure}
 
 \section{Conclusion}
-Storing a selected sub set of data items that matches a specific criteria as a replica set is an optimal way to bookmark large data sources. Users should be able to create and update their replica sets, and share it with others using a unique identifier. While different data sources have different interfaces, a generic data replication and synchronization tool will be convenient, such that sharing of replica sets across heterogeneous data sources will be possible. This project researched the possibilities of such a replication and data synchronization tool, exploiting the in-memory data grid projects, and implements a data synchronization and replication tool\footnote{The source code can be accessed from \url{https://bitbucket.org/BMI/datareplicationsystem}} with Infinispan while consuming data sources such as TCIA via their public APIs.
+\balance
+Storing a selected sub set of data items that matches a specific criteria as a replica set is an optimal way to bookmark large data sources. Users should be able to create and update their replica sets, and share it with others using a unique identifier. While different data sources have different interfaces, a generic data replication and synchronization tool will be convenient, such that sharing of replica sets across heterogeneous data sources will be possible. This project researched the possibilities of such a replication and data synchronization tool, exploiting the in-memory data grid projects, and implements a data synchronization and replication tool with Infinispan while consuming data sources such as TCIA via their public APIs.
 
 \section{Future Work}
 \paragraph*{Get the Raw Images}
