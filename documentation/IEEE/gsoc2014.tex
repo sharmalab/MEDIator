@@ -62,7 +62,9 @@ Email: ashish.sharma@emory.edu}}
 \maketitle
 
 \begin{abstract}
-Big data science has more consumers and fewer producers of data. Scientific data is getting larger and larger. Sharing data among the consumers can be achieved by sharing pointers to data. Replica set is a shared pointer to a stored data, which is created, shared, and modified by the data consumers. This paper presents \textit{MEDIator}, a data sharing and synchronization middleware platform for heterogeneous medical image archives. \textit{MEDIator} allows sharing pointers to data effectively, while letting the consumers manipulate the pointers without modifying th raw data. \textit{MEDIator} has been implemented for multiple data sources, including the Amazon S3, The Cancer Imaging Archive (TCIA), CA Microscope, and meta data from CSV files.
+Big data science has more consumers and fewer producers of data. Scientific data is getting larger and larger and consists of a varying degree of heterogeneity in its content and storage media. Medical image archives are populated by the images and meta data by a few source providers and are read by different interfaces. With the growing adaptation of pervasive computing into medical domain and increasingly open access to data, the meta data stored in legacy data stores is shared and synchronized across multiple devices and users. With the increasing complexity of the medical image hierarchies, consumers of medical images should be able to bookmark pointers to the sets of images and meta data from different sources, and share the pointers with others. 
+
+While many medical image sources provide APIs for public access, an architecture that permits an effective sharing and synchronization of meta data across multiple users, from different storage media, is still lacking. This paper presents \textit{MEDIator}, a data sharing and synchronization middleware platform for heterogeneous medical image archives. \textit{MEDIator} allows sharing pointers to data effectively, while letting the consumers manipulate the pointers without modifying th raw data. \textit{MEDIator} has been implemented for multiple data sources, including the Amazon S3, The Cancer Imaging Archive (TCIA), CA Microscope, and meta data from CSV files.
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
@@ -71,6 +73,8 @@ Big data science has more consumers and fewer producers of data. Scientific data
 Data sources contain data of different granularity. Data is organized in a hierarchical structure, where different levels are used to present data in specific formats. Folders and documents make a good example of this. A unique identifier is assigned to each of the data units. A search across the data source would present the user with the list of matching criteria. Interesting sub set of the matching criteria may be bookmarked by the user and shared with others. 
 
 The sub set which is commonly known as a replica set, can be updated, duplicated, shared with other users, and deleted later. A search query may contain different parameters that can define the scope of the search and the outcomes, and often return the outputs in a finer granularity. When a sub set of such information is stored as a replica set, it is sufficient to store the unique identifiers of the matching data units of finer granularity than the original search query, as it would be sufficient to reproduce the data that is represented by the replica set.
+
+Sharing data among the consumers can be achieved by sharing pointers to data. Replica set is a shared pointer to a stored data, which is created, shared, and modified by the data consumers.
 %
 \section{Related Work}
 
