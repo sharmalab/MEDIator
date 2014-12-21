@@ -70,18 +70,26 @@ While many medical image sources provide APIs for public access, an architecture
 \IEEEpeerreviewmaketitle
 
 \section{Introduction}
-Data sources contain data of different granularity. Data is organized in a hierarchical structure, where different levels are used to present data in specific formats. Folders and documents make a good example of this. A unique identifier is assigned to each of the data units. A search across the data source would present the user with the list of matching criteria. Interesting sub set of the matching criteria may be bookmarked by the user and shared with others. 
+Data sources contain data of different granularity. Data is organized in a hierarchical structure, where different levels are used to present data in specific formats. Folders and documents make a good example of this. A unique identifier is assigned to each of the data units. A search across the data source would present the user with the list of matching criteria. Interesting sub set of the matching criteria may be bookmarked by the user and shared with others. Medical image archives have a hierarchy of information with a well-structured schema. Hence, medical image information can be retrieved at different granularity by the users, exploiting this hierarchy.
+
+Sharing data among the consumers can be achieved by sharing pointers to data. Replica set is a shared pointer to a stored data, which is created, shared, and modified by the data consumers. Storing a selected sub set of data items that matches a specific criteria as a replica set is an optimal way to bookmark large data sources. Users can create replica sets as a sub set of their search queries, and share their replica sets with other users, and update their replica sets periodically. Replica sets can be used as a way of tracking and sharing information.
+
+Users should be able to create and update their replica sets, and share it with others using a unique identifier. While different data sources have different interfaces, a generic data replication and synchronization tool will be convenient, such that sharing of replica sets across heterogeneous data sources will be possible. 
+
+This paper presents the research and prototype implementations of $MEDIator$, a replication and data synchronization platform, exploiting the in-memory data grid projects, while consuming data sources such as TCIA via their public APIs.
+
+%
+\section{Related Work}
+\subsection{Medical Image Archives}
+
+
+\section{Solution Architecture}
+
 
 The sub set which is commonly known as a replica set, can be updated, duplicated, shared with other users, and deleted later. A search query may contain different parameters that can define the scope of the search and the outcomes, and often return the outputs in a finer granularity. When a sub set of such information is stored as a replica set, it is sufficient to store the unique identifiers of the matching data units of finer granularity than the original search query, as it would be sufficient to reproduce the data that is represented by the replica set.
 
-Sharing data among the consumers can be achieved by sharing pointers to data. Replica set is a shared pointer to a stored data, which is created, shared, and modified by the data consumers.
-%
-\section{Related Work}
-
-
-\section{Design}
 Multiple nodes running Infinipsan are leveraged and configured to create a cluster of the data replication and synchronization tool. Having multiple instances running over different nodes provide fault-tolerance, as when one node terminates, the other nodes have the backup replica of the partitions stored in the terminated node. Figure~\ref{fig:deployment} shows the higher level deployment view of the solution.
-\begin{figure}[!htbp]
+\begin{figure}[!h]
 \begin{center}
  \resizebox{0.6\columnwidth}{!}{
   \includegraphics[width=0.6\textwidth]{deployment.png}
@@ -197,13 +205,25 @@ Figure~\ref{fig:arch} depicts the architecture of the data replication and synch
  \label{fig:arch}
 \end{figure}
 
-Dependencies are used unmodified. Dependencies such as Apache HTTP Client and Mashape Unirest are configured and leveraged by the InteraceAPI, to query and retrieve the raw data from the data sources. Infinispan, as the core dependency, is configured and exploited as the shared storage and distributed execution medium. Presentation layer dependencies such aS Embedded Tomcat, Apache Velocity, and Log4j2 facilitate prototype application development with web pages, and configurable logging. Apache Maven is used as the project management dependency to build, deploy, and execute the project effectively.
+Dependencies are used unmodified. Dependencies such as Apache HTTP Client and Mashape Unirest are configured and leveraged by the InterfaceAPI, to query and retrieve the raw data from the data sources. Infinispan, as the core dependency, is configured and exploited as the shared storage and distributed execution medium. Presentation layer dependencies such aS Embedded Tomcat, Apache Velocity, and Log4j2 facilitate prototype application development with web pages, and configurable logging. Apache Maven is used as the project management dependency to build, deploy, and execute the project effectively.
 
 Data sources access layer consists of means of accessing the data sources, such as querying and downloading the data stored in Amazon S3 or TCIA, via the REST API. Utilities such as MetaDataLoader and TciaUtil provide utility methods and functionalities for the tool throughout its execution.
 
 InterfaceAPIs, Integrators, and PubConsAPIs are implemented at the top level, extending their respective base classes. The presentation layer consists of the Intiiators that function as the starting point of the prototype applications. Servlets and UI Generators generate the presentation layer of the tool.
 
+Replica sets management is handled by both $Integrator$ and $PubConsAPI$ interfaces. If multiple data sources should be managed consecutively, having maps pointing to meta data from heterogeneous sources, $Integrator$ interface should be implemented in a class with the respective distributed maps to hold the meta data. If a single data source is involved with a fine grain control over a data source, $PubConsAPI$ should be implemented. Functionality such as security with SAML token should be implemented as an Integrator, as this involves SSO for multiple data sources.
+
+Similarly, involving a time stamp for the class extending $PubConsAPI$, downloaded items can be tracked, and the diffs can be produced for the user download. Hence, a download can be paused and resumed later, downloading the images that have not been downloaded yet.
+
+$InterfaceAPI$ integrates the tool with the data source, such that the relevant data can be queried, searched, manipulated, and downloaded. Hence, respective classes should implement this interface for each of the data source. The TCIA integration by the $tcia\_rest\_api$ package stands as a decent sample on implementing this interface.
+
+The data replication and synchronization can be further secured with user authentication. SAML tokens can be created for user names and passwords with the membership information. The SAML tokens can be validated later. A create and validate API with user stores such as LDAP or OpenID should be designed and implemented, extending and leveraging the replication tool.
+
+$getRawData(String key)$ method should be implemented in the classes implementing the $PubConsAPI$ and $Integrator$ interfaces to be able to download the raw data from the data sources such as TCIA, CA Microscope, or S3, for the given replica set, potentially using Java web start.
+
 \section{Implementation}
+Based on the design, $MEDIator$ was implemented as a data sharing and synchronization middleware platform for heterogeneous medical image archives.
+
 Different complex data sources require custom development extending the generic framework. As creating and customizing the replicaSet require a more specific data structure, further implementations are done, extending the core class hierarchy\footnote{The source code can be accessed from \url{https://bitbucket.org/BMI/datareplicationsystem}}. 
 
 \subsection{Generic Implementation}
@@ -287,49 +307,19 @@ TCIA public API provides methods to retrieve the images and meta data of differe
 
 
 \section{Evaluation}
-A prototype web application was built with the data replication and synchronization tool and TCIA REST API. Apache Velocity was used to generate the web pages for the replication tool. Apache Tomcat (Embedded) was integrated into the program such that it will get the user inputs from the HTML pages and present the output in pages formatted by Apache Velocity Templates. Respective servlets were created inside the servlets package to receive the inputs from HTML pages to the backend Java code.
+A prototype web application was built with $MEDIator$ architecture. Apache Velocity was used to generate the web pages for the replication tool. Apache Tomcat (Embedded) was integrated into the program such that it will get the user inputs from the HTML pages and present the output in pages formatted by Apache Velocity Templates. Respective servlets were created inside the servlets package to receive the inputs from HTML pages to the backend Java code.
 
-$DataRetriever$ class is invoked to retrieve the meta data from TCIA and to create and retrieve replica sets. $UIGenerator$ class invokes the Apache Velocity templates to create the web pages, presenting the data to the users. $DataRetriever$ has instances of $TciaInvoker$ and $TciaLogInInitiator$ to invoke the TCIA queries and replication tool create and retrieve replicaSets mechanisms. $TciaLogInInitiator$ has instances of $TciaInvoker$ and $DataProSpecs$, to invoke the public APIs provided by these classes for the data provider specification and publisher/consumer APIs. Figure~\ref{fig:classUX} depicts the class hierarchy involved in the user interface.
-\begin{figure}[!htbp]
-\begin{center}
- \resizebox{0.55\columnwidth}{!}{
-  \includegraphics[width=0.55\textwidth]{classUX.png}
- }
-\end{center}
- \caption{Class Hierarchy of the User Interface}
- \label{fig:classUX}
-\end{figure}
+A cluster with 6 identical nodes (Intel(R) Core(TM) i7-2600K CPU @ 3.40GHz and 12 GB memory) was used for evaluations. With synchronous backups enabled, $MEDIator$ showed a fault-tolerant behavior when a node failed and/or rejoined later. The time to initialize $MEDIator$ remained constant, regardless of the underlying data sources.
+
 
 \section{Conclusion}
+$MEDIator$ is a platform providing an ubiquitous access to medical meta data from the image archives, while providing fault tolerance and load balancing, leveraging the distributed shared memory platforms. A prototype has been implemented with multiple data sources containing cancer images, with Infinispan as the in-memory data store.
+
+Consumers download the data by searching the image repository using the browser. The information that the consumer is interested in, gets updated whenever the data producers update or add patient information. Further improvements to $MEDIator$ should enable automated downloads to the consumers. 
+
 \balance
-Storing a selected sub set of data items that matches a specific criteria as a replica set is an optimal way to bookmark large data sources. Users should be able to create and update their replica sets, and share it with others using a unique identifier. While different data sources have different interfaces, a generic data replication and synchronization tool will be convenient, such that sharing of replica sets across heterogeneous data sources will be possible. This project researched the possibilities of such a replication and data synchronization tool, exploiting the in-memory data grid projects, and implements a data synchronization and replication tool with Infinispan while consuming data sources such as TCIA via their public APIs.
 
-\section{Future Work}
-\paragraph*{Get the Raw Images}
-$getRawData(String key)$ method should be implemented in the classes implementing the $PubConsAPI$ and $Integrator$ interfaces to be able to download the raw data from the data sources such as TCIA, CA Microscope, or S3, for the given replica set, potentially using Java web start.
-
-\paragraph*{Tracking the downloaded items}
-Consumers download the data by searching the image repository using the browser. The information that the consumer is interested in, gets updated whenever the data producers update or add patient information. The current download tool lacks the ability to track the relevant updates to the consumer. A data replication and synchronization tool will assist automated downloads to the consumers. Users can create replica sets as a sub set of their search queries, and share their replica sets with other users, and update their replica sets periodically. Replica sets can be used as a way of tracking and sharing information.
-
-Currently, when a user initates download of a replica set, finishes the download, and later restart the download, the download mechanism still would download the whole replica set again, as there is no track of what has already been downloaded. A sample timeline of the events is given below.\\
- $t_{0}$: \textit{User A} Creates Replica Set $R_{1}$ with a query.\\
- $t_{1}$: \textit{User A} accesses and downloads the contents of the replica set $R_{1}$ and finds the contents to be ${A,B,C}$.\\
- $t_{2}$: The contents matching the replica set $R_{1}$ query modified to be ${A,B,D}$ by an outside event such as more images added and existing images removed.\\
- $t_{3}$: \textit{User A} downloads the contents of $R_{1}$ again.
-
-This should be designed such that the already accessed images would not be downloaded while the newly available or not previously accessed segments of the replica set will be downloaded. For example, in the above scenario, currently at $t_{3}$, all A, B, and D will be downloaded, where an implementation should allow only the new or modified contents to be downloaded.
-
-\paragraph*{Security}
-The data replication and synchronization can be further secured with user authentication. SAML tokens can be created for user names and passwords with the membership information. The SAML tokens can be validated later. A create and validate API with user stores such as LDAP or OpenID should be designed and implemented, extending and leveraging the replication tool.
-
-\subsection{Developer Guide}
-This section describes how the future work could be done.
-
-Replica sets management is handled by both $Integrator$ and $PubConsAPI$ interfaces. If multiple data sources should be managed consecutively, having maps pointing to meta data from heterogenous sources, $Integrator$ interface should be implemented in a class with the respective distributed maps to hold the meta data. If a single data source is involved with a fine grain control over a data source, $PubConsAPI$ should be implemented. Functionality such as security with SAML token should be implemented as an Integrator, as this involves SSO for multiple data sources.
-
-Similarly, involving a time stamp for the class extending $PubConsAPI$, downloaded items can be tracked, and the diffs can be produced for the user download.
-
-$InterfaceAPI$ integrates the tool with the data source, such that the relevant data can be queried, searched, manipulated, and downloaded. Hence, respective classes should implement this interface for each of the data source. The TCIA integration by the $tcia\_rest\_api$ package stands as a decent sample on implementing this interface.
+\small{ \paragraph*{\textbf{Acknowledgments}} This work was partially supported by the Google Summer of Code 2014 project, under the mentoring organization \textit{Biomedical Informatics, Emory University}.}
 
 %\begin{thebibliography}{1}
 %\end{thebibliography}
