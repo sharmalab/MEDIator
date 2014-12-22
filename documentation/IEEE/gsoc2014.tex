@@ -76,12 +76,29 @@ Sharing data among the consumers can be achieved by sharing pointers to data. Re
 
 Users should be able to create and update their replica sets, and share it with others using a unique identifier. While different data sources have different interfaces, a generic data replication and synchronization tool will be convenient, such that sharing of replica sets across heterogeneous data sources will be possible. 
 
+In-memory data grids distribute storage and execution over multiple physical nodes, while giving a logically centralized view of a larger resource pool. An in-memory data grid can be an alternative for a traditional storage to store the replica sets, as it will provide faster storage and access. Infinispan is a Java in-memory NoSQL store with implementations of distributed executor framework and MapReduce~\cite{infinispan}, which also has an actively maintained Android version. Sharing pointers instead of actual data will reduce the redundancy and increase the efficiency of the sharing and accessing of medical data. A deployment architecture consists of in-memory key-value stores such as Infinispan for sharing medical images will be scalable and pervasive.
+
+
 This paper presents the research and prototype implementations of $MEDIator$, a replication and data synchronization platform, exploiting the in-memory data grid projects, while consuming data sources such as TCIA via their public APIs.
 
 %
 \section{Related Work}
 \subsection{Medical Image Archives}
+Medical image archives often follow a well-defined hierarchy of images with different granularity. TCIA public API provides methods to retrieve the images and meta data of different granularity. Figure~\ref{fig:methods} depicts the methods that retrieve image and metadata at different granularity from TCIA. These methods are invoked by the public APIs such as the REST API. As shown by Figure~\ref{fig:methods} an initial search on TCIA may contain parameters such as modality, in addition to collection name, patient ID, study instance ID, and series instance UID. 
 
+\begin{figure}[!h]
+	\begin{center}
+		\resizebox{\columnwidth}{!}{
+			\includegraphics[width=\textwidth]{methods.png}
+		}
+	\end{center}
+	\caption{Retrieving images and meta data}
+	\label{fig:methods}
+\end{figure}
+
+
+\subsection{In-Memory Data Grids}
+In-memory data grids are extensively used in industry and academia, to provide a scalable memory and execution platform. Many commercial and open source in-memory data grid platforms exist. Infinispan and Hazelcast~\cite{hazelcast} are two commonly cited open source in-memory data grids. Infinispan is often cited in researches~\cite{palmieri2012integrated,rosa2011goal,ruivo2011exploiting}.
 
 \section{Solution Architecture}
 
@@ -99,7 +116,9 @@ Multiple nodes running Infinipsan are leveraged and configured to create a clust
  \label{fig:deployment}
 \end{figure}
 
-The data replication and synchronization tool consists of 3 APIs, to be able to connect to specific data source, to integrate multiple data sources and meta data into the system, and to create replica sets for the data sources. While $PubConsAPI$ provides and manages a replica set for a specific data source, $Integrator$ integrates multiple data sources and provides a meta map and maps for each of the data sources to access the relevant information for each of the entry. Hence, while $PubConsAPI$ deals with the replica sets, $Integrator$ deals with meta data of multiple data sources. $InterfaceAPI$ is often provided by the data sources, as a mean to query and retrieve the data from the remote data sources.
+Each of the searches in TCIA returns the output in a finer granularity. When a sub set of this finer granularity is selected, each of the selected elements are always identified by their respective identifier. Hence, storing an array of patient ID would be sufficient to identify the selected sub set of the collection including the array of patients. Similarly an array of study instance UID is sufficient to represent the selected sub set of any patient, and an array of series instance UID is sufficient to represent the selected sub set of any study, as it will contain an array of series. Hence $MEDIator$ stores the relevant IDs for the respective replica sets.
+
+$MEDIator$ consists of 3 APIs, to be able to connect to specific data source, to integrate multiple data sources and meta data into the system, and to create replica sets for the data sources. While $PubConsAPI$ provides and manages a replica set for a specific data source, $Integrator$ integrates multiple data sources and provides a meta map and maps for each of the data sources to access the relevant information for each of the entry. Hence, while $PubConsAPI$ deals with the replica sets, $Integrator$ deals with meta data of multiple data sources. $InterfaceAPI$ is often provided by the data sources, as a mean to query and retrieve the data from the remote data sources.
 
 
 The data replication and synchronization tool lets the users to create, update, retrieve, and delete replica sets, and share the replica sets with others. Replica sets are stored and processed in the Infinispan maps, where integrating with the data sources is done by the $InterfaceAPI$ interface. $Integrator$ interface provides a coarse granular integration with the data sources, letting the users to store meta data from multiple heterogeneous sources in a coarse grain access. 
@@ -292,18 +311,6 @@ $tciaMetaMap$ contains a boolean array, which reflects which of the granularity 
 \end{lstlisting} 
 The name of the collections, patientID, studyInstanceUID, and seriesInstanceUID are stored against the respective replicaSetID in collectionsMap, patientsMap, studiesMap, and seriesMap respectively. Hence changes are done at the respective maps. Duplicating the replicaSets duplicate the contents of the entire row to a new replicaSetID. Similarly, deleting a replicaSet deletes the respective information from all the maps.
 
-TCIA public API provides methods to retrieve the images and meta data of different granularity. Figure~\ref{fig:methods} depicts the methods that retrieve image and metadata at different granularity from TCIA. These methods are invoked by the replication manager tool to retrieve the images. As shown by Figure~\ref{fig:methods} an initial search on TCIA may contain parameters such as modality, in addition to collection name, patient ID, study instance ID, and series instance UID. However, each of these search returns the output in a finer granularity, and when a sub set of this finer granularity is selected, each of the selected elements are always identified by their respective identifier. Hence, storing an array of patient ID would be sufficient to identify the selected sub set of the collection including the array of patients. Similary an array of study instance UID is sufficient to represent the selected sub set of any patient, and an array of series instance UID is sufficient to represent the selected sub set of any study, as it will contain an array of series.
-
-\begin{figure}[!h]
-\begin{center}
- \resizebox{\columnwidth}{!}{
-  \includegraphics[width=\textwidth]{methods.png}
- }
-\end{center}
- \caption{Retrieving images and meta data}
- \label{fig:methods}
-\end{figure}
-
 
 
 \section{Evaluation}
@@ -321,8 +328,20 @@ Consumers download the data by searching the image repository using the browser.
 
 \small{ \paragraph*{\textbf{Acknowledgments}} This work was partially supported by the Google Summer of Code 2014 project, under the mentoring organization \textit{Biomedical Informatics, Emory University}.}
 
-%\begin{thebibliography}{1}
-%\end{thebibliography}
+\begin{thebibliography}{1}
+\bibitem{infinispan}
+Francesco Marchioni.
+\newblock {\em Infinispan Data Grid Platform}.
+\newblock Packt Publishing Ltd, 2012.
+
+\bibitem{hazelcast} Johns, M. (2013). {\em Getting Started with Hazelcast}. Packt Publishing Ltd.
+
+\bibitem{palmieri2012integrated} Palmieri, R., di Sanzo, P., Quaglia, F., Romano, P., Peluso, S., \& Didona, D. (2012, January). Integrated monitoring of infrastructures and applications in cloud environments. In {\em Euro-Par 2011: Parallel Processing Workshops} (pp. 45-53). Springer Berlin Heidelberg.
+
+\bibitem{rosa2011goal}Rosa, L., Rodrigues, L., \& Lopes, A. (2011, November). Goal-oriented self-management of in-memory distributed data grid platforms. In {\em Cloud Computing Technology and Science (CloudCom), 2011 IEEE Third International Conference on} (pp. 587-591). IEEE.
+
+\bibitem{ruivo2011exploiting} Ruivo, P., Couceiro, M., Romano, P., \& Rodrigues, L. (2011, December). Exploiting total order multicast in weakly consistent transactional caches. In {\em Dependable Computing (PRDC), 2011 IEEE 17th Pacific Rim International Symposium on} (pp. 99-108). IEEE.
+\end{thebibliography}
 
 \end{document}
 
