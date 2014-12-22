@@ -78,13 +78,12 @@ Users should be able to create and update their replica sets, and share it with 
 
 In-memory data grids distribute storage and execution over multiple physical nodes, while giving a logically centralized view of a larger resource pool. An in-memory data grid can be an alternative for a traditional storage to store the replica sets, as it will provide faster storage and access. Infinispan is a Java in-memory NoSQL store with implementations of distributed executor framework and MapReduce~\cite{infinispan}, which also has an actively maintained Android version. Sharing pointers instead of actual data will reduce the redundancy and increase the efficiency of the sharing and accessing of medical data. A deployment architecture consists of in-memory key-value stores such as Infinispan for sharing medical images will be scalable and pervasive.
 
-
-This paper presents the research and prototype implementations of $MEDIator$, a replication and data synchronization platform, exploiting the in-memory data grid projects, while consuming data sources such as TCIA via their public APIs.
+While sharing data is encouraged in science~\cite{szala2006science}, algorithms and architectures should be designed for mashing up and making the public data sharing easy and effective. This paper presents the research and prototype implementations of $MEDIator$, a replication and data synchronization platform, exploiting the in-memory data grid projects, while consuming data sources such as TCIA via their public APIs.
 
 %
 \section{Related Work}
 \subsection{Medical Image Archives}
-Medical image archives often follow a well-defined hierarchy of images with different granularity. TCIA public API provides methods to retrieve the images and meta data of different granularity. Figure~\ref{fig:methods} depicts the methods that retrieve image and metadata at different granularity from TCIA. These methods are invoked by the public APIs such as the REST API. As shown by Figure~\ref{fig:methods} an initial search on TCIA may contain parameters such as modality, in addition to collection name, patient ID, study instance ID, and series instance UID. 
+Medical image archives often follow a well-defined hierarchy of images with different granularity. TCIA public API provides methods to retrieve the images and meta data of different granularity~\cite{prior2013tcia}. Figure~\ref{fig:methods} depicts the methods that retrieve image and metadata at different granularity from TCIA. These methods are invoked by the public APIs such as the REST API. As shown by Figure~\ref{fig:methods} an initial search on TCIA may contain parameters such as modality, in addition to collection name, patient ID, study instance ID, and series instance UID. Each of the searches in TCIA returns the output in a finer granularity.
 
 \begin{figure}[!h]
 	\begin{center}
@@ -102,10 +101,7 @@ In-memory data grids are extensively used in industry and academia, to provide a
 
 \section{Solution Architecture}
 
-
-The sub set which is commonly known as a replica set, can be updated, duplicated, shared with other users, and deleted later. A search query may contain different parameters that can define the scope of the search and the outcomes, and often return the outputs in a finer granularity. When a sub set of such information is stored as a replica set, it is sufficient to store the unique identifiers of the matching data units of finer granularity than the original search query, as it would be sufficient to reproduce the data that is represented by the replica set.
-
-Multiple nodes running Infinipsan are leveraged and configured to create a cluster of the data replication and synchronization tool. Having multiple instances running over different nodes provide fault-tolerance, as when one node terminates, the other nodes have the backup replica of the partitions stored in the terminated node. Figure~\ref{fig:deployment} shows the higher level deployment view of the solution.
+Multiple nodes running Infinipsan are leveraged and configured to create a cluster of $MEDIator$. Having multiple instances running over different nodes provide fault-tolerance, as when one node terminates, the other nodes have the backup replica of the partitions stored in the terminated node. Figure~\ref{fig:deployment} depicts a higher level deployment view.
 \begin{figure}[!h]
 \begin{center}
  \resizebox{0.6\columnwidth}{!}{
@@ -116,12 +112,12 @@ Multiple nodes running Infinipsan are leveraged and configured to create a clust
  \label{fig:deployment}
 \end{figure}
 
-Each of the searches in TCIA returns the output in a finer granularity. When a sub set of this finer granularity is selected, each of the selected elements are always identified by their respective identifier. Hence, storing an array of patient ID would be sufficient to identify the selected sub set of the collection including the array of patients. Similarly an array of study instance UID is sufficient to represent the selected sub set of any patient, and an array of series instance UID is sufficient to represent the selected sub set of any study, as it will contain an array of series. Hence $MEDIator$ stores the relevant IDs for the respective replica sets.
+\subsection{Data Access and Integration}
+A search query may contain different parameters that can define the scope of the search and the outcomes, and often return the outputs in a finer granularity. $MEDIator$ lets the users to create, update, retrieve, and delete replica sets, and share the replica sets with others.
 
-$MEDIator$ consists of 3 APIs, to be able to connect to specific data source, to integrate multiple data sources and meta data into the system, and to create replica sets for the data sources. While $PubConsAPI$ provides and manages a replica set for a specific data source, $Integrator$ integrates multiple data sources and provides a meta map and maps for each of the data sources to access the relevant information for each of the entry. Hence, while $PubConsAPI$ deals with the replica sets, $Integrator$ deals with meta data of multiple data sources. $InterfaceAPI$ is often provided by the data sources, as a mean to query and retrieve the data from the remote data sources.
+When a sub set of such information is chosen and stored as a replica set, it is sufficient to store the unique identifiers of the matching data units of finer granularity than the original search query, as it would be sufficient to reproduce the data that is represented by the replica set. Hence, when using TCIA as the data source, storing an array of patient ID would be sufficient to identify the selected sub set of the collection including the array of patients. Similarly an array of study instance UID is sufficient to represent the selected sub set of any patient, and an array of series instance UID is sufficient to represent the selected sub set of any study, as it will contain an array of series. Hence $MEDIator$ stores the relevant IDs for the respective replica sets.
 
-
-The data replication and synchronization tool lets the users to create, update, retrieve, and delete replica sets, and share the replica sets with others. Replica sets are stored and processed in the Infinispan maps, where integrating with the data sources is done by the $InterfaceAPI$ interface. $Integrator$ interface provides a coarse granular integration with the data sources, letting the users to store meta data from multiple heterogeneous sources in a coarse grain access. 
+$MEDIator$ consists of 3 APIs, to be able to connect to specific data source, to integrate multiple data sources and meta data into the system, and to create replica sets for the data sources. Replica sets are stored and processed in the Infinispan maps, where integrating with the data sources is done by the $InterfaceAPI$ interface. $InterfaceAPI$ is often provided by the data sources, as a mean to query and retrieve the raw data from the remote data sources.
 
 Methods for RESTful invocations are designed for each of the interfaces defining the APIs. Methods that are defined in the interfaces should be implemented by the classes that implement these interfaces. Table~\ref{table:interfaces} depicts the methods defined for each of the interfaces
 
@@ -148,7 +144,7 @@ retrieve & createReplicaSet&updateExistenceInDataSource \\
 \end{tabular}
 \end{table}
 
-While the interfaces of $PubConsAPI$ and $Integrator$ look similar with some common methods, they differ on what they manage. 
+$PubConsAPI$ and $Integrator$ provide replica set management. $Integrator$ integrates multiple heterogeneous data sources into $MEDIator$ and provides a meta map and maps for each of the data sources to access the relevant information for each of the entry, while $PubConsAPI$ provides and manages replica sets for each specific data source. $Integrator$ lets the users to store meta data from multiple heterogeneous sources in a coarse grain access. 
 
 \subsection{Generic Design}
 Classes extending PubConsAPI design and implement the logic of replica sets management, where integration with the data sources is done by two interfaces - Interface API and Integrator. Interface API provides data retrieval from the data source, where Integrator integrates multiple data sources into the system and store the meta data of the data sources into Infinispan.
@@ -166,9 +162,6 @@ replicaSetsMap is a mapping of replicaSetID \ding{213} replicaSet.
 Though this could be replaced with a single cache instance with the mapping of userID \ding{213} replicaSets, having two cache instances will be more efficient during searches, duplicates, and push changes. Hence, two cache instances design was chosen.
 
 $InfDataAccessIntegration$ implements the PubConsAPI for publisher/consumer, where $InterfaceManager$ implements the $InterfaceAPI$ for the interface between the data source and the data replication and synchronization tool. Invoker classes extending the abstract class InterfaceManager, implement the respective data source integration to invoke these methods. The execution flow is depicted by Figure~\ref{fig:execution}.
-
-\paragraph*{multi-tenancy}
-The Replication Tool is multi-tenanted, and it is aware of the multiple tenants or users using the system. Each user co-exist in the replication tool at the same time, without the knowledge of existence of the other users, sharing the same cache space. 
 
 \paragraph*{DataProSpecs - PubConsAPI}
 The methods of $DataProSpecs$ can be invoked by knowing the respective replicaSetID of the replica set and the user ID of the user who owns the replica set. User ID is a random string that is input by the user. Probably this can be some `secret' or pass from the user. userIDs serve as the keys of the userReplicasMap. Apart from that, there is no data structure to hold the list of users.
@@ -211,39 +204,46 @@ The $metaMap$ stores a binary array against each of the key (such as, patientID)
 
 Methods for updating, creating, and deleting meta data from these maps are available where creating or deleting meta data will update the availability to true/false for the respective index in the $metaMap$. $XXX\_META\_POSITION$ defines the position in the metaMap, where XXX stands for CSV, CA, TCIA, and S3. Updating the existence will flop the respective boolean value in the respective entry. The $metaMap$ ensures easy indexing, and helps to search which of the data sources contain the respective information for any given key, such as a given patient ID.
 
+\subsection{\textit{MEDIator} Extensions}
+$MEDIator$ has further characteristics to functions as a resilient middleware platform.
+\paragraph*{multi-tenancy}
+The Replication Tool is multi-tenanted, and it is aware of the multiple tenants or users using the system. Each user co-exist in the replication tool at the same time, without the knowledge of existence of the other users, sharing the same cache space. 
+
+\paragraph*{Access Logging}
+Involving a time stamp for the class extending $PubConsAPI$, downloaded items can be tracked, and the diffs can be produced for the user download. Hence, a download can be paused and resumed later, downloading the images that have not been downloaded yet.
+
+\paragraph*{Security}
+$MEDIator$ can be further secured with user authentication. SAML tokens can be created for user names and passwords with the membership information, which can be validated later. A create and validate API with user stores such as LDAP or OpenID should be designed and implemented, extending and leveraging $MEDIator$.
 
 \subsection{Software Architecture}
 Figure~\ref{fig:arch} depicts the architecture of the data replication and synchronization tool, showing its components and dependencies.
 \begin{figure}[!htbp]
 \begin{center}
- \resizebox{0.5\columnwidth}{!}{
-  \includegraphics[width=0.5\textwidth]{arch.png}
+ \resizebox{0.8\columnwidth}{!}{
+  \includegraphics[width=0.8\textwidth]{arch.png}
  }
 \end{center}
  \caption{Architecture}
  \label{fig:arch}
 \end{figure}
 
-Dependencies are used unmodified. Dependencies such as Apache HTTP Client and Mashape Unirest are configured and leveraged by the InterfaceAPI, to query and retrieve the raw data from the data sources. Infinispan, as the core dependency, is configured and exploited as the shared storage and distributed execution medium. Presentation layer dependencies such aS Embedded Tomcat, Apache Velocity, and Log4j2 facilitate prototype application development with web pages, and configurable logging. Apache Maven is used as the project management dependency to build, deploy, and execute the project effectively.
+Dependencies are used unmodified. Apache HTTP Client and Mashape Unirest are configured and leveraged by the InterfaceAPI, to query and retrieve the raw data from the data sources. Infinispan, as the core dependency, is configured and exploited as the shared storage and distributed execution medium. Presentation layer dependencies such as Embedded Tomcat, Apache Velocity, and Log4j2 facilitate prototype application development with web pages, and configurable logging. Apache Maven is used as the project management dependency to build, deploy, and execute the project.
 
 Data sources access layer consists of means of accessing the data sources, such as querying and downloading the data stored in Amazon S3 or TCIA, via the REST API. Utilities such as MetaDataLoader and TciaUtil provide utility methods and functionalities for the tool throughout its execution.
 
-InterfaceAPIs, Integrators, and PubConsAPIs are implemented at the top level, extending their respective base classes. The presentation layer consists of the Intiiators that function as the starting point of the prototype applications. Servlets and UI Generators generate the presentation layer of the tool.
+InterfaceAPIs, Integrators, and PubConsAPIs are implemented at the top level, extending their respective base classes. The presentation layer consists of the Initiators that function as the starting point of the prototype applications. Servlets and UI Generators generate the presentation layer of the tool.
 
 Replica sets management is handled by both $Integrator$ and $PubConsAPI$ interfaces. If multiple data sources should be managed consecutively, having maps pointing to meta data from heterogeneous sources, $Integrator$ interface should be implemented in a class with the respective distributed maps to hold the meta data. If a single data source is involved with a fine grain control over a data source, $PubConsAPI$ should be implemented. Functionality such as security with SAML token should be implemented as an Integrator, as this involves SSO for multiple data sources.
 
-Similarly, involving a time stamp for the class extending $PubConsAPI$, downloaded items can be tracked, and the diffs can be produced for the user download. Hence, a download can be paused and resumed later, downloading the images that have not been downloaded yet.
 
 $InterfaceAPI$ integrates the tool with the data source, such that the relevant data can be queried, searched, manipulated, and downloaded. Hence, respective classes should implement this interface for each of the data source. The TCIA integration by the $tcia\_rest\_api$ package stands as a decent sample on implementing this interface.
-
-The data replication and synchronization can be further secured with user authentication. SAML tokens can be created for user names and passwords with the membership information. The SAML tokens can be validated later. A create and validate API with user stores such as LDAP or OpenID should be designed and implemented, extending and leveraging the replication tool.
 
 $getRawData(String key)$ method should be implemented in the classes implementing the $PubConsAPI$ and $Integrator$ interfaces to be able to download the raw data from the data sources such as TCIA, CA Microscope, or S3, for the given replica set, potentially using Java web start.
 
 \section{Implementation}
 Based on the design, $MEDIator$ was implemented as a data sharing and synchronization middleware platform for heterogeneous medical image archives.
 
-Different complex data sources require custom development extending the generic framework. As creating and customizing the replicaSet require a more specific data structure, further implementations are done, extending the core class hierarchy\footnote{The source code can be accessed from \url{https://bitbucket.org/BMI/datareplicationsystem}}. 
+Different complex data sources require custom development extending the generic framework. As creating and customizing the replica set require a more specific data structure, further implementations are done, extending the core class hierarchy. %\footnote{The source code can be accessed from \url{https://bitbucket.org/BMI/datareplicationsystem}}. 
 
 \subsection{Generic Implementation}
 Base classes of the APIs were implemented to provide a generic synchronization tool, that stores the entire search queries of any data source as the replica set. When the user logs in, $logIn()$ checks whether the user has already stored replicaSets from the Infinispan distributed Cache. If so, execute them all again. This would be changed later as we do not have to execute all. Rather, we need to execute for the diffs. When the user performs new searches, for the images, series, collections, and the other meta data, the results will be returned to the user, and the user can chose ta subset of the returned results to create a replicaSet.
@@ -333,6 +333,11 @@ Consumers download the data by searching the image repository using the browser.
 Francesco Marchioni.
 \newblock {\em Infinispan Data Grid Platform}.
 \newblock Packt Publishing Ltd, 2012.
+
+\bibitem{szala2006science} A. Szalay and J. Gray, 2020 Computing: Science in an exponential world, {\em Nature, vol. 440}, pp. 413-414, 2006.
+
+\bibitem{prior2013tcia}
+Prior, F. W., Clark, K., Commean, P., Freymann, J., Jaffe, C., Kirby, J., ... \& Marquez, G. (2013, July). TCIA: an information resource to enable open science. In {\em Engineering in Medicine and Biology Society (EMBC), 2013 35th Annual International Conference of the IEEE} (pp. 1282-1285). IEEE.
 
 \bibitem{hazelcast} Johns, M. (2013). {\em Getting Started with Hazelcast}. Packt Publishing Ltd.
 
