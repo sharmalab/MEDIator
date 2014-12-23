@@ -177,7 +177,7 @@ Clinical data is deployed in multiple data sources such as TCIA, caMicroscope, a
  \label{fig:dsdeployment}
 \end{figure}
 
-Each data source is connected to $MEDIator$ by implementing a class that extends Integrator interface. $DatasourcesIntegrator$, an abstract class provides the common features for the data sources integration. $CsvIntegrator$, $CaMicIntegrator$, $S3Integrator$, and $TciaIntegrator$ respectively function as the integrators for $CSV$, $caMicroscope$, $Amazon S3$, and $TCIA$. Further data sources can be integrated into $MEDIator$ by extending $DataSourcesIntegrator$ with a relevant sub class.$MetaDataLoader$ loads the CSV files and stores them into Infinispan maps, against the ID, such as the patient ID. 
+Each data source is connected to $MEDIator$ by implementing a class that extends Integrator interface. $DatasourcesIntegrator$, an abstract class provides the common features for the data sources integration. It is extended by $CsvIntegrator$, $CaMicIntegrator$, $S3Integrator$, and $TciaIntegrator$ which respectively function as the integrators for $CSV$, $caMicroscope$, $Amazon S3$, and $TCIA$. $MetaDataLoader$ loads the CSV files and stores them into Infinispan maps, against the ID, such as the patient ID. 
 
 A sub class of $InfDataAccessIntegration$, $DSInfDai$ holds the instances of map to store all the meta data. $DSIntegratorInitiator$ invokes the instances of $DSInfDai$, $MetaDataLoader$ and the other respective classes to parse the meta data, and store the instances into the respective maps. 
 
@@ -203,11 +203,11 @@ Involving a time stamp for the class extending $PubConsAPI$, downloaded items ca
 $MEDIator$ can be further secured with user authentication. SAML tokens can be created for user names and passwords with the membership information, which can be validated later. This is designed as an Integrator for the Single Sign-on (SSO), as it involves multiple data sources. A create and validate API with user stores such as LDAP or OpenID should be designed and implemented, extending $MEDIator$.
 
 \subsection{Software Architecture}
-Figure~\ref{fig:arch} depicts the architecture of $MEDIator$, showing its components and dependencies. Dependencies are used unmodified. Apache HTTP Client and Mashape Unirest are configured and leveraged by the $InterfaceAPI$, to query and retrieve the raw data from the data sources. Infinispan, as the core dependency, is configured and exploited as the shared storage and distributed execution medium. Presentation layer dependencies such as Embedded Tomcat, Apache Velocity, and Log4j2 facilitate prototype application development with web pages, and configurable logging. Apache Maven is used as the project management dependency to build, deploy, and execute the project.
+Figure~\ref{fig:arch} depicts the architecture of $MEDIator$. Dependencies are used unmodified. Apache HTTP Client and Mashape Unirest are configured and leveraged by the $InterfaceAPI$, to query and retrieve the raw data from the data sources. Infinispan, as the core dependency, is configured and exploited as the shared storage and distributed execution medium. Presentation layer dependencies such as Embedded Tomcat, Apache Velocity, and Log4j2 facilitate prototype application development with web pages, and configurable logging. Apache Maven is used as the project management dependency to build, deploy, and execute the project.
 \begin{figure}[!htbp]
 \begin{center}
- \resizebox{\columnwidth}{!}{
-  \includegraphics[width=\textwidth]{arch.png}
+ \resizebox{0.6\columnwidth}{!}{
+  \includegraphics[width=0.6\textwidth]{arch.png}
  }
 \end{center}
   \vspace{-18pt}
@@ -228,29 +228,28 @@ Replica sets management is handled by both $Integrator$ and $PubConsAPI$ interfa
 \section{Implementation}
 A prototype web application was built with $MEDIator$ architecture for cancer image archives. Apache Velocity was used to generate the web pages for the replication tool. Apache Tomcat (Embedded) was integrated into the program such that it will get the user inputs from the HTML pages and present the output in pages formatted by Apache Velocity Templates. Respective servlets were created inside the servlets package to receive the inputs from HTML pages to the backend Java code.
 
-Different complex data sources require custom development extending the generic framework. As creating and customizing the replica set require a more specific data structure, further implementations are done, extending the core class hierarchy. $InterfaceManager$ implements the $InterfaceAPI$ for the interface between the data source and $MEDIator$. Invoker classes extending the abstract class $InterfaceManager$, implement the respective data source integration to invoke these methods. 
-
-$TciaInvoker$ extends $InterfaceManager$ to implement the interfacing layer between the TCIA data source and $MEDIator$. Meta data such as collections, patients, studies, and series are retrieved at different levels, though the default download manager of TCIA downloads the data in series level, composed of the images of the series in a single zip archive. While having the default userReplicasMap to contain the IDs of the replica sets for each user, the replica set itself is stored in multiple maps instead of a single replicaSets map, to provide an efficient storage and access. $DataProSpecs$ extends the $InfDataAccessIntegration$ class. 
-
 \paragraph*{\textbf{TCIA Integration Implementation}}
+Different complex data sources require custom development extending the generic framework and core class hierarchy, as creating and customizing the replica set require a more specific data structure. $InterfaceManager$ implements the $InterfaceAPI$ for the interface between the data source and $MEDIator$. Invoker classes such as $TciaInvoker$ extending the abstract class $InterfaceManager$, implement the data source integration.
+
+Meta data such as collections, patients, studies, and series are retrieved at different levels, though the default download manager of TCIA downloads the data in series level, composed of the images of the series in a single zip archive. While having the default userReplicasMap to contain the IDs of the replica sets for each user, the replica set itself is stored in multiple maps instead of a single replicaSets map, to provide an efficient storage and access. $DataProSpecs$ extends the $InfDataAccessIntegration$ class. 
+
 4 maps store the meta data for each replica set against its ID, in different granularity - collections, patients, studies, and series, along with a meta map that points to the 4 maps. 
 \begin{lstlisting}  
 protected static Cache<String, Boolean[]> tciaMetaMap;  /*collections, patients, studies, series*/
 \end{lstlisting} 
+\vspace{-9pt}
 Each of the 4 maps stores the respective IDs of the meta data as the value against the replicaSetID. $tciaMetaMap$ contains a boolean array of length 4, which reflects which of the granularity of meta data is selected as a whole. A $true$ value indicates the existence of replica set entry in the respective map. For TCIA, if a few collections are selected, the first element of the array is set to true, and similarly patients, studies, and series are defined by the other 3 elements.
 
 The name of the collections, patientID, studyInstanceUID, and seriesInstanceUID are stored against the respective replicaSetID in collectionsMap, patientsMap, studiesMap, and seriesMap respectively. Hence changes are done at the respective maps. Duplicating the replicaSets duplicate the contents of the entire row to a new replicaSetID. Similarly, deleting a replicaSet deletes the respective information from all the maps.
 
-\paragraph*{\textbf{Prototype Evaluation}}
-A cluster with 6 identical nodes (Intel(R) Core(TM) i7-2600K CPU @ 3.40GHz and 12 GB memory) was used for evaluations. With synchronous backups enabled, $MEDIator$ showed a fault-tolerant behavior when a node failed and/or rejoined later. The time to initialize $MEDIator$ remained constant, regardless of the underlying data sources.
+%\paragraph*{\textbf{Prototype Evaluation}}
+A cluster with 6 identical nodes (Intel(R) Core(TM) i7-2600K CPU @ 3.40GHz and 12 GB memory) was used for evaluations. With synchronous backups, $MEDIator$ showed fault-tolerant behavior when a node failed and rejoined later. 
 
 
 \section{Conclusion}
 \balance
 
-$MEDIator$ is a platform providing an ubiquitous access to medical meta data from the image archives, while providing fault tolerance and load balancing, leveraging the distributed shared memory platforms. A prototype has been implemented with multiple data sources containing cancer images, with Infinispan as the in-memory data store.
-
-Consumers download the data by searching the image repository using the browser. The information that the consumer is interested in, gets updated whenever the data producers update or add patient information. Further improvements to $MEDIator$ should enable automated downloads to the consumers. While $MEDIator$ focuses on medical image archives, the design can also be implemented for any other data types with an index to query and structure them as replica sets.
+$MEDIator$ is a platform providing an ubiquitous access to medical meta data from the image archives, while providing fault tolerance and load balancing, leveraging the distributed shared memory platforms. A prototype has been implemented with multiple data sources containing cancer images, with Infinispan as the in-memory data store. Consumers download the data by searching the image repository using the browser. The information that the consumer is interested in, gets updated whenever the data producers update or add patient information. Further improvements to $MEDIator$ should enable automated downloads to the consumers. While $MEDIator$ focuses on medical image archives, the design can also be implemented for any other data types with an index to query and structure them as replica sets.
 
 
 %\small{ \paragraph*{\textbf{Acknowledgments}} This work was partially supported by the Google Summer of Code 2014 project, under the mentoring organization \textit{Biomedical Informatics, Emory University}.}
