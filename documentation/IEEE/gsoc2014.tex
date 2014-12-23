@@ -52,17 +52,18 @@
 \IEEEauthorblockA{INESC-ID Lisboa\\
 Instituto Superior T\'{e}cnico, Universidade de Lisboa\\
 Lisbon, Portugal\\
-Email: pradeeban.kathiravelu@tecnico.ulisboa.pt}
+Email: pradeeban.kathiravelu@tecnico.ulisboa.pt}\\[-5.0ex]
 \and
 \IEEEauthorblockN{Ashish Sharma}
 \IEEEauthorblockA{Department of Biomedical Informatics\\
 Emory University\\
 Atlanta, Georgia, USA\\
-Email: ashish.sharma@emory.edu}}
+Email: ashish.sharma@emory.edu}
+\\[-5.0ex]}
 \maketitle
 
 \begin{abstract}
-Big data science has more consumers and fewer producers of data. Scientific data is getting larger and larger and consists of a varying degree of heterogeneity in its content and storage media. Medical image archives are populated by the images and meta data by a few source providers and are read through different interfaces. With the growing adaptation of pervasive computing into medical domain and increasingly open access to data, the meta data stored in legacy data stores is shared and synchronized across multiple devices and users. With the increasing complexity of the medical image hierarchies, consumers of medical images should be able to bookmark pointers to the sets of images and meta data from different sources, and share the pointers with others. 
+Big data science has more consumers and fewer producers of data. Scientific data is getting larger and larger and consists of a varying degree of heterogeneity in its content and storage media. Medical image archives are populated by the images and meta data by a few source providers and are read through different interfaces. With the growing adaptation of pervasive computing into medical domain and increasingly open access to data, the meta data stored in legacy data stores is shared and synchronized across multiple devices and users. With the increasing complexity of the image hierarchies, consumers of medical images should be able to bookmark and share the pointers to the sets of images and meta data from different sources. 
 
 While many medical image sources provide APIs for public access, an architecture that permits an effective sharing and synchronization of meta data across multiple users, from different storage media, is still lacking. This paper presents \textit{MEDIator}, a data sharing and synchronization middleware platform for heterogeneous medical image archives. \textit{MEDIator} allows sharing pointers to data effectively, while letting the consumers manipulate the pointers without modifying th raw data. \textit{MEDIator} has been implemented for multiple data sources, including Amazon S3, The Cancer Imaging Archive (TCIA), caMicroscope\footnote{http://imaging.cci.emory.edu/camicroscope/}, and meta data from CSV files for cancer images.
 \end{abstract}
@@ -72,11 +73,11 @@ While many medical image sources provide APIs for public access, an architecture
 \section{Introduction}
 Data sources contain data of different granularity. Data is organized in a hierarchical structure, where different levels are used to present data in specific formats. Folders and documents make a good example of this. Data units are often indexed with a unique identifier. A search across the data source would present the user with the list of matching criteria. Interesting sub set of the matching criteria may be bookmarked by the user and shared with others. Medical image archives have a hierarchy of information with a well-structured schema. Hence, medical image information can be retrieved at different granularity by the users, exploiting this hierarchy.
 
-Sharing data among the consumers can be achieved by sharing pointers to the data. Replica set is a pointer to stored data, which is created, shared, and modified by the data consumers. Replica set is created by choosing a sub set of data items that matches a specific user-defined criteria, as a bookmark. Users can create replica sets with unique identifiers as a sub set of their search queries, and share their replica sets with other users, and update their replica sets periodically. Hence, replica sets can be used as a way of tracking and sharing information. While different data sources have different interfaces, a generic data replication and synchronization tool will be convenient, such that sharing of replica sets from heterogeneous data sources will be possible. 
+Sharing data among the consumers can be achieved by sharing pointers to the data, which reduces the redundancy and increases the efficiency of sharing and accessing the data as data duplication is minimized. Replica set is a pointer to stored data, which is created by the users as a bookmark, by choosing a sub set of data items that matches a search query or a specific user-defined criteria. Users can create replica sets with unique identifiers, and share their replica sets with other users and duplicate the replica sets, and update or delete their replica sets later. Hence, replica sets can be used as a way of tracking and sharing information. As heterogeneous data sources have different interfaces, a generic data replication and synchronization tool will be convenient, with sharing of replica sets from the data sources. 
 
-In-memory data grids distribute storage and execution over multiple physical nodes, while giving a logically centralized view of a larger resource pool. An in-memory data grid can be an alternative for a traditional storage for the replica sets, as it will provide faster storage and access. Sharing pointers instead of actual data will reduce the redundancy and increase the efficiency of the sharing and accessing of medical data. Infinispan is a Java in-memory NoSQL store with implementations of distributed executor framework and MapReduce~\cite{infinispan}, which also has an actively maintained Android version. A deployment architecture consists of in-memory key-value stores such as Infinispan for sharing medical images will be scalable and pervasive.
+In-memory data grids distribute storage and execution over multiple physical nodes, while giving a logically centralized view of a larger resource pool. An in-memory data grid can be an alternative for a traditional storage for the replica sets, as it will provide faster storage and access. Infinispan is a Java in-memory NoSQL store with implementations of distributed executor framework and MapReduce~\cite{infinispan}, which also has an actively maintained Android version. A deployment architecture consists of in-memory key-value stores such as Infinispan for sharing medical images will be scalable and pervasive.
 
-While sharing data is encouraged in science~\cite{szala2006science}, algorithms and architectures should be designed for mashing up and making the public data sharing easy and effective. This paper presents the research and prototype implementations of $MEDIator$, a replication and data synchronization platform, exploiting the in-memory data grid projects, while consuming data sources such as TCIA via their public APIs.
+While sharing data is encouraged in science~\cite{szala2006science}, algorithms and architectures should be designed for mashing up and making the public data sharing easy and effective. This paper presents the research and prototype implementations of $MEDIator$, a replication and data synchronization platform, exploiting the in-memory data grid projects, while consuming data sources such as TCIA via their public APIs. In the remaining of the paper, we will discuss the preliminary background information on $MEDIator$ in section II. Section III discusses solution architecture of $MEDIator$, where Section IV further presents the prototype implementation details of $MEDIator$. Section V closes the paper with conclusions and future work.
 
 %
 \section{Related Work}
@@ -87,8 +88,8 @@ Medical image archives often follow a well-defined hierarchy of images with diff
 
 \begin{figure}[!h]
 	\begin{center}
-		\resizebox{0.9\columnwidth}{!}{
-			\includegraphics[width=0.9\textwidth]{methods.png}
+		\resizebox{0.8\columnwidth}{!}{
+			\includegraphics[width=0.8\textwidth]{methods.png}
 		}
 \vspace{-10pt}
 
