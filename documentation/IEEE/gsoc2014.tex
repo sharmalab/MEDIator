@@ -112,9 +112,10 @@ OGSA-DAI is a middleware platform that provides seamless integration and access 
 Multiple nodes running Infinispan are leveraged and configured to create a cluster of $MEDIator$. Having multiple instances running over different nodes provide fault-tolerance, as when one node crashes or fails, the other nodes have the backup replica of the partitions stored in the terminated node. Figure~\ref{fig:deployment} depicts a higher level deployment view, with $MEDIator$ configured to execute over multiple physical nodes.
 \begin{figure}[!h]
 \begin{center}
- \resizebox{0.6\columnwidth}{!}{
-  \includegraphics[width=0.6\textwidth]{deployment.png}
+ \resizebox{0.5\columnwidth}{!}{
+  \includegraphics[width=0.5\textwidth]{deployment.png}
  }
+  \vspace{-15pt}
 \end{center}
  \caption{Deployment}
  \label{fig:deployment}
@@ -184,10 +185,11 @@ A sub class of $InfDataAccessIntegration$, $DSInfDai$ holds the instances of map
 \subsection{$MEDIator$ Data Structures}
 Infinispan distributed cache instances are created in $InfDataAccessIntegration$ as the data structures to hold the replica sets for each of the users. $userReplicasMap$ provides a mapping of userIdentifier \ding{213} array of replicaSetIDs. Hence, $userReplicasMap$ provide a listing of all the replica sets for the given user. replicaSetsMap is a mapping of replicaSetID \ding{213} replicaSet. A meta map provides a  mapping of replica set ID against a boolean array. The boolean value is set to true if the data source represented by the index of the boolean element in the array is available in the considered replica set.
 
-
+ \vspace{-10pt}
 \begin{lstlisting}  
     protected static Cache<String, Boolean[]> metaMap; /*csv, ca, tcia, s3*/
 \end{lstlisting} 
+ \vspace{-15pt}
 
 The $metaMap$ stores a binary array against each of the key (such as, patientID) to point the existence of meta data in the data sources defined. Further, meta maps such as $tciaMetaMap$, $csvMetaMap$, $s3MetaMap$, and $caMetaMap$ are defined for each data source, against the replica set ID. $s3MetaMap$ provides the file name for the respective ID, which can be used to find the location of the file as it follows the pattern of of $S3\_BASE\_URL + folderName + ``/'' + fileName$. Similarly, $caMetaMap$ stores the URL that the respective object is stored. $csvMetaMap$ contains the meta data loaded from the CSV files against the respective ID. $tciaMetaMap$ stores a boolean array against the replica set ID, where a $true$ for the array element in the map indicates that a meta data with specific granularity is stored in the replica set.
 
@@ -234,6 +236,7 @@ Different complex data sources require custom development extending the generic 
 Meta data such as collections, patients, studies, and series are retrieved at different levels, though the default download manager of TCIA downloads the data in series level, composed of the images of the series in a single zip archive. While having the default userReplicasMap to contain the IDs of the replica sets for each user, the replica set itself is stored in multiple maps instead of a single replicaSets map, to provide an efficient storage and access. $DataProSpecs$ extends the $InfDataAccessIntegration$ class. 
 
 4 maps store the meta data for each replica set against its ID, in different granularity - collections, patients, studies, and series, along with a meta map that points to the 4 maps. 
+ \vspace{-10pt}
 \begin{lstlisting}  
 protected static Cache<String, Boolean[]> tciaMetaMap;  /*collections, patients, studies, series*/
 \end{lstlisting} 
