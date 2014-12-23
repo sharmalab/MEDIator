@@ -94,7 +94,7 @@ Medical image archives often follow a well-defined hierarchy of images with diff
 \vspace{-10pt}
 
 	\end{center}
-	\caption{Retrieving images and meta data}
+	\caption{Retrieving images and meta data in TCIA}
 	\label{fig:methods}
 \vspace{-15pt}
 \end{figure}
@@ -109,7 +109,7 @@ OGSA-DAI is a middleware platform that provides seamless integration and access 
 
 \section{Solution Architecture}
 
-Multiple nodes running Infinispan are leveraged and configured to create a cluster of $MEDIator$. Having multiple instances running over different nodes provide fault-tolerance, as when one node crashes or fails, the other nodes have the backup replica of the partitions stored in the terminated node. Figure~\ref{fig:deployment} depicts a higher level deployment view, with $MEDIator$ configured to execute over multiple physical nodes including servers, desktops, laptops, and smart Android devices forming an Infinispan cluster. Heterogeneous data sources are accessed by the $MEDIator$ cluster. $MEDIator$ cluster is accessed by multiple users through any of the physical nodes.
+Multiple nodes running Infinispan are leveraged and configured to create a cluster of $MEDIator$. Having multiple instances running over different nodes provide fault-tolerance, as when one node crashes or fails, the other nodes have the backup replica of the partitions stored in the terminated node. Figure~\ref{fig:deployment} depicts a higher level use case view, with $MEDIator$ configured to execute over multiple physical nodes including servers, desktops, laptops, and smart Android devices forming an Infinispan cluster. Heterogeneous data sources are accessed by the $MEDIator$ cluster. $MEDIator$ cluster is accessed by multiple users through any of the physical nodes.
 \begin{figure}[!h]
 \begin{center}
  \resizebox{0.5\columnwidth}{!}{
@@ -117,7 +117,7 @@ Multiple nodes running Infinispan are leveraged and configured to create a clust
  }
   \vspace{-15pt}
 \end{center}
- \caption{Deployment}
+ \caption{Higher Level Use Case View of $MEDIator$}
  \label{fig:deployment}
  \vspace{-18pt}
 \end{figure}
@@ -212,9 +212,9 @@ Figure~\ref{fig:arch} depicts the architecture of $MEDIator$. Dependencies are u
   \includegraphics[width=0.6\textwidth]{arch.png}
  }
 \end{center}
-  \vspace{-18pt}
+  \vspace{-17pt}
   
- \caption{Architecture}
+ \caption{$MEDIator$ Architecture}
  \label{fig:arch}
  \vspace{-13pt}
  
