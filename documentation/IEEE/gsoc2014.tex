@@ -121,14 +121,14 @@ Multiple nodes running Infinispan are leveraged and configured to create a clust
  \vspace{-18pt}
 \end{figure}
 
-When the user performs searches, for the images, series, collections, and the other meta data, the results will be returned to the user, and the user can chose ta subset of the returned results to create a replica set. A search query may contain different parameters that can define the scope of the search and the outcomes, and often return the outputs in a finer granularity. $MEDIator$ lets the users to create, update, retrieve, and delete replica sets, and share the replica sets with others.
+When the user performs searches for the images, series, collections, and the other meta data, the results will be returned to the user, and the user can chose a subset of the returned results to create and store a replica set in  the Infinispan maps. A search query may contain different parameters that can define the scope of the search and the outcomes, and often return the outputs in a finer granularity. $MEDIator$ lets the users to create, update, retrieve, and delete replica sets, and share the replica sets with others.
 
 When a sub set of such information is chosen and stored as a replica set, it is sufficient to store the unique identifiers of the matching data units of finer granularity than the original search query, as it would be sufficient to reproduce the data that is represented by the replica set. Hence, when using TCIA as the data source, storing an array of patient ID would be sufficient to identify the selected sub set of the collection including the array of patients. Similarly an array of study instance UID is sufficient to represent the selected sub set of any patient, and an array of series instance UID is sufficient to represent the selected sub set of any study, as it will contain an array of series. Hence $MEDIator$ stores the relevant IDs for the respective replica sets.
 
 \subsection{Public APIs}
-$MEDIator$ consists of 3 APIs, to be able to connect to specific data source, to integrate multiple data sources and meta data into the system, and to create replica sets for the data sources. Replica sets are stored and processed in the Infinispan maps, where integrating with the data sources is done by the $InterfaceAPI$ interface. $InterfaceAPI$ is often provided by the data sources, as a mean to query and retrieve the raw data from the remote data sources.
+$MEDIator$ consists of 3 APIs, to be able to connect to specific data source, to integrate multiple data sources and meta data into the system, and to create replica sets for the data sources. Integrating with the data sources for data retrieval is done by $InterfaceAPI$, which is often provided by the remote data sources, as a mean to query and retrieve the raw data.
 
-Methods for RESTful invocations are designed for each of the interfaces defining the APIs. Methods that are defined in the interfaces should be implemented by the classes that implement these interfaces. Table~\ref{table:interfaces} depicts the methods defined for each of the interfaces
+Methods for RESTful invocations are designed for each of the interfaces defining the APIs. Methods that are defined in the interfaces should be implemented by the classes that implement these interfaces. Table~\ref{table:interfaces} depicts the methods defined for each of the interfaces.
 
 \begin{table}[!ht]
 \centering
@@ -154,14 +154,13 @@ retrieve & createReplicaSet&updateExistenceInDataSource \\
  \vspace{-13pt}
 \end{table}
 
-$PubConsAPI$ and $Integrator$ provide replica set management. $Integrator$ integrates multiple heterogeneous data sources into $MEDIator$ and provides a meta map and maps for each of the data sources to access the relevant information for each of the entry, while $PubConsAPI$ provides and manages replica sets for each specific data source. $Integrator$ lets the users to store meta data from multiple heterogeneous sources in a coarse grain access. 
-
-Classes extending PubConsAPI design and implement the logic of replica sets management, where integration with the data sources is done by two interfaces - Interface API and Integrator. Interface API provides data retrieval from the data source, where Integrator integrates multiple data sources into the system and store the meta data of the data sources into Infinispan.
+$PubConsAPI$ and $Integrator$ provide replica set management. $Integrator$ integrates multiple heterogeneous data sources into $MEDIator$ and provides a meta map and maps for each of the data sources to access the relevant information for each of the entry in a coarse granularity. $PubConsAPI$ provides and manages replica sets for each specific data source.  
+%$InterfaceAPI$ provides data retrieval from the data source.
 
 \paragraph*{DataProSpecs - PubConsAPI}
-The methods of $DataProSpecs$ can be invoked by knowing the respective replicaSetID of the replica set and the user ID of the user who owns the replica set. UserID is a user identifier such as a user name or a `secret' or pass from the user. userIDs serve as the keys of the userReplicasMap. 
+$DataProSpecs$ extends $PubConsAPI$ to design and implement the logic of replica sets management. The methods of $DataProSpecs$ can be invoked by knowing the respective ID of the replica set and the user ID of the user who owns the replica set. User ID is an identifier such as a user name or a `secret' or pass from the user. user IDs serve as the keys of the userReplicasMap. 
 
-$createReplicaSet()$ requires the userID along with the elements to be stored in the replica set. It returns the $replicaSetID$, which is further used to uniquely identify the replica set. $getReplicaSet()$ requires only the relevant $replicaSetID$ to return the respective replica set. Similarly, $updateReplicaSet()$ requires $replicaSetID$ as well as the elements to be stored in the $replicaSet$, replacing the previous elements. $deleteReplicaSet()$ requires both the $userID$ and $replicaSetID$. Similarly, $duplicateReplicaSet()$ requires both $replicaSetID$ and the userID of the user to whom the replicaSet is shared to. Creating, deleting, and duplicating a replication set requires modification to the user replicas map, which holds the list of the replica sets for the particular user. Hence the necessity to input the userID. ReplicaSetID is a large negative number that can be randomly generated.
+$createReplicaSet()$ requires the userID along with the elements to be stored in the replica set. It returns the $replicaSetID$, which is further used to uniquely identify the replica set. $getReplicaSet()$ requires only the relevant $replicaSetID$ to return the respective replica set. Similarly, $updateReplicaSet()$ requires $replicaSetID$ as well as the elements to be stored in the $replicaSet$, replacing the previous elements. $deleteReplicaSet()$ requires both the $userID$ and $replicaSetID$. Similarly, $duplicateReplicaSet()$ requires both $replicaSetID$ and the userID of the user to whom the replicaSet is shared to. Creating, deleting, and duplicating a replication set requires modification to the user replicas map, which holds the list of the replica sets for the particular user. Hence the necessity to input the userID. ReplicaSetID is a large number that can be randomly generated.
 %It can be safely assumed to be harder to guess. Hence, this model is assumed to provide adequate security for this prototype.
 
 \subsection{Integration with Data Sources}
@@ -180,37 +179,31 @@ Clinical data is deployed in multiple data sources such as TCIA, caMicroscope, a
 
 Each data source is connected to $MEDIator$ by implementing a class that extends Integrator interface. $DatasourcesIntegrator$, an abstract class provides the common features for the data sources integration. $CsvIntegrator$, $CaMicIntegrator$, $S3Integrator$, and $TciaIntegrator$ respectively function as the integrators for $CSV$, $caMicroscope$, $Amazon S3$, and $TCIA$. Further data sources can be integrated into $MEDIator$ by extending $DataSourcesIntegrator$ with a relevant sub class.$MetaDataLoader$ loads the CSV files and stores them into Infinispan maps, against the ID, such as the patient ID. 
 
-$DSInfDai$ a class extending $InfDataAccessIntegration$ holds the instances of map to store all the meta data. $DSIntegratorInitiator$ invokes the instances of $DSInfDai$, $MetaDataLoader$ and the other respective classes to start parsing the meta data, and store the instances into the respective maps. 
+A sub class of $InfDataAccessIntegration$, $DSInfDai$ holds the instances of map to store all the meta data. $DSIntegratorInitiator$ invokes the instances of $DSInfDai$, $MetaDataLoader$ and the other respective classes to parse the meta data, and store the instances into the respective maps. 
 
 \subsection{$MEDIator$ Data Structures}
-Infinispan distributed cache instances are created in $InfDataAccessIntegration$ as the data structures to hold the replica sets for each of the users. $userReplicasMap$ provides a mapping of userIdentifier \ding{213} array of replicaSetIDs. Hence, $userReplicasMap$ provide a listing of all the replica sets for the given user.
-
-
-UserID is the could be the logged in user name. (for now, testing with random strings).
-replicaSetsMap is a mapping of replicaSetID \ding{213} replicaSet.
+Infinispan distributed cache instances are created in $InfDataAccessIntegration$ as the data structures to hold the replica sets for each of the users. $userReplicasMap$ provides a mapping of userIdentifier \ding{213} array of replicaSetIDs. Hence, $userReplicasMap$ provide a listing of all the replica sets for the given user. replicaSetsMap is a mapping of replicaSetID \ding{213} replicaSet. A meta map provides a  mapping of replica set ID against a boolean array. The boolean value is set to true if the data source represented by the index of the boolean element in the array is available in the considered replica set.
 
 
 \begin{lstlisting}  
     protected static Cache<String, Boolean[]> metaMap; /*csv, ca, tcia, s3*/
-    protected static Cache<String, String[]> csvMetaMap;
-    protected static Cache<String, String> s3MetaMap;
-    protected static Cache<String, String> caMetaMap;
 \end{lstlisting} 
-The $metaMap$ stores a binary array against each of the key (such as, patientID) to point the existence of meta data in the data sources defined. $s3MetaMap$ provides the file name for the respective ID, which can be used to find the location of the file as it follows the pattern of of $S3\_BASE\_URL + folderName + ``/'' + fileName$. Similarly, $caMetaMap$ stores the URL that the respective object is stored. $csvMetaMap$ contains the meta data loaded from the CSV files against the respective ID.
 
-Methods for updating, creating, and deleting meta data from these maps are available where creating or deleting meta data will update the availability to true/false for the respective index in the $metaMap$. $XXX\_META\_POSITION$ defines the position in the metaMap, where XXX stands for data sources such as CSV, CA, TCIA, and S3. Updating the existence will flop the respective boolean value in the respective entry. The $metaMap$ ensures easy indexing, and helps to search which of the data sources contain the respective information for any given key, such as a given patient ID.
+The $metaMap$ stores a binary array against each of the key (such as, patientID) to point the existence of meta data in the data sources defined. Further, meta maps such as $tciaMetaMap$, $csvMetaMap$, $s3MetaMap$, and $caMetaMap$ are defined for each data source, against the replica set ID. $s3MetaMap$ provides the file name for the respective ID, which can be used to find the location of the file as it follows the pattern of of $S3\_BASE\_URL + folderName + ``/'' + fileName$. Similarly, $caMetaMap$ stores the URL that the respective object is stored. $csvMetaMap$ contains the meta data loaded from the CSV files against the respective ID. $tciaMetaMap$ stores a boolean array against the replica set ID, where a $true$ for the array element in the map indicates that a meta data with specific granularity is stored in the replica set.
+
+Methods for updating, creating, and deleting meta data from these maps are available where creating or deleting meta data will update the availability to true/false for the respective index in the $metaMap$. $XXX\_META\_POSITION$ defines the position in the metaMap, where XXX stands for data sources such as CSV, CA, TCIA, and S3. Updating the existence will flop the respective boolean value for the entry. The $metaMap$ ensures easy indexing, and helps to search which of the data sources contain the respective information for any given key, such as a given patient ID. Similarly, data sources with a hierarchy such as $TCIA$ follow the same model, with a boolean array stored against each replica set ID at the top level.
 
 \paragraph*{multi-tenancy}
-$MEDIator$ is multi-tenanted, and it is aware of the multiple tenants or users using the system. Each user co-exist in the replication tool at the same time, without the knowledge of existence of the other users, sharing the same cache space. 
+$MEDIator$ is multi-tenanted, and it is aware of the multiple tenants or users using the system. All the users co-exist without the knowledge of existence of the other users, sharing the same cache space. 
 
 \paragraph*{Access Logging}
 Involving a time stamp for the class extending $PubConsAPI$, downloaded items can be tracked, and the diffs can be produced for the user download. Hence, a download can be paused and resumed later, downloading the images that have not been downloaded yet.
 
 \paragraph*{Security}
-$MEDIator$ can be further secured with user authentication. SAML tokens can be created for user names and passwords with the membership information, which can be validated later. A create and validate API with user stores such as LDAP or OpenID should be designed and implemented, extending and leveraging $MEDIator$.
+$MEDIator$ can be further secured with user authentication. SAML tokens can be created for user names and passwords with the membership information, which can be validated later. This is designed as an Integrator for the Single Sign-on (SSO), as it involves multiple data sources. A create and validate API with user stores such as LDAP or OpenID should be designed and implemented, extending $MEDIator$.
 
 \subsection{Software Architecture}
-Figure~\ref{fig:arch} depicts the architecture of the data replication and synchronization tool, showing its components and dependencies.
+Figure~\ref{fig:arch} depicts the architecture of $MEDIator$, showing its components and dependencies. Dependencies are used unmodified. Apache HTTP Client and Mashape Unirest are configured and leveraged by the $InterfaceAPI$, to query and retrieve the raw data from the data sources. Infinispan, as the core dependency, is configured and exploited as the shared storage and distributed execution medium. Presentation layer dependencies such as Embedded Tomcat, Apache Velocity, and Log4j2 facilitate prototype application development with web pages, and configurable logging. Apache Maven is used as the project management dependency to build, deploy, and execute the project.
 \begin{figure}[!htbp]
 \begin{center}
  \resizebox{\columnwidth}{!}{
@@ -225,18 +218,12 @@ Figure~\ref{fig:arch} depicts the architecture of the data replication and synch
  
 \end{figure}
 
-Dependencies are used unmodified. Apache HTTP Client and Mashape Unirest are configured and leveraged by the InterfaceAPI, to query and retrieve the raw data from the data sources. Infinispan, as the core dependency, is configured and exploited as the shared storage and distributed execution medium. Presentation layer dependencies such as Embedded Tomcat, Apache Velocity, and Log4j2 facilitate prototype application development with web pages, and configurable logging. Apache Maven is used as the project management dependency to build, deploy, and execute the project.
 
-Data sources access layer consists of means of accessing the data sources, such as querying and downloading the data stored in Amazon S3 or TCIA, via the REST API. Utilities such as MetaDataLoader and TciaUtil provide utility methods and functionalities for the tool throughout its execution.
+Data sources access layer consists of means of accessing the data sources, such as querying and downloading the data stored in Amazon S3 or TCIA, via the REST API. Utilities such as MetaDataLoader and TciaUtil provide utility methods and functionalities throughout the execution. InterfaceAPIs, Integrators, and PubConsAPIs are implemented at the top level, extending their respective base classes. The presentation layer consists of the Initiators that function as the starting point of the prototype applications. Servlets and UI Generators generate the presentation layer. 
 
-InterfaceAPIs, Integrators, and PubConsAPIs are implemented at the top level, extending their respective base classes. The presentation layer consists of the Initiators that function as the starting point of the prototype applications. Servlets and UI Generators generate the presentation layer of the tool.
+Replica sets management is handled by both $Integrator$ and $PubConsAPI$ interfaces. If multiple data sources should be managed consecutively, having maps pointing to meta data from heterogeneous sources, $Integrator$ interface should be implemented in a class with the respective distributed maps to hold the meta data. If a single data source is involved with a fine grain control over a data source, it is sufficient only to extend and implement $PubConsAPI$. $InterfaceAPI$ integrates the data sources with $MEDIator$, such that the relevant data can be queried, searched, manipulated, and downloaded. Hence, respective classes should implement this interface for each of the data source. 
 
-Replica sets management is handled by both $Integrator$ and $PubConsAPI$ interfaces. If multiple data sources should be managed consecutively, having maps pointing to meta data from heterogeneous sources, $Integrator$ interface should be implemented in a class with the respective distributed maps to hold the meta data. If a single data source is involved with a fine grain control over a data source, $PubConsAPI$ should be implemented. Functionality such as security with SAML token should be implemented as an Integrator, as this involves SSO for multiple data sources.
-
-
-$InterfaceAPI$ integrates the tool with the data source, such that the relevant data can be queried, searched, manipulated, and downloaded. Hence, respective classes should implement this interface for each of the data source. The TCIA integration by the $tcia\_rest\_api$ package stands as a decent sample on implementing this interface.
-
-$getRawData(String key)$ method should be implemented in the classes implementing the $PubConsAPI$ and $Integrator$ interfaces to be able to download the raw data from the data sources such as TCIA, caMicroscope, or S3, for the given replica set, potentially using Java web start.
+%$getRawData(String key)$ method should be implemented in the classes implementing the $PubConsAPI$ and $Integrator$ interfaces to be able to download the raw data from the data sources such as TCIA, caMicroscope, or S3, for the given replica set, potentially using Java web start.
 
 \section{Implementation}
 Based on the design, $MEDIator$ was implemented as a data sharing and synchronization middleware platform for heterogeneous medical image archives. Different complex data sources require custom development extending the generic framework. As creating and customizing the replica set require a more specific data structure, further implementations are done, extending the core class hierarchy. %\footnote{The source code can be accessed from \url{https://bitbucket.org/BMI/datareplicationsystem}}. 
