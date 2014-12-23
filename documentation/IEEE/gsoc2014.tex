@@ -83,25 +83,31 @@ While sharing data is encouraged in science~\cite{szala2006science}, algorithms 
 %
 \section{Related Work}
 \subsection{Medical Image Archives}
-Medical image archives often follow a well-defined hierarchy of images with different granularity. TCIA public API provides methods to retrieve the images and meta data of different granularity~\cite{prior2013tcia}. Figure~\ref{fig:methods} depicts the methods that retrieve image and metadata at different granularity from TCIA. These methods are invoked by the public APIs such as the REST API. As shown by Figure~\ref{fig:methods} an initial search on TCIA may contain parameters such as modality, in addition to collection name, patient ID, study instance ID, and series instance UID. Each of the searches in TCIA returns the output in a finer granularity.
+Medical image archives often follow a well-defined hierarchy of images with different granularity. TCIA public API provides methods to retrieve the images and meta data of different granularity~\cite{prior2013tcia}. Figure 1 depicts the methods that retrieve image and metadata at different granularity from TCIA. These methods are invoked by the public APIs such as the REST API. As shown by Figure 1 an initial search on TCIA may contain parameters such as modality, in addition to collection name, patient ID, study instance ID, and series instance UID. Each of the searches in TCIA returns the output in a finer granularity.
 
-\begin{figure}[!h]
-	\begin{center}
-		\resizebox{\columnwidth}{!}{
-			\includegraphics[width=\textwidth]{methods.png}
-		}
-	\end{center}
-	\caption{Retrieving images and meta data}
+\begin{figure*}
+%\begin{figure}[!h]	
+		\begin{center}
+			\includegraphics[width=0.8\textwidth]{methods.png}
+	\caption{Accessing data from TCIA with different granularity}
+		\end{center}
 	\label{fig:methods}
-\end{figure}
+%\end{figure}
+\end{figure*}
 
 
 \subsection{In-Memory Data Grids}
-In-memory data grids are extensively used in industry and academia, to provide a scalable memory and execution platform. Many commercial and open source in-memory data grid platforms exist. Infinispan and Hazelcast~\cite{hazelcast} are two commonly cited open source in-memory data grids. Infinispan is often cited in researches~\cite{palmieri2012integrated,rosa2011goal,ruivo2011exploiting}.
+In-memory data grids are extensively used in industry and academia, to provide a scalable memory and execution platform. Many commercial and open source in-memory data grid platforms exist. Infinispan and Hazelcast~\cite{hazelcast} are two commonly used open source in-memory data grids. Infinispan is often cited in researches~\cite{palmieri2012integrated,rosa2011goal,ruivo2011exploiting}.
+
+\subsection{Data Access and Integration}
+OGSA-DAI is a middleware platform that provides seamless integration and access into heterogeneous data sources~\cite{antonioletti2005design}. WS-DAI family of specifications provide a data access integration for web services~\cite{antonioletti2006ws}.
+
+While there are data sources integration platforms, a compact platform for medical image archives to share content across multiple users with light-weight pointers without actually duplicating the original content is still lacking.
+
 
 \section{Solution Architecture}
 
-Multiple nodes running Infinipsan are leveraged and configured to create a cluster of $MEDIator$. Having multiple instances running over different nodes provide fault-tolerance, as when one node terminates, the other nodes have the backup replica of the partitions stored in the terminated node. Figure~\ref{fig:deployment} depicts a higher level deployment view.
+Multiple nodes running Infinispan are leveraged and configured to create a cluster of $MEDIator$. Having multiple instances running over different nodes provide fault-tolerance, as when one node crashes or fails, the other nodes have the backup replica of the partitions stored in the terminated node. Figure~\ref{fig:deployment} depicts a higher level deployment view, with $MEDIator$ configured to execute over multiple physical nodes.
 \begin{figure}[!h]
 \begin{center}
  \resizebox{0.6\columnwidth}{!}{
@@ -112,11 +118,12 @@ Multiple nodes running Infinipsan are leveraged and configured to create a clust
  \label{fig:deployment}
 \end{figure}
 
-\subsection{Data Access and Integration}
+\subsection{Use Case}
 A search query may contain different parameters that can define the scope of the search and the outcomes, and often return the outputs in a finer granularity. $MEDIator$ lets the users to create, update, retrieve, and delete replica sets, and share the replica sets with others.
 
 When a sub set of such information is chosen and stored as a replica set, it is sufficient to store the unique identifiers of the matching data units of finer granularity than the original search query, as it would be sufficient to reproduce the data that is represented by the replica set. Hence, when using TCIA as the data source, storing an array of patient ID would be sufficient to identify the selected sub set of the collection including the array of patients. Similarly an array of study instance UID is sufficient to represent the selected sub set of any patient, and an array of series instance UID is sufficient to represent the selected sub set of any study, as it will contain an array of series. Hence $MEDIator$ stores the relevant IDs for the respective replica sets.
 
+\subsection{Public APIs}
 $MEDIator$ consists of 3 APIs, to be able to connect to specific data source, to integrate multiple data sources and meta data into the system, and to create replica sets for the data sources. Replica sets are stored and processed in the Infinispan maps, where integrating with the data sources is done by the $InterfaceAPI$ interface. $InterfaceAPI$ is often provided by the data sources, as a mean to query and retrieve the raw data from the remote data sources.
 
 Methods for RESTful invocations are designed for each of the interfaces defining the APIs. Methods that are defined in the interfaces should be implemented by the classes that implement these interfaces. Table~\ref{table:interfaces} depicts the methods defined for each of the interfaces
@@ -219,8 +226,8 @@ $MEDIator$ can be further secured with user authentication. SAML tokens can be c
 Figure~\ref{fig:arch} depicts the architecture of the data replication and synchronization tool, showing its components and dependencies.
 \begin{figure}[!htbp]
 \begin{center}
- \resizebox{0.8\columnwidth}{!}{
-  \includegraphics[width=0.8\textwidth]{arch.png}
+ \resizebox{\columnwidth}{!}{
+  \includegraphics[width=\textwidth]{arch.png}
  }
 \end{center}
  \caption{Architecture}
@@ -320,11 +327,12 @@ A cluster with 6 identical nodes (Intel(R) Core(TM) i7-2600K CPU @ 3.40GHz and 1
 
 
 \section{Conclusion}
+\balance
+
 $MEDIator$ is a platform providing an ubiquitous access to medical meta data from the image archives, while providing fault tolerance and load balancing, leveraging the distributed shared memory platforms. A prototype has been implemented with multiple data sources containing cancer images, with Infinispan as the in-memory data store.
 
 Consumers download the data by searching the image repository using the browser. The information that the consumer is interested in, gets updated whenever the data producers update or add patient information. Further improvements to $MEDIator$ should enable automated downloads to the consumers. While $MEDIator$ focuses on medical image archives, the design can also be implemented for any other data types with an index available to query and structure them as replica sets.
 
-\balance
 
 \small{ \paragraph*{\textbf{Acknowledgments}} This work was partially supported by the Google Summer of Code 2014 project, under the mentoring organization \textit{Biomedical Informatics, Emory University}.}
 
@@ -346,6 +354,10 @@ Prior, F. W., Clark, K., Commean, P., Freymann, J., Jaffe, C., Kirby, J., ... \&
 \bibitem{rosa2011goal}Rosa, L., Rodrigues, L., \& Lopes, A. (2011, November). Goal-oriented self-management of in-memory distributed data grid platforms. In {\em Cloud Computing Technology and Science (CloudCom), 2011 IEEE Third International Conference on} (pp. 587-591). IEEE.
 
 \bibitem{ruivo2011exploiting} Ruivo, P., Couceiro, M., Romano, P., \& Rodrigues, L. (2011, December). Exploiting total order multicast in weakly consistent transactional caches. In {\em Dependable Computing (PRDC), 2011 IEEE 17th Pacific Rim International Symposium on} (pp. 99-108). IEEE.
+
+\bibitem{antonioletti2005design} Antonioletti, M., Atkinson, M., Baxter, R., Borley, A., Chue Hong, N. P., Collins, B., ... \& Westhead, M. (2005). The design and implementation of Grid database services in OGSA-DAI. {\em  Concurrency and Computation: Practice and Experience, 17} (2-4), 357-376.
+
+\bibitem{antonioletti2006ws} Antonioletti, M., Krause, A., Paton, N. W., Eisenberg, A., Laws, S., Malaika, S., ... \& Pearson, D. (2006). The WS-DAI family of specifications for web service data access and integration. {\em ACM SIGMOD Record}, 35(1), 48-55.
 \end{thebibliography}
 
 \end{document}
