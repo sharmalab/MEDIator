@@ -226,39 +226,22 @@ Replica sets management is handled by both $Integrator$ and $PubConsAPI$ interfa
 %$getRawData(String key)$ method should be implemented in the classes implementing the $PubConsAPI$ and $Integrator$ interfaces to be able to download the raw data from the data sources such as TCIA, caMicroscope, or S3, for the given replica set, potentially using Java web start.
 
 \section{Implementation}
-Based on the design, $MEDIator$ was implemented as a data sharing and synchronization middleware platform for heterogeneous medical image archives. Different complex data sources require custom development extending the generic framework. As creating and customizing the replica set require a more specific data structure, further implementations are done, extending the core class hierarchy. %\footnote{The source code can be accessed from \url{https://bitbucket.org/BMI/datareplicationsystem}}. 
+A prototype web application was built with $MEDIator$ architecture for cancer image archives. Apache Velocity was used to generate the web pages for the replication tool. Apache Tomcat (Embedded) was integrated into the program such that it will get the user inputs from the HTML pages and present the output in pages formatted by Apache Velocity Templates. Respective servlets were created inside the servlets package to receive the inputs from HTML pages to the backend Java code.
 
-%\subsection{TCIA Implementation}
-$InfDataAccessIntegration$ implements the PubConsAPI for publisher/consumer of data, where $InterfaceManager$ implements the $InterfaceAPI$ for the interface between the data source and $MEDIator$. Invoker classes extending the abstract class $InterfaceManager$, implement the respective data source integration to invoke these methods. 
+Different complex data sources require custom development extending the generic framework. As creating and customizing the replica set require a more specific data structure, further implementations are done, extending the core class hierarchy. $InterfaceManager$ implements the $InterfaceAPI$ for the interface between the data source and $MEDIator$. Invoker classes extending the abstract class $InterfaceManager$, implement the respective data source integration to invoke these methods. 
 
-$TciaInvoker$ extends $InterfaceManager$ to implement the interfacing layer between the TCIA data source and $MEDIator$. Meta data such as collections, patients, studies, and series are retrieved at different levels, though the default download manager of TCIA downloads the data in series level, composed of the images of the series in a single zip archive. While having the default userReplicasMap to contain the IDs of the replica sets for each user, the replica set itself is stored in multiple maps instead of a single replicaSets map, to provide an efficient storage and access.
+$TciaInvoker$ extends $InterfaceManager$ to implement the interfacing layer between the TCIA data source and $MEDIator$. Meta data such as collections, patients, studies, and series are retrieved at different levels, though the default download manager of TCIA downloads the data in series level, composed of the images of the series in a single zip archive. While having the default userReplicasMap to contain the IDs of the replica sets for each user, the replica set itself is stored in multiple maps instead of a single replicaSets map, to provide an efficient storage and access. $DataProSpecs$ extends the $InfDataAccessIntegration$ class. 
 
-$DataProSpecs$ extends the $InfDataAccessIntegration$ class. 5 maps are created as below to represent the replica sets.
+\paragraph*{\textbf{TCIA Integration Implementation}}
+4 maps store the meta data for each replica set against its ID, in different granularity - collections, patients, studies, and series, along with a meta map that points to the 4 maps. 
 \begin{lstlisting}  
-    protected static Cache<Long, Boolean[]> tciaMetaMap;
-    protected static Cache<Long, String[]> collectionsMap;
-    protected static Cache<Long, String[]> patientsMap;
-    protected static Cache<Long, String[]> studiesMap;
-    protected static Cache<Long, String[]> seriesMap;
+protected static Cache<String, Boolean[]> tciaMetaMap;  /*collections, patients, studies, series*/
 \end{lstlisting} 
+Each of the 4 maps stores the respective IDs of the meta data as the value against the replicaSetID. $tciaMetaMap$ contains a boolean array of length 4, which reflects which of the granularity of meta data is selected as a whole. A $true$ value indicates the existence of replica set entry in the respective map. For TCIA, if a few collections are selected, the first element of the array is set to true, and similarly patients, studies, and series are defined by the other 3 elements.
 
-$tciaMetaMap$ contains a boolean array, which reflects which of the granularity of meta data is selected as a whole. For TCIA, if a few collections are selected, the first element of the array is set to true, and similarly, the other meta data are marked to true or false as shown by the below code segment.
-\begin{lstlisting}  
-        Boolean[] metaMap = new Boolean[4];
-        metaMap[0] = collection != null;
-        metaMap[1] = patientID != null;
-        metaMap[2] = studyInstanceUID != null;
-        metaMap[3] = seriesInstanceUID != null;
-
-        putReplicaSet(replicaSetId, metaMap);
-\end{lstlisting} 
 The name of the collections, patientID, studyInstanceUID, and seriesInstanceUID are stored against the respective replicaSetID in collectionsMap, patientsMap, studiesMap, and seriesMap respectively. Hence changes are done at the respective maps. Duplicating the replicaSets duplicate the contents of the entire row to a new replicaSetID. Similarly, deleting a replicaSet deletes the respective information from all the maps.
 
-
-
-\paragraph*{\textbf{Prototype Web Application and Evaluation}}
-A prototype web application was built with $MEDIator$ architecture. Apache Velocity was used to generate the web pages for the replication tool. Apache Tomcat (Embedded) was integrated into the program such that it will get the user inputs from the HTML pages and present the output in pages formatted by Apache Velocity Templates. Respective servlets were created inside the servlets package to receive the inputs from HTML pages to the backend Java code.
-
+\paragraph*{\textbf{Prototype Evaluation}}
 A cluster with 6 identical nodes (Intel(R) Core(TM) i7-2600K CPU @ 3.40GHz and 12 GB memory) was used for evaluations. With synchronous backups enabled, $MEDIator$ showed a fault-tolerant behavior when a node failed and/or rejoined later. The time to initialize $MEDIator$ remained constant, regardless of the underlying data sources.
 
 
@@ -267,7 +250,7 @@ A cluster with 6 identical nodes (Intel(R) Core(TM) i7-2600K CPU @ 3.40GHz and 1
 
 $MEDIator$ is a platform providing an ubiquitous access to medical meta data from the image archives, while providing fault tolerance and load balancing, leveraging the distributed shared memory platforms. A prototype has been implemented with multiple data sources containing cancer images, with Infinispan as the in-memory data store.
 
-Consumers download the data by searching the image repository using the browser. The information that the consumer is interested in, gets updated whenever the data producers update or add patient information. Further improvements to $MEDIator$ should enable automated downloads to the consumers. While $MEDIator$ focuses on medical image archives, the design can also be implemented for any other data types with an index available to query and structure them as replica sets.
+Consumers download the data by searching the image repository using the browser. The information that the consumer is interested in, gets updated whenever the data producers update or add patient information. Further improvements to $MEDIator$ should enable automated downloads to the consumers. While $MEDIator$ focuses on medical image archives, the design can also be implemented for any other data types with an index to query and structure them as replica sets.
 
 
 %\small{ \paragraph*{\textbf{Acknowledgments}} This work was partially supported by the Google Summer of Code 2014 project, under the mentoring organization \textit{Biomedical Informatics, Emory University}.}
