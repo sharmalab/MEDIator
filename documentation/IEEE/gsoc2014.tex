@@ -54,10 +54,10 @@
 
 \author{Pradeeban Kathiravelu$^{1}$ and Ashish Sharma$^{2}$% <-this % stops a space
 	\thanks{$^{1}$Pradeeban Kathiravelu is with Instituto Superior T\'{e}cnico, Universidade de Lisboa, Lisbon, Portugal
-		{\tt\small pradeeban.kathiravelu@tecnico.ulisboa.pt}}%
+		{\tt\small (e-mail: pradeeban.kathiravelu@tecnico.ulisboa.pt).}}%
 	\thanks{$^{2}$Ashish Sharma is with the Department of Biomedical Informatics, Emory University,
 		Atlanta, Georgia, USA
-		{\tt\small ashish.sharma@emory.edu}}%}
+		{\tt\small (e-mail: ashish.sharma@emory.edu).}}%}
 }
 \begin{document}
 	
@@ -66,21 +66,21 @@
 	\pagestyle{empty}
 	
 \begin{abstract}
-	Big data science has more consumers and fewer producers of data. Scientific data is getting larger and larger and consists of a varying degree of heterogeneity in its content and storage media. Medical image archives are populated by the images and meta data by a few source providers and are read through different interfaces. With the growing adaptation of pervasive computing into medical domain and increasingly open access to data, the meta data stored in legacy data stores is shared and synchronized across multiple devices and users. With the increasing complexity of the image hierarchies, consumers of medical images should be able to bookmark and share the pointers to the sets of images and meta data from different sources. 
-	
-	While many medical image sources provide APIs for public access, an architecture that permits an effective sharing and synchronization of meta data across multiple users, from different storage media, is still lacking. This paper presents \textit{MEDIator}, a data sharing and synchronization middleware platform for heterogeneous medical image archives. \textit{MEDIator} allows sharing pointers to data effectively, while letting the consumers manipulate the pointers without modifying the raw data. \textit{MEDIator} has been implemented for multiple data sources, including Amazon S3, The Cancer Imaging Archive (TCIA), caMicroscope\footnote{http://imaging.cci.emory.edu/camicroscope/}, and meta data from CSV files for cancer images.
+With the growing adaptation of pervasive computing into medical domain and increasingly open access to data, the meta data stored in legacy data stores is shared and synchronized across multiple devices and users. As the complexity of the image hierarchy of medical image sources keeps growing, consumers should be able to bookmark and share the pointers to the sets of images and meta data from different sources. While many medical image sources provide APIs for public access, an architecture that permits an effective sharing and synchronization of meta data across multiple users, from different storage media and data sources, is still lacking. This paper presents \textit{MEDIator}, a data sharing and synchronization middleware platform for heterogeneous medical image archives. \textit{MEDIator} allows sharing pointers to medical data effectively, while letting the consumers manipulate the pointers without modifying the raw medical data. \textit{MEDIator} has been implemented for multiple data sources, including Amazon S3, The Cancer Imaging Archive (TCIA), caMicroscope\footnote{http://imaging.cci.emory.edu/camicroscope/}, and meta data from CSV files for cancer images.
 \end{abstract}
 
 
 
 \section{Introduction}
-Data sources contain data of different granularity. Data is organized in a hierarchical structure, where different levels are used to present data in specific formats. Medical image archives have a hierarchy of information with a well-structured schema. Hence, medical image information can be retrieved at different granularity by the users, exploiting this hierarchy.
+Medical image archives are populated by the images and meta data by a few source providers and are read through different interfaces, following the norm of big data science. Scientific data is getting larger and larger and consists of a varying degree of heterogeneity in its content and storage media. Medical image archives are well-structured data consisting of a schema with a commonly accepted taxonomy and provide a hierarchy of information. Hence, medical image information can be retrieved at different granularity by the users, exploiting this hierarchy.
 
-Sharing data among the consumers can be achieved by sharing pointers to the data, which reduces the redundancy and increases the efficiency of sharing and accessing the data as data duplication is minimized. Replica set is a pointer to stored data, which is created by the users as a bookmark, by choosing a sub set of data items that matches a search query or a specific user-defined criteria. Users can create replica sets with unique identifiers, and share their replica sets with other users and duplicate the replica sets, and update or delete their replica sets later. Hence, replica sets can be used as a way of tracking and sharing information. As heterogeneous data sources have different interfaces, a generic data replication and synchronization tool will be convenient, with sharing of replica sets from the data sources. 
+Supporting the Open Science initiatives in biomedical engineering, data should be easily accessed from multiple medical data sources and legacy warehouses. As heterogeneous data sources have different interfaces, a generic data replication and synchronization tool will be convenient, with sharing of replica sets from the data sources. While sharing data is encouraged in science~\cite{szala2006science}, algorithms and architectures should be designed for mashing up and making the public data sharing easy and effective. 
 
-In-memory data grids distribute storage and execution over multiple physical nodes, while giving a logically centralized view of a larger resource pool. An in-memory data grid can be an alternative for a traditional storage for the replica sets, as it will provide faster storage and access. Infinispan is a Java in-memory NoSQL store with implementations of distributed executor framework and MapReduce~\cite{infinispan}, which also has an Android version. A deployment architecture consists of in-memory key-value stores such as Infinispan for sharing medical images will be scalable and pervasive.
+Analyzing and mining multiple medical data sources require considerable computational resources, as they consist of different structures, complex APIs, and gigantic amount of hierarchical data. Consumers of the medical data sources also often bookmark the sub set of their search items and share with them. These bookmarks should be stored as replica sets, in a fault-tolerant manner. 
+ 
+In-memory data grids distribute storage and execution over multiple physical nodes, while giving a logically centralized view of a larger resource pool. Hence, they provide a cost-effective and feasible alternative to supercomputers. An in-memory data grid can be an alternative for a traditional storage for the replica sets, as it will provide faster storage, access, and execution. A deployment architecture consists of in-memory key-value stores such as Infinispan for sharing medical images will be scalable and pervasive.
 
-While sharing data is encouraged in science~\cite{szala2006science}, algorithms and architectures should be designed for mashing up and making the public data sharing easy and effective. This paper presents the research and prototype implementations of $MEDIator$, a replication and data synchronization platform, exploiting the in-memory data grid projects, while consuming data sources such as TCIA via their public APIs. In the remaining of the paper, we will discuss the preliminary background information on $MEDIator$ in section II. Section III discusses solution architecture of $MEDIator$, where Section IV further presents the prototype implementation details of $MEDIator$. Section V closes the paper with conclusions and future work.
+This paper presents the research and prototype implementations of $MEDIator$, a replication and data synchronization platform, exploiting the in-memory data grid projects, while consuming data sources such as TCIA~\cite{prior2013tcia} via their public APIs. In the remaining of the paper, we will discuss the preliminary background information on $MEDIator$ in section II. Section III discusses solution architecture of $MEDIator$, where Section IV further presents the prototype implementation details of $MEDIator$. Section V closes the paper with conclusions and future work.
 
 %
 \section{Background and Related Work}
@@ -104,13 +104,14 @@ Medical image archives often follow a well-defined hierarchy of images with diff
 
 
 \paragraph*{\textbf{In-Memory Data Grids}}
-In-memory data grids are extensively used in industry and academia, to provide a scalable memory and execution platform. Many commercial and open source in-memory data grid platforms exist. Infinispan and Hazelcast~\cite{hazelcast} are two commonly used open source in-memory data grids. Infinispan is often cited in researches~\cite{palmieri2012integrated,rosa2011goal,ruivo2011exploiting}.
+In-memory data grids are extensively used in industry and academia, to provide a scalable memory and execution platform. Infinispan~\cite{marchioni2012infinispan} and Hazelcast~\cite{hazelcast} are two commonly used open source in-memory data grids. Infinispan is a Java in-memory NoSQL store with implementations of distributed executor framework and MapReduce, which also has an Android version. 
 
 \paragraph*{\textbf{Data Access and Integration}}
-OGSA-DAI is a middleware platform that provides seamless integration and access to heterogeneous data sources~\cite{antonioletti2005design}. WS-DAI family of specifications provide a data access integration for web services~\cite{antonioletti2006ws}. While there are data sources integration platforms, a compact platform for medical image archives to share content across multiple users with light-weight pointers without actually duplicating the original content is still lacking.
+OGSA-DAI is a middleware platform that provides seamless integration and access to heterogeneous data sources~\cite{antonioletti2005design}. WS-DAI family of specifications provide a data access integration for web services~\cite{antonioletti2006ws}. While there are generic data sources integration platforms, a compact platform for medical image archives to share content across multiple users with light-weight pointers without actually duplicating the original content is still lacking.
 
 
 \section{Solution Architecture}
+Sharing data among the consumers can be achieved by sharing pointers to the data, which reduces the redundancy and increases the efficiency of sharing and accessing the data as data duplication is minimized. Replica set is a pointer to stored data, which is created by the users as a bookmark, by choosing a sub set of data items that matches a search query or a specific user-defined criteria. Users can create replica sets with unique identifiers, and share their replica sets with other users and duplicate the replica sets, and update or delete their replica sets later. Hence, replica sets can be used as a way of tracking and sharing information. 
 
 Multiple nodes running Infinispan are leveraged and configured to create a cluster of $MEDIator$. Having multiple instances running over different nodes provide fault-tolerance, as when one node crashes or fails, the other nodes have the backup replica of the partitions stored in the terminated node. Figure~\ref{fig:deployment} depicts a higher level use case view, with $MEDIator$ configured to execute over multiple physical nodes including servers, desktops, laptops, and smart Android devices forming an Infinispan cluster. Heterogeneous data sources are accessed by the $MEDIator$ cluster. $MEDIator$ cluster is accessed by multiple users through any of the physical nodes.
 \begin{figure}[!h]
@@ -230,7 +231,7 @@ The name of the collections, patientID, studyInstanceUID, and seriesInstanceUID 
 \section{Conclusion}
 \balance
 
-$MEDIator$ is a platform providing an ubiquitous access to medical meta data from the image archives, while providing fault tolerance and load balancing, leveraging the distributed shared memory platforms. A prototype has been implemented with multiple data sources containing cancer images, with Infinispan as the in-memory data store. Consumers download the data by searching the image repository using the browser. The information that the consumer is interested in, gets updated whenever the data producers update or add patient information. Further improvements to $MEDIator$ should enable automated downloads to the consumers. While $MEDIator$ focuses on medical image archives, the design can also be implemented for any other data types with an index to query and structure them as replica sets.
+$MEDIator$ is a platform providing an ubiquitous access to medical meta data from the image archives, while providing fault tolerance and load balancing, leveraging the distributed shared memory platforms. A prototype has been implemented with multiple data sources containing cancer images, with Infinispan as the in-memory data store. Consumers download the data by searching the image repository using the browser. The information that the consumer is interested in, gets updated whenever the data producers update or add patient information. Further improvements to $MEDIator$ should enable automated downloads to the consumers. While $MEDIator$ focuses on medical image archives, the design can also be implemented for any other complex data types with an index to query and structure them as replica sets.
 
 
 %\small{ \paragraph*{\textbf{Acknowledgments}} This work was partially supported by the Google Summer of Code 2014 project, under the mentoring organization \textit{Biomedical Informatics, Emory University}.}
@@ -238,27 +239,18 @@ $MEDIator$ is a platform providing an ubiquitous access to medical meta data fro
 \begin{thebibliography}{99}
 	\scriptsize{
 		
-		\bibitem{infinispan}
-		Francesco Marchioni.
-		\newblock {\em Infinispan Data Grid Platform}.
-		\newblock Packt Publishing Ltd, 2012.
-		
 		\bibitem{szala2006science} A. Szalay and J. Gray, 2020 Computing: Science in an exponential world, {\em Nature, vol. 440}, pp. 413-414, 2006.
 		
-		\bibitem{prior2013tcia}
-		Prior, F. W., Clark, K., Commean, P., Freymann, J., Jaffe, C., Kirby, J., ... \& Marquez, G. (2013, July). TCIA: an information resource to enable open science. In {\em Engineering in Medicine and Biology Society (EMBC), 2013 35th Annual International Conference of the IEEE} (pp. 1282-1285). IEEE.
-		
+		\bibitem{prior2013tcia} Prior, F. W., Clark, K., Commean, P., Freymann, J., Jaffe, C., Kirby, J., ... \& Marquez, G. (2013, July). TCIA: an information resource to enable open science. In {\em Engineering in Medicine and Biology Society (EMBC), 2013 35th Annual International Conference of the IEEE} (pp. 1282-1285). IEEE.
+				
+		\bibitem{marchioni2012infinispan} Marchioni, F. (2012). Infinispan data grid platform. Packt Publishing Ltd.
+				
 		\bibitem{hazelcast} Johns, M. (2013). {\em Getting Started with Hazelcast}. Packt Publishing Ltd.
-		
-		\bibitem{palmieri2012integrated} Palmieri, R., di Sanzo, P., Quaglia, F., Romano, P., Peluso, S., \& Didona, D. (2012, January). Integrated monitoring of infrastructures and applications in cloud environments. In {\em Euro-Par 2011: Parallel Processing Workshops} (pp. 45-53). Springer Berlin Heidelberg.
-		
-		\bibitem{rosa2011goal}Rosa, L., Rodrigues, L., \& Lopes, A. (2011, November). Goal-oriented self-management of in-memory distributed data grid platforms. In {\em Cloud Computing Technology and Science (CloudCom), 2011 IEEE Third International Conference on} (pp. 587-591). IEEE.
-		
-		\bibitem{ruivo2011exploiting} Ruivo, P., Couceiro, M., Romano, P., \& Rodrigues, L. (2011, December). Exploiting total order multicast in weakly consistent transactional caches. In {\em Dependable Computing (PRDC), 2011 IEEE 17th Pacific Rim International Symposium on} (pp. 99-108). IEEE.
 		
 		\bibitem{antonioletti2005design} Antonioletti, M., Atkinson, M., Baxter, R., Borley, A., Chue Hong, N. P., Collins, B., ... \& Westhead, M. (2005). The design and implementation of Grid database services in OGSA-DAI. {\em  Concurrency and Computation: Practice and Experience, 17} (2-4), 357-376.
 		
 		\bibitem{antonioletti2006ws} Antonioletti, M., Krause, A., Paton, N. W., Eisenberg, A., Laws, S., Malaika, S., ... \& Pearson, D. (2006). The WS-DAI family of specifications for web service data access and integration. {\em ACM SIGMOD Record}, 35(1), 48-55.
+		
 	}
 \end{thebibliography}
 
