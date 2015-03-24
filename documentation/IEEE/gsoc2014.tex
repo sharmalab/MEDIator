@@ -49,7 +49,7 @@
 
 
 \title{\LARGE \bf
-	A Data Sharing and Synchronization Middleware Platform for Heterogeneous Medical Image Archives}
+	\textit{MEDIator}: A Data Sharing and Synchronization Platform for Heterogeneous Medical Image Archives}
 
 
 \author{Pradeeban Kathiravelu$^{1}$ and Ashish Sharma$^{2}$% <-this % stops a space
@@ -66,28 +66,27 @@
 	\pagestyle{empty}
 	
 \begin{abstract}
-With the growing adaptation of pervasive computing into medical domain and increasingly open access to data, the meta data stored in legacy data stores is shared and synchronized across multiple devices and users. As the complexity of the image hierarchy of medical image sources keeps growing, consumers should be able to bookmark and share the pointers to the sets of images and meta data from different sources. While many medical image sources provide APIs for public access, an architecture that permits an effective sharing and synchronization of meta data across multiple users, from different storage media and data sources, is still lacking. This paper presents \textit{MEDIator}, a data sharing and synchronization middleware platform for heterogeneous medical image archives. \textit{MEDIator} allows sharing pointers to medical data effectively, while letting the consumers manipulate the pointers without modifying the raw medical data. \textit{MEDIator} has been implemented for multiple data sources, including Amazon S3, The Cancer Imaging Archive (TCIA), caMicroscope\footnote{http://imaging.cci.emory.edu/camicroscope/}, and meta data from CSV files for cancer images.
+With the growing adaptation of pervasive computing into medical domain and increasingly open access to data, metadata stored in medical image archives and legacy data stores is shared and synchronized across multiple devices of data consumers. While many medical image sources provide APIs for public access, an architecture that orchestrates an effective sharing and synchronization of metadata across multiple users, from different storage media and data sources, is still lacking. This paper presents \textit{MEDIator}, a data sharing and synchronization middleware platform for heterogeneous medical image archives. \textit{MEDIator} allows sharing pointers to medical data efficiently, while letting the consumers manipulate the pointers without modifying the raw medical data. \textit{MEDIator} has been implemented for multiple data sources, including Amazon S3, The Cancer Imaging Archive (TCIA), caMicroscope\footnote{http://imaging.cci.emory.edu/camicroscope/}, and metadata from CSV files for cancer images.
 \end{abstract}
 
 
 
 \section{Introduction}
-Medical image archives are populated by the images and meta data by a few source providers and are read through different interfaces, following the norm of big data science. Scientific data is getting larger and larger and consists of a varying degree of heterogeneity in its content and storage media. Medical image archives are well-structured data consisting of a schema with a commonly accepted taxonomy and provide a hierarchy of information. Hence, medical image information can be retrieved at different granularity by the users, exploiting this hierarchy.
+Scientific data is getting larger and larger, with an increasingly varying degree of heterogeneity in its content and storage media. Medical image archives are populated with images and metadata by a few source providers and are read by many consumers through different interfaces, following the norm of big data science. As medical image archives store data in a well-structured hierarchy, adhering to a pre-defined schema with a commonly accepted taxonomy, medical image data can be retrieved at different granularity by the consumers.
 
-Supporting the Open Science initiatives in biomedical engineering, data should be easily accessed from multiple medical data sources and legacy warehouses. As heterogeneous data sources have different interfaces, a generic data replication and synchronization tool will be convenient, with sharing of replica sets from the data sources. While sharing data is encouraged in science~\cite{szala2006science}, algorithms and architectures should be designed for mashing up and making the public data sharing easy and effective. 
+Data should be easily accessed from multiple medical data sources and legacy warehouses, supporting the Open Science initiatives in biomedical engineering. Analyzing and mining multiple medical data sources require considerable computational resources, as they consist of different structures, complex APIs, and gigantic amount of hierarchical data. As the complexity of the image hierarchy of medical image sources keeps growing, consumers bookmark and share pointers to selected sub sets of images and metadata from different sources, that match a certain criteria or interest. 
 
-Analyzing and mining multiple medical data sources require considerable computational resources, as they consist of different structures, complex APIs, and gigantic amount of hierarchical data. Consumers of the medical data sources also often bookmark the sub set of their search items and share with them. These bookmarks should be stored as replica sets, in a fault-tolerant manner. 
+The shared pointers should be stored as bookmarks in a fault-tolerant manner, and shared among the users as replica sets. Since data sources have different and often incompatible interfaces, a generic data sharing and synchronization tool will be convenient, for sharing of such replica sets from the data sources. While sharing data is encouraged in science~\cite{szala2006science}, algorithms and architectures should be designed for mashing up and sharing the medical data efficiently. 
  
-In-memory data grids distribute storage and execution over multiple physical nodes, while giving a logically centralized view of a larger resource pool. Hence, they provide a cost-effective and feasible alternative to supercomputers. An in-memory data grid can be an alternative for a traditional storage for the replica sets, as it will provide faster storage, access, and execution. A deployment architecture consists of in-memory key-value stores such as Infinispan for sharing medical images will be scalable and pervasive.
+In-memory data grids distribute storage and execution over multiple physical nodes, while giving a logically centralized view of a larger resource pool. Hence, they provide a cost-effective and feasible alternative to supercomputers. An in-memory data grid can be an alternative for a traditional storage for the replica sets, as it provides faster storage, access, and execution. A deployment architecture consists of in-memory key-value stores such as Infinispan for sharing medical images will be scalable and pervasive.
 
-This paper presents the research and prototype implementations of $MEDIator$, a replication and data synchronization platform, exploiting the in-memory data grid projects, while consuming data sources such as TCIA~\cite{prior2013tcia} via their public APIs. In the remaining of the paper, we will discuss the preliminary background information on $MEDIator$ in section II. Section III discusses solution architecture of $MEDIator$, where Section IV further presents the prototype implementation details of $MEDIator$. Section V closes the paper with conclusions and future work.
+This paper presents the research and prototype implementations of $MEDIator$, a data sharing and synchronization platform, exploiting the in-memory data grid platforms, while consuming data sources such as TCIA~\cite{prior2013tcia} via their public APIs. While $MEDIator$ is designed for medical image archives, the overall design and architecture of the framework can be generalized for any data sources. In the remaining of the paper, we will discuss the preliminary background information on $MEDIator$ in section II. Section III discusses solution architecture of $MEDIator$, where Section IV further presents the prototype implementation details of $MEDIator$. Section V closes the paper with conclusions and future work.
 
 %
 \section{Background and Related Work}
 %\subsection{Medical Image Archives}
 %\paragraph*{\textbf{Medical Image Archives}}
-
-Medical image archives often follow a well-defined hierarchy of images with different granularity. TCIA public API provides methods to retrieve the images and meta data of different granularity~\cite{prior2013tcia}, as shown by Figure~\ref{fig:methods}. These methods are invoked by the public APIs such as the REST API. An initial search on TCIA may contain parameters such as modality, in addition to collection name, patient ID, study instance ID, and series instance UID. Each of the searches in TCIA returns the output in a finer granularity.
+Medical images are stored in specific data sources such as TCIA that defines a schema for the metadata, or can be stored in a general-purpose data source such as Amazon S3, with user-enforced schema. TCIA public API provides methods to retrieve the images and metadata of different granularity~\cite{prior2013tcia}, as shown by Figure~\ref{fig:methods}. These methods are invoked by the public APIs such as the REST API. An initial search on TCIA may contain parameters such as modality, in addition to collection name, patient ID, study instance ID, and series instance UID. Each of the searches in TCIA returns the output in a finer granularity.
 
 \begin{figure}[!h]
 	\begin{center}
@@ -97,17 +96,14 @@ Medical image archives often follow a well-defined hierarchy of images with diff
 		\vspace{-10pt}
 		
 	\end{center}
-	\caption{Retrieving images and meta data in TCIA}
+	\caption{Retrieving images and metadata in TCIA}
 	\label{fig:methods}
 	\vspace{-15pt}
 \end{figure}
 
 
-\paragraph*{\textbf{In-Memory Data Grids}}
-In-memory data grids are extensively used in industry and academia, to provide a scalable memory and execution platform. Infinispan~\cite{marchioni2012infinispan} and Hazelcast~\cite{hazelcast} are two commonly used open source in-memory data grids. Infinispan is a Java in-memory NoSQL store with implementations of distributed executor framework and MapReduce, which also has an Android version. 
-
-\paragraph*{\textbf{Data Access and Integration}}
-OGSA-DAI is a middleware platform that provides seamless integration and access to heterogeneous data sources~\cite{antonioletti2005design}. WS-DAI family of specifications provide a data access integration for web services~\cite{antonioletti2006ws}. While there are generic data sources integration platforms, a compact platform for medical image archives to share content across multiple users with light-weight pointers without actually duplicating the original content is still lacking.
+\paragraph*{\textbf{Data Grids and Access Integration Platforms}}
+Infinispan~\cite{marchioni2012infinispan} and Hazelcast~\cite{hazelcast} are two commonly used open source in-memory data grids, which are leveraged as scalable memory and execution platforms. Infinispan is a Java in-memory NoSQL store with implementations of distributed executor framework and MapReduce, which also has an Android version. OGSA-DAI is a middleware platform that provides seamless integration and access to heterogeneous data sources~\cite{antonioletti2005design}. WS-DAI family of specifications provide a data access integration for web services~\cite{antonioletti2006ws}. While there are generic data sources integration platforms, a compact platform for medical image archives to share content across multiple users with light-weight pointers without actually duplicating the original content is still lacking.
 
 
 \section{Solution Architecture}
@@ -126,24 +122,26 @@ Multiple nodes running Infinispan are leveraged and configured to create a clust
 	\vspace{-18pt}
 \end{figure}
 
-When the user performs searches for the images, series, collections, and the other meta data, the results will be returned to the user, and the user can chose a subset of the returned results to create and store a replica set in  the Infinispan maps. A search query may contain different parameters that can define the scope of the search and the outcomes, and often return the outputs in a finer granularity. $MEDIator$ lets the users to create, update, retrieve, and delete replica sets, and share the replica sets with others.
+When the user performs searches for the images, series, collections, and the other metadata, the results will be returned to the user, and the user can chose a subset of the returned results to create and store a replica set in  the Infinispan maps. A search query may contain different parameters that can define the scope of the search and the outcomes, and often return the outputs in a finer granularity. $MEDIator$ lets the users to create, update, retrieve, and delete replica sets, and share the replica sets with others.
 
 When a sub set of such information is chosen and stored as a replica set, it is sufficient to store the unique identifiers of the matching data units of finer granularity than the original search query, as it would be sufficient to reproduce the data that is represented by the replica set. Hence, when using TCIA as the data source, storing an array of patient ID would be sufficient to identify the selected sub set of the collection including the array of patients. Similarly an array of study instance UID is sufficient to represent the selected sub set of any patient, and an array of series instance UID is sufficient to represent the selected sub set of any study, as it will contain an array of series. Hence $MEDIator$ stores the relevant IDs for the respective replica sets.
 
-\subsection{Public APIs}
-$MEDIator$ consists of 3 APIs, to be able to connect to specific data source, to integrate multiple data sources and meta data into the system, and to create replica sets for the data sources. Integrating with the data sources for data retrieval is done by $InterfaceAPI$, which is often provided by the remote data sources, as a mean to query and retrieve the raw data. Methods for RESTful invocations are designed for each of the interfaces defining the APIs. Methods that are defined in the interfaces should be implemented by the classes that implement these interfaces. 
+\subsection{$MEDIator$ APIs}
+$MEDIator$ consists of 3 public APIs, to be able to connect to specific data source, to integrate multiple data sources and metadata into the system, and to create replica sets for the data sources. 
+\begin{itemize}
+	\item $InterfaceAPI$: Integrates with the data sources for data retrieval, which is often provided by the remote data sources, as a mean to query and retrieve the raw data. Methods for RESTful invocations are designed for each of the interfaces defining the APIs. Methods that are defined in the interfaces should be implemented by the classes that implement these interfaces. 
+	\item $PubConsAPI$: Manages replica sets for each specific data source.    		
+	\item $Integrator$: Integrates multiple heterogeneous data sources into $MEDIator$ and provides a meta map and maps for each of the data sources to access the relevant information for each of the entry in a coarse granularity. $PubConsAPI$ and $Integrator$ provide replica set management.
+\end{itemize}
 
-$PubConsAPI$ and $Integrator$ provide replica set management. $Integrator$ integrates multiple heterogeneous data sources into $MEDIator$ and provides a meta map and maps for each of the data sources to access the relevant information for each of the entry in a coarse granularity. $PubConsAPI$ manages replica sets for each specific data source.  
-%$InterfaceAPI$ provides data retrieval from the data source.
 
-\paragraph*{DataProSpecs - PubConsAPI}
-$DataProSpecs$ extends $PubConsAPI$ to design and implement the logic of replica sets management. The methods of $DataProSpecs$ can be invoked by knowing the respective ID of the replica set and the user ID of the user who owns the replica set. User ID is an identifier such as a user name or a `secret' or pass from the user. user IDs serve as the keys of the userReplicasMap. 
+$DataProSpecs$ extends $PubConsAPI$ to design and implement the logic of replica sets management. The methods of $DataProSpecs$ can be invoked by knowing the respective ID of the replica set and the user ID of the user who owns the replica set. UserID is an identifier such as a user name or a `secret key' from the user. ReplicaSetID is a large number that can be randomly generated. UserID serves as the key of the userReplicasMap, where replicaSetID serve as the key for the replica sets maps.
 
-$createReplicaSet()$ requires the userID along with the elements to be stored in the replica set. It returns the $replicaSetID$, which is further used to uniquely identify the replica set. $getReplicaSet()$ requires only the relevant $replicaSetID$ to return the respective replica set. Similarly, $updateReplicaSet()$ requires $replicaSetID$ as well as the elements to be stored in the $replicaSet$, replacing the previous elements. $deleteReplicaSet()$ requires both the $userID$ and $replicaSetID$. Similarly, $duplicateReplicaSet()$ requires both $replicaSetID$ and the userID of the user to whom the replicaSet is shared to. Creating, deleting, and duplicating a replication set requires modification to the user replicas map, which holds the list of the replica sets for the particular user. Hence the necessity to input the userID. ReplicaSetID is a large number that can be randomly generated.
+$createReplicaSet()$ requires the userID along with the elements to be stored in the replica set. It returns the $replicaSetID$, which is further used to uniquely identify the replica set. $getReplicaSet()$ requires only the relevant $replicaSetID$ to return the respective replica set. Similarly, $updateReplicaSet()$ requires $replicaSetID$ as well as the elements to be stored in the $replicaSet$, replacing the previous elements. $deleteReplicaSet()$ requires both the $userID$ and $replicaSetID$. Similarly, $duplicateReplicaSet()$ requires both $replicaSetID$ and the userID of the user to whom the replicaSet is shared to. Creating, deleting, and duplicating a replication set requires modification to the user replicas map, which holds the list of the replica sets for the particular user, making it necessary to input the userID.
 %It can be safely assumed to be harder to guess. Hence, this model is assumed to provide adequate security for this prototype.
-
-\subsection{Integration with Data Sources}
-Clinical data is deployed in multiple data sources such as TCIA, caMicroscope, and Amazon S3. Figure~\ref{fig:dsdeployment} depicts the deployment of the system with multiple data sources. A set of clinical data was uploaded to S3, where the meta data mapping of patientID \ding{213} fileName was available as a CSV file. Similarly CSV file depicting clinical information is available, as multiple properties against the UUID, such as patient ID. These files are parsed and stored into meta data maps in Infinispan. The CSV files containing meta data or $resource ID \ding{213} fileName$ mapping are stored locally in the file system or in a remote repository.
+	\vspace{-5pt}
+\subsection{Integration with Medical Data Sources}
+Clinical data is deployed in multiple data sources such as TCIA, caMicroscope, and Amazon S3. Figure~\ref{fig:dsdeployment} depicts the deployment of the system with multiple medical data sources. A set of clinical data was uploaded to S3, where the metadata mapping of patientID \ding{213} fileName was available as a CSV file. Similarly CSV file depicting clinical information is available, as multiple properties against the UUID, such as patient ID. These files are parsed and stored into metadata maps in Infinispan. The CSV files containing metadata or $resource ID \ding{213} fileName$ mapping are stored locally in the file system or in a remote repository.
 \begin{figure}[!htbp]
 	\begin{center}
 		\resizebox{\columnwidth}{!}{
@@ -158,29 +156,27 @@ Clinical data is deployed in multiple data sources such as TCIA, caMicroscope, a
 
 Each data source is connected to $MEDIator$ by implementing a class that extends Integrator interface. $DatasourcesIntegrator$, an abstract class provides the common features for the data sources integration. It is extended by $CsvIntegrator$, $CaMicIntegrator$, $S3Integrator$, and $TciaIntegrator$ which respectively function as the integrators for $CSV$, $caMicroscope$, $Amazon S3$, and $TCIA$. $MetaDataLoader$ loads the CSV files and stores them into Infinispan maps, against the ID, such as the patient ID. 
 
-A sub class of $InfDataAccessIntegration$, $DSInfDai$ holds the instances of map to store all the meta data. $DSIntegratorInitiator$ invokes the instances of $DSInfDai$, $MetaDataLoader$ and the other respective classes to parse the meta data, and store the instances into the respective maps. 
+A sub class of $InfDataAccessIntegration$, $DSInfDai$ holds the instances of map to store all the metadata. $DSIntegratorInitiator$ invokes the instances of $DSInfDai$ and $MetaDataLoader$ to parse the metadata, and store the instances into the respective maps. 
 
-\subsection{$MEDIator$ Data Structures}
+\subsection{$MEDIator$ Representation of Medical Image Sources}
 Infinispan distributed cache instances are created in $InfDataAccessIntegration$ as the data structures to hold the replica sets for each of the users. $userReplicasMap$ provides a mapping of userIdentifier \ding{213} array of replicaSetIDs. Hence, $userReplicasMap$ provide a listing of all the replica sets for the given user. replicaSetsMap is a mapping of replicaSetID \ding{213} replicaSet. A meta map provides a  mapping of replica set ID against a boolean array. The boolean value is set to true if the data source represented by the index of the boolean element in the array is available in the considered replica set.
 
 \vspace{-15pt}
 \begin{lstlisting}  
 protected static Cache<String, Boolean[]> metaMap; /*csv, ca, tcia, s3*/
 \end{lstlisting} 
+\vspace{-7pt}
 
+The $metaMap$ stores a binary array against each of the key (such as, patientID) to point the existence of metadata in the data sources defined. Further, meta maps such as $tciaMetaMap$, $csvMetaMap$, $s3MetaMap$, and $caMetaMap$ are defined for each data source, against the replica set ID. $s3MetaMap$ provides the file name for the respective ID, which can be used to find the location of the file as it follows the pattern of of $S3\_BASE\_URL + folderName + ``/'' + fileName$. Similarly, $caMetaMap$ stores the URL that the respective object is stored. $csvMetaMap$ contains the metadata loaded from the CSV files against the respective ID. $tciaMetaMap$ stores a boolean array against the replica set ID, where a $true$ for the array element in the map indicates that a metadata with specific granularity is stored in the replica set.
 
-The $metaMap$ stores a binary array against each of the key (such as, patientID) to point the existence of meta data in the data sources defined. Further, meta maps such as $tciaMetaMap$, $csvMetaMap$, $s3MetaMap$, and $caMetaMap$ are defined for each data source, against the replica set ID. $s3MetaMap$ provides the file name for the respective ID, which can be used to find the location of the file as it follows the pattern of of $S3\_BASE\_URL + folderName + ``/'' + fileName$. Similarly, $caMetaMap$ stores the URL that the respective object is stored. $csvMetaMap$ contains the meta data loaded from the CSV files against the respective ID. $tciaMetaMap$ stores a boolean array against the replica set ID, where a $true$ for the array element in the map indicates that a meta data with specific granularity is stored in the replica set.
+Methods for updating, creating, and deleting metadata from these maps are available where creating or deleting metadata will update the availability to true/false for the respective index in the $metaMap$. $XXX\_META\_POSITION$ defines the position in the metaMap, where XXX stands for data sources such as CSV, CA, TCIA, and S3. Updating the existence will flop the respective boolean value for the entry. The $metaMap$ ensures easy indexing, and helps to search which of the data sources contain the respective information for any given key, such as a given patient ID. Data sources with a hierarchy such as $TCIA$ follow the same model, with a boolean array stored against each replica set ID at the top level.
 
-Methods for updating, creating, and deleting meta data from these maps are available where creating or deleting meta data will update the availability to true/false for the respective index in the $metaMap$. $XXX\_META\_POSITION$ defines the position in the metaMap, where XXX stands for data sources such as CSV, CA, TCIA, and S3. Updating the existence will flop the respective boolean value for the entry. The $metaMap$ ensures easy indexing, and helps to search which of the data sources contain the respective information for any given key, such as a given patient ID. Data sources with a hierarchy such as $TCIA$ follow the same model, with a boolean array stored against each replica set ID at the top level.
+%\paragraph*{\textbf{multi-tenancy}}
+$MEDIator$ is multi-tenanted where multiple users co-exist without the knowledge of existence of the other users, sharing the same cache space. Involving a time stamp for the class extending $PubConsAPI$, downloaded items can be tracked, and the diffs can be produced for the user download. Thus a download can be paused and resumed later, downloading the images that have not been downloaded yet.
 
-\paragraph*{\textbf{multi-tenancy}}
-$MEDIator$ is multi-tenanted, and it is aware of the multiple tenants or users using the system. All the users co-exist without the knowledge of existence of the other users, sharing the same cache space. 
-
-\paragraph*{\textbf{Access Logging}}
-Involving a time stamp for the class extending $PubConsAPI$, downloaded items can be tracked, and the diffs can be produced for the user download. Hence, a download can be paused and resumed later, downloading the images that have not been downloaded yet.
-
-\paragraph*{\textbf{Security}}
-$MEDIator$ can be further secured with user authentication. SAML tokens can be created for user names and passwords with the membership information, which can be validated later. This is designed as an Integrator for the Single Sign-on (SSO), as it involves multiple data sources. A create and validate API with user stores such as LDAP or OpenID should be designed and implemented, extending $MEDIator$.
+%\paragraph*{\textbf{Access Logging}}
+%\paragraph*{\textbf{Security}}
+$MEDIator$ can be secured with user authentication. SAML tokens can be created for user names and passwords with the membership information, which can be validated later. This is designed as an Integrator for the Single Sign-on (SSO), as it involves multiple data sources. A create and validate API with user stores such as LDAP or OpenID should be designed and implemented, extending $MEDIator$.
 
 \subsection{Software Architecture}
 Figure~\ref{fig:arch} depicts the architecture of $MEDIator$. Dependencies are used unmodified. Apache HTTP Client and Mashape Unirest are configured and leveraged by the $InterfaceAPI$, to query and retrieve the raw data from the data sources. Infinispan, as the core dependency, is configured and exploited as the shared storage and distributed execution medium. Presentation layer dependencies such as Embedded Tomcat, Apache Velocity, and Log4j2 facilitate prototype application development with web pages, and configurable logging.
@@ -203,25 +199,22 @@ Data sources access layer consists of means of accessing the data sources, such 
 		
 	\end{figure}
 	
-Replica sets management is handled by both $Integrator$ and $PubConsAPI$ interfaces. If multiple data sources should be managed consecutively, having maps pointing to meta data from heterogeneous sources, $Integrator$ interface should be implemented in a class with the respective distributed maps to hold the meta data. If a single data source is involved with a fine grain control over a data source, it is sufficient only to extend and implement $PubConsAPI$. $InterfaceAPI$ integrates the data sources with $MEDIator$, such that the relevant data can be queried, manipulated, and downloaded. $InterfaceAPI$ is implemented by the respective class for each data source.
+Replica sets management is handled by both $Integrator$ and $PubConsAPI$ interfaces. If multiple data sources should be managed consecutively, having maps pointing to metadata from heterogeneous sources, $Integrator$ interface should be implemented in a class with the respective distributed maps to hold the metadata. If a single data source is involved with a fine grain control over a data source, it is sufficient only to extend and implement $PubConsAPI$. $InterfaceAPI$ integrates the data sources with $MEDIator$, such that the relevant data can be queried, manipulated, and downloaded. $InterfaceAPI$ is implemented by the respective class for each data source.
 
 %$getRawData(String key)$ method should be implemented in the classes implementing the $PubConsAPI$ and $Integrator$ interfaces to be able to download the raw data from the data sources such as TCIA, caMicroscope, or S3, for the given replica set, potentially using Java web start.
 
-\section{Implementation}
-A prototype web application was built with $MEDIator$ architecture for cancer image archives. Apache Tomcat (Embedded) was integrated into the program such that it will get the user inputs from the HTML pages and present the output in pages formatted by Apache Velocity Templates. Respective servlets were created to receive the inputs from HTML pages to the backend Java code.
+\section{Implementation: $MEDIator$ for TCIA}
+Different complex data sources require custom development extending the generic framework and core $MEDIator$ architecture, as creating and customizing replica sets require a more specific data structure. A prototype $MEDIator$ web application was built for TCIA, with Apache Tomcat (Embedded) to get the user inputs from the HTML pages and present the output in pages formatted by Apache Velocity Templates. Respective servlets were created to receive the inputs from HTML pages to the backend Java code.
+ 
+$InterfaceManager$ implements the $InterfaceAPI$ for the interface between the data source and $MEDIator$. Invoker classes such as $TciaInvoker$ extending the abstract class $InterfaceManager$, integrate the data sources. Metadata such as collections, patients, studies, and series are retrieved at different levels, though the default download manager of TCIA downloads the data in series level, composed of the images of the series in a single zip archive. 
 
-\paragraph*{\textbf{TCIA Integration Implementation}}
-Different complex data sources require custom development extending the generic framework and core class hierarchy, as creating and customizing the replica set require a more specific data structure. $InterfaceManager$ implements the $InterfaceAPI$ for the interface between the data source and $MEDIator$. Invoker classes such as $TciaInvoker$ extending the abstract class $InterfaceManager$, integrate the data sources.
-
-Meta data such as collections, patients, studies, and series are retrieved at different levels, though the default download manager of TCIA downloads the data in series level, composed of the images of the series in a single zip archive. While having the default userReplicasMap to contain the IDs of the replica sets for each user, the replica set itself is stored in multiple maps instead of a single replicaSets map, to provide an efficient storage and access. $DataProSpecs$ extends the $InfDataAccessIntegration$ class. 
-
-4 maps store the meta data for each replica set against its ID, in different granularity - collections, patients, studies, and series, along with a meta map that points to the 4 maps. 
-\vspace{-25pt}
+While having the default userReplicasMap to contain the IDs of the replica sets for each user, the replica set itself is stored in multiple maps instead of a single replicaSets map, to provide an efficient storage and access. $DataProSpecs$ extends the $InfDataAccessIntegration$ class. 4 maps store the metadata for each replica set against its ID, in different granularity - collections, patients, studies, and series, along with a meta map that points to the 4 maps. 
+\vspace{-20pt}
 \begin{lstlisting}  
 protected static Cache<String, Boolean[]> tciaMetaMap;  /*collections, patients, studies, series*/
 \end{lstlisting} 
-\vspace{-9pt}
-Each of the 4 maps stores the respective IDs of the meta data as the value against the replicaSetID. $tciaMetaMap$ contains a boolean array of length 4, which reflects which of the granularity of meta data is selected as a whole. A $true$ value indicates the existence of replica set entry in the respective map. For TCIA, if a few collections are selected, the first element of the array is set to true, and similarly patients, studies, and series are defined by the other 3 elements.
+\vspace{-7pt}
+Each of the 4 maps stores the respective IDs of the metadata as the value against the replicaSetID. $tciaMetaMap$ contains a boolean array of length 4, which reflects which of the granularity of metadata is selected as a whole. A $true$ value indicates the existence of replica set entry in the respective map. For TCIA, if a few collections are selected, the first element of the array is set to true, and similarly patients, studies, and series are defined by the other 3 elements.
 
 The name of the collections, patientID, studyInstanceUID, and seriesInstanceUID are stored against the respective replicaSetID in collectionsMap, patientsMap, studiesMap, and seriesMap. Changes are done at the respective maps. Duplicating the replicaSets duplicate the contents of the entire row to a new replicaSetID. Similarly, deleting a replicaSet deletes the respective information from all the maps. 
 
@@ -231,27 +224,29 @@ The name of the collections, patientID, studyInstanceUID, and seriesInstanceUID 
 \section{Conclusion}
 \balance
 
-$MEDIator$ is a platform providing an ubiquitous access to medical meta data from the image archives, while providing fault tolerance and load balancing, leveraging the distributed shared memory platforms. A prototype has been implemented with multiple data sources containing cancer images, with Infinispan as the in-memory data store. Consumers download the data by searching the image repository using the browser. The information that the consumer is interested in, gets updated whenever the data producers update or add patient information. Further improvements to $MEDIator$ should enable automated downloads to the consumers. While $MEDIator$ focuses on medical image archives, the design can also be implemented for any other complex data types with an index to query and structure them as replica sets.
+$MEDIator$ is a platform providing an ubiquitous access to medical metadata from the image archives, while providing fault tolerance and load balancing, leveraging the distributed shared memory platforms. A prototype has been implemented with multiple data sources containing cancer images, with Infinispan as the in-memory data store. Consumers download the data by searching the image repository using the browser. The information that the consumer is interested in, gets updated whenever the data producers update or add patient information. Further improvements to $MEDIator$ should enable automated downloads to the consumers. While $MEDIator$ focuses on medical image archives, the design can also be implemented for any other complex data types with an index to query and structure them as replica sets.
 
 
 %\small{ \paragraph*{\textbf{Acknowledgments}} This work was partially supported by the Google Summer of Code 2014 project, under the mentoring organization \textit{Biomedical Informatics, Emory University}.}
 
 \begin{thebibliography}{99}
-	\scriptsize{
+%	\scriptsize{
 		
 		\bibitem{szala2006science} A. Szalay and J. Gray, 2020 Computing: Science in an exponential world, {\em Nature, vol. 440}, pp. 413-414, 2006.
 		
 		\bibitem{prior2013tcia} Prior, F. W., Clark, K., Commean, P., Freymann, J., Jaffe, C., Kirby, J., ... \& Marquez, G. (2013, July). TCIA: an information resource to enable open science. In {\em Engineering in Medicine and Biology Society (EMBC), 2013 35th Annual International Conference of the IEEE} (pp. 1282-1285). IEEE.
 				
-		\bibitem{marchioni2012infinispan} Marchioni, F. (2012). Infinispan data grid platform. Packt Publishing Ltd.
+		\bibitem{marchioni2012infinispan} Marchioni, F. (2012). Infinispan data grid platform. Packt Publishing.
+		%\bibitem{marchioni2012infinispan} Marchioni, F. (2012). Infinispan data grid platform. Packt Publishing Ltd.
 				
-		\bibitem{hazelcast} Johns, M. (2013). {\em Getting Started with Hazelcast}. Packt Publishing Ltd.
-		
+		\bibitem{hazelcast} Johns, M. (2013). {\em Getting Started with Hazelcast}. Packt Publishing.
+		%\bibitem{hazelcast} Johns, M. (2013). {\em Getting Started with Hazelcast}. Packt Publishing Ltd.
+						
 		\bibitem{antonioletti2005design} Antonioletti, M., Atkinson, M., Baxter, R., Borley, A., Chue Hong, N. P., Collins, B., ... \& Westhead, M. (2005). The design and implementation of Grid database services in OGSA-DAI. {\em  Concurrency and Computation: Practice and Experience, 17} (2-4), 357-376.
 		
 		\bibitem{antonioletti2006ws} Antonioletti, M., Krause, A., Paton, N. W., Eisenberg, A., Laws, S., Malaika, S., ... \& Pearson, D. (2006). The WS-DAI family of specifications for web service data access and integration. {\em ACM SIGMOD Record}, 35(1), 48-55.
 		
-	}
+%	}
 \end{thebibliography}
 
 \end{document}
