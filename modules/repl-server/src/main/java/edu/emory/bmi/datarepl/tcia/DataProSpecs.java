@@ -369,7 +369,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
      * PUT /putMetaMap
      *
      * @param replicaSetId, the id of the replica set.
-     * @param metadata,     boolean array of meta data
+     * @param metadata,     String array of meta data
      * @return replicaSetId: Long
      */
     public long putCollectionSet(long replicaSetId, String[] metadata) {
@@ -381,7 +381,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
      * PUT /putMetaMap
      *
      * @param replicaSetId, the id of the replica set.
-     * @param metadata,     boolean array of meta data
+     * @param metadata,     String array of meta data
      * @return replicaSetId: Long
      */
     public long putPatientSet(long replicaSetId, String[] metadata) {
@@ -393,7 +393,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
      * PUT /putMetaMap
      *
      * @param replicaSetId, the id of the replica set.
-     * @param metadata,     boolean array of meta data
+     * @param metadata,     String array of meta data
      * @return replicaSetId: Long
      */
     public long putStudiesSet(long replicaSetId, String[] metadata) {
@@ -405,7 +405,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
      * PUT /putMetaMap
      *
      * @param replicaSetId, the id of the replica set.
-     * @param metadata,     boolean array of meta data
+     * @param metadata,     String array of meta data
      * @return replicaSetId: Long
      */
     public long putSeriesSet(long replicaSetId, String[] metadata) {
