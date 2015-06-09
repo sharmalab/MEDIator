@@ -366,7 +366,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
     }
 
     /**
-     * PUT /putMetaMap
+     * PUT /putCollectionSet
      *
      * @param replicaSetId, the id of the replica set.
      * @param metadata,     String array of meta data
@@ -378,7 +378,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
     }
 
     /**
-     * PUT /putMetaMap
+     * PUT /putPatientSet
      *
      * @param replicaSetId, the id of the replica set.
      * @param metadata,     String array of meta data
@@ -390,7 +390,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
     }
 
     /**
-     * PUT /putMetaMap
+     * PUT /putStudiesSet
      *
      * @param replicaSetId, the id of the replica set.
      * @param metadata,     String array of meta data
@@ -402,7 +402,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
     }
 
     /**
-     * PUT /putMetaMap
+     * PUT /putSeriesSet
      *
      * @param replicaSetId, the id of the replica set.
      * @param metadata,     String array of meta data
@@ -414,7 +414,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
     }
 
     /**
-     * GET /getReplicaSet
+     * GET /getMetaMap
      *
      * @param replicaSetId, long
      * @return replicaSet:String
@@ -424,7 +424,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
     }
 
     /**
-     * GET /getReplicaSet
+     * GET /getCollectionsSet
      *
      * @param replicaSetId, long
      * @return replicaSet:String
@@ -434,7 +434,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
     }
 
     /**
-     * GET /getReplicaSet
+     * GET /getPatientsSet
      *
      * @param replicaSetId, long
      * @return replicaSet:String
@@ -444,7 +444,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
     }
 
     /**
-     * GET /getReplicaSet
+     * GET /getStudiesSet
      *
      * @param replicaSetId, long
      * @return replicaSet:String
@@ -454,7 +454,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
     }
 
     /**
-     * GET /getReplicaSet
+     * GET /getSeriesSet
      *
      * @param replicaSetId, long
      * @return replicaSet:String
