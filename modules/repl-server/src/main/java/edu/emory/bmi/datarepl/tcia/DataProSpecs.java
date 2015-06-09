@@ -355,6 +355,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
 
     /**
      * PUT /putMetaMap
+     * Puts the MetaData array for the given replicaSetID into the MetaMap.
      *
      * @param replicaSetId, the id of the replica set.
      * @param metadata,     boolean array of meta data
@@ -367,6 +368,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
 
     /**
      * PUT /putCollectionSet
+     * Puts the array of collection names for the given replicaSetID into the CollectionsMap.
      *
      * @param replicaSetId, the id of the replica set.
      * @param metadata,     String array of collection names
@@ -379,6 +381,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
 
     /**
      * PUT /putPatientSet
+     * Puts the array of patientIDs into the patientsMap.
      *
      * @param replicaSetId, the id of the replica set.
      * @param metadata,     String array of patient IDs.
@@ -391,6 +394,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
 
     /**
      * PUT /putStudiesSet
+     * Puts the array of StudiesIDs into the studiesMap.
      *
      * @param replicaSetId, the id of the replica set.
      * @param metadata,     String array of studyInstanceUIDs.
@@ -403,6 +407,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
 
     /**
      * PUT /putSeriesSet
+     * Puts the array of SeriesIDs into the seriesMap.
      *
      * @param replicaSetId, the id of the replica set.
      * @param metadata,     String array of seriesInstanceUIDs
@@ -415,6 +420,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
 
     /**
      * GET /getMetaMap
+     * Gets the meta map entry of the given replicaSetID.
      *
      * @param replicaSetId, long
      * @return replicaSet:Boolean[]
@@ -425,6 +431,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
 
     /**
      * GET /getCollectionsSet
+     * Gets the array of collection names for the given replicaSetID.
      *
      * @param replicaSetId, long
      * @return replicaSet:String[] - Array of Collection Names.
@@ -435,6 +442,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
 
     /**
      * GET /getPatientsSet
+     * Gets the array of patientIDs for the given replicaSetID.
      *
      * @param replicaSetId, long
      * @return replicaSet:String[] - Array of Patient IDs.
@@ -445,6 +453,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
 
     /**
      * GET /getStudiesSet
+     * Gets the array of studyInstanceIDs for the given replicaSetID.
      *
      * @param replicaSetId, long
      * @return replicaSet:String[] - Array of StudyInstance IDs.
@@ -455,6 +464,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
 
     /**
      * GET /getSeriesSet
+     * Gets the array of seriesIDs for the given replicaSetID.
      *
      * @param replicaSetId, long
      * @return replicaSet:String[] - Array of SeriesInstance IDs.
