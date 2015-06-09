@@ -369,7 +369,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
      * PUT /putCollectionSet
      *
      * @param replicaSetId, the id of the replica set.
-     * @param metadata,     String array of meta data
+     * @param metadata,     String array of collection names
      * @return replicaSetId: Long
      */
     public long putCollectionSet(long replicaSetId, String[] metadata) {
@@ -381,7 +381,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
      * PUT /putPatientSet
      *
      * @param replicaSetId, the id of the replica set.
-     * @param metadata,     String array of meta data
+     * @param metadata,     String array of patient IDs.
      * @return replicaSetId: Long
      */
     public long putPatientSet(long replicaSetId, String[] metadata) {
@@ -393,7 +393,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
      * PUT /putStudiesSet
      *
      * @param replicaSetId, the id of the replica set.
-     * @param metadata,     String array of meta data
+     * @param metadata,     String array of studyInstanceUIDs.
      * @return replicaSetId: Long
      */
     public long putStudiesSet(long replicaSetId, String[] metadata) {
@@ -405,7 +405,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
      * PUT /putSeriesSet
      *
      * @param replicaSetId, the id of the replica set.
-     * @param metadata,     String array of meta data
+     * @param metadata,     String array of seriesInstanceUIDs
      * @return replicaSetId: Long
      */
     public long putSeriesSet(long replicaSetId, String[] metadata) {
@@ -417,7 +417,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
      * GET /getMetaMap
      *
      * @param replicaSetId, long
-     * @return replicaSet:String
+     * @return replicaSet:Boolean[]
      */
     public Boolean[] getMetaMap(long replicaSetId) {
         return tciaMetaMap.get(replicaSetId);
@@ -427,7 +427,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
      * GET /getCollectionsSet
      *
      * @param replicaSetId, long
-     * @return replicaSet:String
+     * @return replicaSet:String[] - Array of Collection Names.
      */
     public String[] getCollectionsSet(long replicaSetId) {
         return collectionsMap.get(replicaSetId);
@@ -437,7 +437,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
      * GET /getPatientsSet
      *
      * @param replicaSetId, long
-     * @return replicaSet:String
+     * @return replicaSet:String[] - Array of Patient IDs.
      */
     public String[] getPatientsSet(long replicaSetId) {
         return patientsMap.get(replicaSetId);
@@ -447,7 +447,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
      * GET /getStudiesSet
      *
      * @param replicaSetId, long
-     * @return replicaSet:String
+     * @return replicaSet:String[] - Array of StudyInstance IDs.
      */
     public String[] getStudiesSet(long replicaSetId) {
         return studiesMap.get(replicaSetId);
@@ -457,7 +457,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
      * GET /getSeriesSet
      *
      * @param replicaSetId, long
-     * @return replicaSet:String
+     * @return replicaSet:String[] - Array of SeriesInstance IDs.
      */
     public String[] getSeriesSet(long replicaSetId) {
         return seriesMap.get(replicaSetId);
