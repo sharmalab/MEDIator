@@ -21,7 +21,7 @@ import org.junit.Test;
  */
 public class TestTCIAClient {
 
-    private static String baseUrl = "https://services.cancerimagingarchive.net/services/TCIA/TCIA/query"; // Base URL of the service
+    private static String baseUrl = TCIAConstants.BASE_URL; // Base URL of the service
     private static String apiKey = TCIAConstants.API_KEY;
 
     /**

@@ -47,6 +47,16 @@ git clone https://pradeeban@bitbucket.org/BMI/datareplicationsystem.git
 
 cd datareplicationsystem
 
-mvn clean install -DskipTests
 
+Execute the MEDIator web app
+----------------------------
+mvn package
+
+sh modules/repl-server/target/bin/webapp
+
+
+Execute with multiple data sources
+-----------------------------------
 java -classpath lib/repl-server-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.datarepl.ds_impl.DSIntegratorInitiator
+
+
