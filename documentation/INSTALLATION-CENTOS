@@ -38,3 +38,15 @@ export PATH=${M2_HOME}/bin:${PATH}
 Install git
 ------------
 sudo yum install git
+
+
+
+Configure MEDIator
+------------------
+git clone https://pradeeban@bitbucket.org/BMI/datareplicationsystem.git
+
+cd datareplicationsystem
+
+mvn clean install -DskipTests
+
+java -classpath lib/repl-server-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.datarepl.ds_impl.DSIntegratorInitiator
