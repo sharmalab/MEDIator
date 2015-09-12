@@ -54,6 +54,11 @@ mvn package
 
 sh modules/repl-server/target/bin/webapp
 
+with nohup
+nohup sh modules/repl-server/target/bin/webapp > nohup.out &
+
+To view the logs
+tail -f nohup.out
 
 Go to http://localhost:9090/ using your browser.
 
