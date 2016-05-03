@@ -1,6 +1,6 @@
 # Project Overview
 
-Welcome to the wiki of the Data Replication System project!
+Welcome to the wiki of the MEDIator - Data Replication System project!
 
 Please visit the website to learn more - https://bitbucket.org/BMI/datareplicationsystem
 
