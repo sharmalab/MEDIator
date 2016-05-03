@@ -8,17 +8,24 @@ Please visit the website to learn more - https://bitbucket.org/BMI/datareplicati
 ## Providing TCIA API Key.
 Provide your TCIA API Key in TCIAConstants.
 
-    public static String API_KEY = "";
+    public static String API_KEY = "ENTER-YOUR-API-KEY-HERE";
 
 
 ## Building and Executing Using Apache Maven 3.x.x
 Building
 --------
-$ mvn package
+     mvn package
+
+It is expected to have the API_KEY set in the TCIAConstants to build with tests.
+
+If you have not received your API_KEY yet, please build with skipping the tests.
+
+    mvn package -DskipTests
+
 
 Executing
 ---------
-$ sh modules/repl-server/target/bin/webapp
+     sh modules/repl-server/target/bin/webapp
 
 Go to http://localhost:9090/ using your browser to access the Data Replication and Synchronization Tool.
 

@@ -66,10 +66,7 @@ public class TestTCIAClient {
         try {
             // Make the RESTfull call . Response comes back as InputStream.
             ITCIAClient.ImageResult imageResult = client.getImage(seriesInstanceUID);
-            double averageDICOMFileSize = 200 * 1024d; // 200KB
-            double compressionRatio = 0.75; // approx
-            int estimatedFileSize = (int) (averageDICOMFileSize * compressionRatio * imageResult.getImageCount());
-            saveTo(imageResult.getRawData(), seriesInstanceUID + ".zip", ".", estimatedFileSize);
+            saveTo(imageResult.getRawData(), seriesInstanceUID + ".zip", ".");
 
         } catch (TCIAClientException e) {
             fail(e.getMessage()); // request failed
@@ -237,6 +234,25 @@ public class TestTCIAClient {
 
             if (mseconds % 10 == 0) {
                 System.out.println(String.format("Bytes Written %s out of estimated %s  : ", sum, estimatedBytes));
+            }
+        }
+
+        fos.close();
+        in.close();
+    }
+
+    public static void saveTo(InputStream in, String name, String directory) throws IOException {
+        FileOutputStream fos = new FileOutputStream(directory + "/" + name);
+        byte[] buffer = new byte[4096];
+        int read = -1;
+        int sum = 0;
+        while ((read = in.read(buffer)) > 0) {
+            fos.write(buffer, 0, read);
+            long mseconds = System.currentTimeMillis();
+            sum += read;
+
+            if (mseconds % 10 == 0) {
+                System.out.println(String.format("Bytes Written %s", sum));
             }
         }
 

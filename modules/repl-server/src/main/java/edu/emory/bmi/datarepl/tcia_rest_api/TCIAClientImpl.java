@@ -17,8 +17,8 @@ public class TCIAClientImpl implements ITCIAClient {
 
     private final static String API_KEY_FIELD = "api_key";
     private String apiKey;
-    private HttpClient httpClient ;
-    private String baseUrl ;
+    private HttpClient httpClient;
+    private String baseUrl;
     private static String getImage = "getImage";
     private static String getManufacturerValues = "getManufacturerValues";
     private static String getModalityValues = "getModalityValues";
@@ -29,8 +29,7 @@ public class TCIAClientImpl implements ITCIAClient {
     private static String getPatient = "getPatient";
 
 
-    public TCIAClientImpl(String apiKey , String baseUrl)
-    {
+    public TCIAClientImpl(String apiKey, String baseUrl) {
         this.apiKey = apiKey;
         this.baseUrl = baseUrl;
         httpClient = new DefaultHttpClient();
@@ -46,34 +45,32 @@ public class TCIAClientImpl implements ITCIAClient {
                                     String modality, OutputFormat format) throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
-            URIBuilder uriBuilder = new URIBuilder( baseUri.toString() + "/" + getModalityValues);
+            URIBuilder uriBuilder = new URIBuilder(baseUri.toString() + "/" + getModalityValues);
 
-            if(collection!=null)
+            if (collection != null)
                 uriBuilder.addParameter(DICOMAttributes.COLLECTION, collection);
 
-            if(bodyPartExamined!=null)
+            if (bodyPartExamined != null)
                 uriBuilder.addParameter(DICOMAttributes.BODY_PART_EXAMINED, bodyPartExamined);
 
-            if(modality!=null)
+            if (modality != null)
                 uriBuilder.addParameter(DICOMAttributes.MODALITY, modality);
 
             uriBuilder.addParameter("format", format.name());
+            uriBuilder.addParameter(API_KEY_FIELD, apiKey);
 
             URI uri = uriBuilder.build();
             return getString(uri);
 
-        }
-        catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
+        } catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
             throw e;
-        }
-        catch (Exception e) {
-            throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException( e , baseUrl);
+        } catch (Exception e) {
+            throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException(e, baseUrl);
         }
 
     }
 
-    public InputStream getRawData(URI uri) throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException, ClientProtocolException, IOException
-    {
+    public InputStream getRawData(URI uri) throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException, ClientProtocolException, IOException {
 // create a new HttpGet request
         HttpGet request = new HttpGet(uri);
 
@@ -110,28 +107,27 @@ public class TCIAClientImpl implements ITCIAClient {
             throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
-            URIBuilder uriBuilder = new URIBuilder( baseUri.toString() + "/" + getManufacturerValues);
+            URIBuilder uriBuilder = new URIBuilder(baseUri.toString() + "/" + getManufacturerValues);
 
-            if(collection!=null)
+            if (collection != null)
                 uriBuilder.addParameter(DICOMAttributes.COLLECTION, collection);
 
-            if(bodyPartExamined!=null)
+            if (bodyPartExamined != null)
                 uriBuilder.addParameter(DICOMAttributes.BODY_PART_EXAMINED, bodyPartExamined);
 
-            if(modality!=null)
+            if (modality != null)
                 uriBuilder.addParameter(DICOMAttributes.MODALITY, modality);
 
             uriBuilder.addParameter("format", format.name());
+            uriBuilder.addParameter(API_KEY_FIELD, apiKey);
 
             URI uri = uriBuilder.build();
             return getString(uri);
 
-        }
-        catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
+        } catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
             throw e;
-        }
-        catch (Exception e) {
-            throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException( e , baseUrl);
+        } catch (Exception e) {
+            throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException(e, baseUrl);
         }
     }
 
@@ -144,76 +140,76 @@ public class TCIAClientImpl implements ITCIAClient {
             throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
-            URIBuilder uriBuilder = new URIBuilder( baseUri.toString() + "/" + getCollectionValues);
+            URIBuilder uriBuilder = new URIBuilder(baseUri.toString() + "/" + getCollectionValues);
             uriBuilder.addParameter("format", format.name());
+            uriBuilder.addParameter(API_KEY_FIELD, apiKey);
 
             URI uri = uriBuilder.build();
             return getString(uri);
 
-        }
-        catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
+        } catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
             throw e;
-        }
-        catch (Exception e) {
-            throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException( e , baseUrl);
+        } catch (Exception e) {
+            throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException(e, baseUrl);
         }
     }
+
     public String getBodyPartValues(String collection, String bodyPartExamined,
                                     String modality, OutputFormat format) throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
-            URIBuilder uriBuilder = new URIBuilder( baseUri.toString() + "/" + getBodyPartValues);
+            URIBuilder uriBuilder = new URIBuilder(baseUri.toString() + "/" + getBodyPartValues);
 
-            if(collection!=null)
+            if (collection != null)
                 uriBuilder.addParameter(DICOMAttributes.COLLECTION, collection);
 
-            if(bodyPartExamined!=null)
+            if (bodyPartExamined != null)
                 uriBuilder.addParameter(DICOMAttributes.BODY_PART_EXAMINED, bodyPartExamined);
 
-            if(modality!=null)
+            if (modality != null)
                 uriBuilder.addParameter(DICOMAttributes.MODALITY, modality);
 
             uriBuilder.addParameter("format", format.name());
+            uriBuilder.addParameter(API_KEY_FIELD, apiKey);
 
             URI uri = uriBuilder.build();
             return getString(uri);
 
-        }
-        catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
+        } catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
             throw e;
-        }
-        catch (Exception e) {
-            throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException( e , baseUrl);
+        } catch (Exception e) {
+            throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException(e, baseUrl);
         }
 
     }
+
     public String getPatientStudy(String collection, String patientID,
                                   String studyInstanceUID, OutputFormat format)
             throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
-            URIBuilder uriBuilder = new URIBuilder( baseUri.toString() + "/" + getPatientStudy);
+            URIBuilder uriBuilder = new URIBuilder(baseUri.toString() + "/" + getPatientStudy);
 
-            if(collection!=null)
+            if (collection != null)
                 uriBuilder.addParameter(DICOMAttributes.COLLECTION, collection);
 
-            if(patientID!=null)
+            if (patientID != null)
                 uriBuilder.addParameter(DICOMAttributes.PATIENT_ID, patientID);
 
-            if(studyInstanceUID!=null)
+            if (studyInstanceUID != null)
                 uriBuilder.addParameter(DICOMAttributes.STUDY_INSTANCE_UID, studyInstanceUID);
 
             uriBuilder.addParameter("format", format.name());
 
+            uriBuilder.addParameter(API_KEY_FIELD, apiKey);
+
             URI uri = uriBuilder.build();
             return getString(uri);
 
-        }
-        catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
+        } catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
             throw e;
-        }
-        catch (Exception e) {
-            throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException( e , baseUrl);
+        } catch (Exception e) {
+            throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException(e, baseUrl);
         }
     }
 
@@ -222,61 +218,65 @@ public class TCIAClientImpl implements ITCIAClient {
             throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
-            URIBuilder uriBuilder = new URIBuilder( baseUri.toString() + "/" + getSeries);
+            URIBuilder uriBuilder = new URIBuilder(baseUri.toString() + "/" + getSeries);
 
-            if(collection!=null)
+            if (collection != null)
                 uriBuilder.addParameter(DICOMAttributes.COLLECTION, collection);
 
-            if(modality!=null)
+            if (modality != null)
                 uriBuilder.addParameter(DICOMAttributes.MODALITY, modality);
 
-            if(studyInstanceUID!=null)
+            if (studyInstanceUID != null)
                 uriBuilder.addParameter(DICOMAttributes.STUDY_INSTANCE_UID, studyInstanceUID);
 
             uriBuilder.addParameter("format", format.name());
 
+            uriBuilder.addParameter(API_KEY_FIELD, apiKey);
+
             URI uri = uriBuilder.build();
             return getString(uri);
 
-        }
-        catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
+        } catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
             throw e;
-        }
-        catch (Exception e) {
-            throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException( e , baseUrl);
+        } catch (Exception e) {
+            throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException(e, baseUrl);
         }
     }
+
     public String getPatient(String collection, OutputFormat format)
             throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
-            URIBuilder uriBuilder = new URIBuilder( baseUri.toString() + "/" + getPatient);
+            URIBuilder uriBuilder = new URIBuilder(baseUri.toString() + "/" + getPatient);
 
-            if(collection!=null)
+            if (collection != null)
                 uriBuilder.addParameter(DICOMAttributes.COLLECTION, collection);
 
             uriBuilder.addParameter("format", format.name());
 
+            uriBuilder.addParameter(API_KEY_FIELD, apiKey);
+
             URI uri = uriBuilder.build();
             return getString(uri);
 
-        }
-        catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
+        } catch (edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException e) {
             throw e;
-        }
-        catch (Exception e) {
-            throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException( e , baseUrl);
+        } catch (Exception e) {
+            throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException(e, baseUrl);
         }
     }
+
     public ImageResult getImage(String seriesInstanceUID)
             throws edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException {
         try {
             URI baseUri = new URI(baseUrl);
-            URIBuilder uriBuilder = new URIBuilder( baseUri.toString() + "/" + getImage);
+            URIBuilder uriBuilder = new URIBuilder(baseUri.toString() + "/" + getImage);
 
-            if(seriesInstanceUID!=null)
+            if (seriesInstanceUID != null) {
                 uriBuilder.addParameter(DICOMAttributes.SERIES_INSTANCE_UID, seriesInstanceUID);
+            }
 
+            uriBuilder.addParameter(API_KEY_FIELD, apiKey);
 
 
             URI uri = uriBuilder.build();
@@ -310,7 +310,6 @@ public class TCIAClientImpl implements ITCIAClient {
                 if (entity != null && entity.getContent() != null) {
                     ImageResult imageResult = new ImageResult();
                     imageResult.setRawData(entity.getContent());
-                    imageResult.setImageCount(Integer.parseInt(response.getFirstHeader("imageCount").getValue()));
                     return imageResult;
                 } else {
                     throw new edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException(baseUrl, "No Content");

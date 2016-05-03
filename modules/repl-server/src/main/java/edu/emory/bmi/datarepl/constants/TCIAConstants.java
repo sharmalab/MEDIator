@@ -13,16 +13,9 @@ package edu.emory.bmi.datarepl.constants;
  */
 public final class TCIAConstants {
 
-    // Old testing url
-    // https://services-test.cancerimagingarchive.net/services/TCIA/TCIA/query"; // Base URL of the service (Test)
+    public static String BASE_URL = "https://services.cancerimagingarchive.net/services/v4/TCIA/query";
 
-//    Old url
-//    public static String BASE_URL = "https://services.cancerimagingarchive.net/services/TCIA/TCIA/query";
-
-//    New Url
-    public static String BASE_URL = "https://services.cancerimagingarchive.net/services/v3/TCIA/query";
-
-    public static String API_KEY = "7bc5fd7f-0ac8-40b3-a8a7-d06a0cb157c2";
+    public static String API_KEY = "ENTER-YOUR-API-KEY-HERE";
 
     public static String MASHAPE_AUTHORIZATION = "7AErcmPVXcqsOT13K1Ij0bLVYL8RVvZ6";
 
