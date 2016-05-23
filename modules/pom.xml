@@ -72,10 +72,10 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.infinispan</groupId>
-      <artifactId>infinispan-core</artifactId>
-    </dependency>
+      <dependency>
+          <groupId>org.infinispan</groupId>
+          <artifactId>infinispan-embedded</artifactId>
+      </dependency>
       <dependency>
           <groupId>org.apache.httpcomponents</groupId>
           <artifactId>httpclient</artifactId>

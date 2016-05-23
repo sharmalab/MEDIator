@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <infinispan>
-    <global>
-        <transport>
-            <properties>
-                <property name="configurationFile" value="conf/jgroups-udp-config.xml"/>
-            </properties>
-        </transport>
-    </global>
-    <namedCache name="transactional">
-        <transaction transactionMode="TRANSACTIONAL"/>
-        <clustering mode="distribution">
-            <sync/>
-        </clustering>
-    </namedCache>
+    <jgroups>
+        <stack-file name="external-file" path="conf/jgroups-udp-config.xml"/>
+    </jgroups>
+    <cache-container default-cache="replicatedCache">
+        <transport stack="external-file" />
+        <replicated-cache name="replicatedCache"/>
+    </cache-container>
 </infinispan>
-
-
