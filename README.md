@@ -27,7 +27,7 @@ Executing
 ---------
      sh modules/repl-server/target/bin/webapp
 
-Go to http://localhost:9090/ using your browser to access the Data Replication and Synchronization Tool.
+Go to http://localhost:9090/mediator/ using your browser to access the Data Replication and Synchronization Tool.
 
 Logging
 -------

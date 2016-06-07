@@ -26,7 +26,7 @@ public class TomcatEmbeddedRunner {
 		tomcat.setPort(CommonConstants.EMBEDDED_TOMCAT_PORT);
 		File base = new File(System.getProperty("user.dir"));
 
-        Context rootCtx = tomcat.addContext("/", base.getAbsolutePath());
+        Context rootCtx = tomcat.addContext("/mediator", base.getAbsolutePath());
 
         /*Create Servlet Mappings*/
 		Tomcat.addServlet(rootCtx, "initServlet", new InitServlet());
