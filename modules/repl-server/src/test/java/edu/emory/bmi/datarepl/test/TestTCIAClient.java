@@ -8,7 +8,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import edu.emory.bmi.datarepl.constants.TCIAConstants;
 import edu.emory.bmi.datarepl.tcia_rest_api.ITCIAClient;
 import edu.emory.bmi.datarepl.tcia_rest_api.OutputFormat;
 import edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException;
@@ -21,8 +20,6 @@ import org.junit.Test;
  */
 public class TestTCIAClient {
 
-    private static String baseUrl = TCIAConstants.BASE_URL; // Base URL of the service
-    private static String apiKey = TCIAConstants.API_KEY;
 
     /**
      * Method : GetCollectionValues
@@ -32,7 +29,7 @@ public class TestTCIAClient {
     @Test
     public void testGetCollectionValues() {
         // create TCIA Client by passing API-Key and baseUrl in the constructor
-        ITCIAClient client = new TCIAClientImpl(apiKey, baseUrl);
+        ITCIAClient client = TCIAClientImpl.getTCIAClientImpl();
 
         try {
             // Make the RESTfull call . Response comes back as InputStream.
@@ -61,7 +58,7 @@ public class TestTCIAClient {
     public void testGetImage() {
 
         // create TCIA Client by passing API-Key and baseUrl in the constructor
-        ITCIAClient client = new TCIAClientImpl(apiKey, baseUrl);
+        ITCIAClient client = TCIAClientImpl.getTCIAClientImpl();
         String seriesInstanceUID = "1.3.6.1.4.1.14519.5.2.1.7695.4001.306204232344341694648035234440";
         try {
             // Make the RESTfull call . Response comes back as InputStream.
@@ -80,7 +77,7 @@ public class TestTCIAClient {
     @Test
     public void testGetSeries() {
         // create TCIA Client by passing API-Key and baseUrl in the constructor
-        ITCIAClient client = new TCIAClientImpl(apiKey, baseUrl);
+        ITCIAClient client = TCIAClientImpl.getTCIAClientImpl();
         String collection = "TCGA-GBM"; // optional
         String modality = "MR"; // optional
         String studyInstanceUID = null; // optional
@@ -106,7 +103,7 @@ public class TestTCIAClient {
     @Test
     public void testGetPatientStudy() {
         // create TCIA Client by passing API-Key and baseUrl in the constructor
-        ITCIAClient client = new TCIAClientImpl(apiKey, baseUrl);
+        ITCIAClient client = TCIAClientImpl.getTCIAClientImpl();
         String collection = "TCGA-GBM"; // optional
         String patientID = null; // optional
         String studyInstanceUID = null; // optional
@@ -130,7 +127,7 @@ public class TestTCIAClient {
     @Test
     public void testGetPatient() {
         // create TCIA Client by passing API-Key and baseUrl in the constructor
-        ITCIAClient client = new TCIAClientImpl(apiKey, baseUrl);
+        ITCIAClient client = TCIAClientImpl.getTCIAClientImpl();
         String collection = "TCGA-GBM"; // optional
 
         try {
@@ -152,7 +149,7 @@ public class TestTCIAClient {
     @Test
     public void testGetBodyPartValues() {
         // create TCIA Client by passing API-Key and baseUrl in the constructor
-        ITCIAClient client = new TCIAClientImpl(apiKey, baseUrl);
+        ITCIAClient client = TCIAClientImpl.getTCIAClientImpl();
         String collection = null; // optional
         String bodyPartExamined = null; // optional
         String modality = "MR"; // optional
@@ -176,7 +173,7 @@ public class TestTCIAClient {
     @Test
     public void testGetModalityValues() {
         // create TCIA Client by passing API-Key and baseUrl in the constructor
-        ITCIAClient client = new TCIAClientImpl(apiKey, baseUrl);
+        ITCIAClient client = TCIAClientImpl.getTCIAClientImpl();
         String collection = null; // optional
         String bodyPartExamined = "BRAIN"; // optional
         String modality = "MR"; // optional
@@ -200,7 +197,7 @@ public class TestTCIAClient {
     @Test
     public void testGetManufacturerValues() {
         // create TCIA Client by passing API-Key and baseUrl in the constructor
-        ITCIAClient client = new TCIAClientImpl(apiKey, baseUrl);
+        ITCIAClient client = TCIAClientImpl.getTCIAClientImpl();
         String collection = null; // optional
         String bodyPartExamined = "BRAIN"; // optional
         String modality = "MR"; // optional

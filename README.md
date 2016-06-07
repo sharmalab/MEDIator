@@ -5,10 +5,16 @@ Welcome to the wiki of the MEDIator - Data Replication System project!
 Please visit the website to learn more - https://bitbucket.org/BMI/datareplicationsystem
 
 
-## Providing TCIA API Key.
-Provide your TCIA API Key in TCIAConstants.
+## Setting the Environment Variables.
+Set the API_KEY, MASHAPE_AUTHORIZATION, and BASE_UR as environment variables.
 
-    public static String API_KEY = "ENTER-YOUR-API-KEY-HERE";
+For example, in Linux.
+
+    export API_KEY=your-api-key
+    
+    export MASHAPE_AUTHORIZATION=your-mashape-authorization
+    
+    export BASE_URL=services.cancerimagingarchive.net/services/v4/TCIA/query
 
 
 ## Building and Executing Using Apache Maven 3.x.x

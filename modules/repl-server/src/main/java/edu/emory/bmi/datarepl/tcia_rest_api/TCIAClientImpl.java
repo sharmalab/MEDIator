@@ -4,6 +4,7 @@ package edu.emory.bmi.datarepl.tcia_rest_api;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Map;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -18,7 +19,8 @@ public class TCIAClientImpl implements ITCIAClient {
     private final static String API_KEY_FIELD = "api_key";
     private String apiKey;
     private HttpClient httpClient;
-    private String baseUrl;
+    private static String baseUrl;
+    private static String mashapeAuthorization;
     private static String getImage = "getImage";
     private static String getManufacturerValues = "getManufacturerValues";
     private static String getModalityValues = "getModalityValues";
@@ -27,11 +29,36 @@ public class TCIAClientImpl implements ITCIAClient {
     private static String getPatientStudy = "getPatientStudy";
     private static String getSeries = "getSeries";
     private static String getPatient = "getPatient";
+    private static TCIAClientImpl tciaClient;
 
 
-    public TCIAClientImpl(String apiKey, String baseUrl) {
-        this.apiKey = apiKey;
-        this.baseUrl = baseUrl;
+    public static TCIAClientImpl getTCIAClientImpl() {
+        if (tciaClient == null) {
+            tciaClient = new TCIAClientImpl();
+        }
+        return tciaClient;
+    }
+
+    public static String getApiKey() {
+        tciaClient = TCIAClientImpl.getTCIAClientImpl();
+        return tciaClient.apiKey;
+    }
+
+    public static String getBaseUrl() {
+        tciaClient = TCIAClientImpl.getTCIAClientImpl();
+        return tciaClient.baseUrl;
+    }
+
+    public static String getMashapeAuthorization() {
+        tciaClient = TCIAClientImpl.getTCIAClientImpl();
+        return tciaClient.mashapeAuthorization;
+    }
+
+    private TCIAClientImpl() {
+        Map<String, String> env = System.getenv();
+        apiKey = env.get("API_KEY");
+        baseUrl = "https://" + env.get("BASE_URL");
+        mashapeAuthorization = env.get("MASHAPE_AUTHORIZATION");
         httpClient = new DefaultHttpClient();
         httpClient = WebClientDevWrapper.wrapClient(httpClient);
     }

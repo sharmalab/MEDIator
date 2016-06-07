@@ -29,7 +29,6 @@ public class TciaInvoker extends InterfaceManager {
     private static Logger logger = LogManager.getLogger(TciaInvoker.class.getName());
     private boolean isMashapeMode;
     private final static String API_KEY_FIELD = "api_key";
-    private String apiKey = TCIAConstants.API_KEY;
 
     public void setMashapeMode(boolean isMashapeMode) {
         this.isMashapeMode = isMashapeMode;
@@ -47,7 +46,7 @@ public class TciaInvoker extends InterfaceManager {
         String query = "getCollectionValues";
         String temp = "";
         temp = TciaUtil.addParam(temp, TCIAConstants.FORMAT, iFormat);
-        temp = TciaUtil.addParam(temp, API_KEY_FIELD, apiKey);
+        temp = TciaUtil.addParam(temp, API_KEY_FIELD, TCIAClientImpl.getApiKey());
         query += temp;
 
         return getHttpResponse(query);
@@ -71,7 +70,7 @@ public class TciaInvoker extends InterfaceManager {
         temp = TciaUtil.addParam(temp, TCIAConstants.COLLECTION, iCollection);
         temp = TciaUtil.addParam(temp, TCIAConstants.BODY_PART_EXAMINED, iBodyPartExamined);
         temp = TciaUtil.addParam(temp, TCIAConstants.MODALITY, iModality);
-        temp = TciaUtil.addParam(temp, API_KEY_FIELD, apiKey);
+        temp = TciaUtil.addParam(temp, API_KEY_FIELD, TCIAClientImpl.getApiKey());
         query += temp;
 
         return getHttpResponse(query);
@@ -95,7 +94,7 @@ public class TciaInvoker extends InterfaceManager {
         temp = TciaUtil.addParam(temp, TCIAConstants.COLLECTION, iCollection);
         temp = TciaUtil.addParam(temp, TCIAConstants.BODY_PART_EXAMINED, iBodyPartExamined);
         temp = TciaUtil.addParam(temp, TCIAConstants.MODALITY, iModality);
-        temp = TciaUtil.addParam(temp, API_KEY_FIELD, apiKey);
+        temp = TciaUtil.addParam(temp, API_KEY_FIELD, TCIAClientImpl.getApiKey());
         query += temp;
 
         return getHttpResponse(query);
@@ -119,7 +118,7 @@ public class TciaInvoker extends InterfaceManager {
         temp = TciaUtil.addParam(temp, TCIAConstants.COLLECTION, iCollection);
         temp = TciaUtil.addParam(temp, TCIAConstants.BODY_PART_EXAMINED, iBodyPartExamined);
         temp = TciaUtil.addParam(temp, TCIAConstants.MODALITY, iModality);
-        temp = TciaUtil.addParam(temp, API_KEY_FIELD, apiKey);
+        temp = TciaUtil.addParam(temp, API_KEY_FIELD, TCIAClientImpl.getApiKey());
         query += temp;
 
         return getHttpResponse(query);
@@ -141,7 +140,8 @@ public class TciaInvoker extends InterfaceManager {
 
     /**
      * Get patient query
-     * @param iFormat format value. optional.
+     *
+     * @param iFormat     format value. optional.
      * @param iCollection collection value. optional.
      * @return patient query
      */
@@ -150,7 +150,7 @@ public class TciaInvoker extends InterfaceManager {
         String temp = "";
         temp = TciaUtil.addParam(temp, TCIAConstants.FORMAT, iFormat);
         temp = TciaUtil.addParam(temp, TCIAConstants.COLLECTION, iCollection);
-        temp = TciaUtil.addParam(temp, API_KEY_FIELD, apiKey);
+        temp = TciaUtil.addParam(temp, API_KEY_FIELD, TCIAClientImpl.getApiKey());
         query += temp;
         return query;
     }
@@ -174,9 +174,10 @@ public class TciaInvoker extends InterfaceManager {
 
     /**
      * Get studies query
-     * @param iFormat format value. optional.
-     * @param iCollection collection value. optional.
-     * @param iPatientID patient id, optional
+     *
+     * @param iFormat           format value. optional.
+     * @param iCollection       collection value. optional.
+     * @param iPatientID        patient id, optional
      * @param iStudyInstanceUID study instance uid, optional
      * @return studies query
      */
@@ -188,7 +189,7 @@ public class TciaInvoker extends InterfaceManager {
         temp = TciaUtil.addParam(temp, TCIAConstants.COLLECTION, iCollection);
         temp = TciaUtil.addParam(temp, TCIAConstants.PATIENT_ID, iPatientID);
         temp = TciaUtil.addParam(temp, TCIAConstants.STUDY_INSTANCE_UID, iStudyInstanceUID);
-        temp = TciaUtil.addParam(temp, API_KEY_FIELD, apiKey);
+        temp = TciaUtil.addParam(temp, API_KEY_FIELD, TCIAClientImpl.getApiKey());
         query += temp;
         return query;
     }
@@ -214,11 +215,12 @@ public class TciaInvoker extends InterfaceManager {
 
     /**
      * Get series query
-     * @param iFormat format value. optional.
-     * @param iCollection collection value. optional.
-     * @param iPatientID patient id, optional
+     *
+     * @param iFormat           format value. optional.
+     * @param iCollection       collection value. optional.
+     * @param iPatientID        patient id, optional
      * @param iStudyInstanceUID study instance uid, optional
-     * @param iModality modality value. optional.
+     * @param iModality         modality value. optional.
      * @return series query
      */
     public String getSeriesOfTheStudyString(
@@ -230,24 +232,26 @@ public class TciaInvoker extends InterfaceManager {
         temp = TciaUtil.addParam(temp, TCIAConstants.PATIENT_ID, iPatientID);
         temp = TciaUtil.addParam(temp, TCIAConstants.STUDY_INSTANCE_UID, iStudyInstanceUID);
         temp = TciaUtil.addParam(temp, TCIAConstants.MODALITY, iModality);
-        temp = TciaUtil.addParam(temp, API_KEY_FIELD, apiKey);
+        temp = TciaUtil.addParam(temp, API_KEY_FIELD, TCIAClientImpl.getApiKey());
         query += temp;
         return query;
     }
 
     /**
      * Gets the Http Response string for the given query, with mashap or direct rest api invocation
+     *
      * @param query the query to be invoked
      * @return response
      * @throws UnirestException, if invocation failed in mashape mode
-     * @throws IOException IO issues
+     * @throws IOException       IO issues
      */
     public String getHttpResponse(String query) throws UnirestException, IOException {
+        TCIAClientImpl tciaClient = TCIAClientImpl.getTCIAClientImpl();
         if (isMashapeMode) {
             HttpResponse response =
                     (HttpResponse) Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).
-                            header("X-Mashape-Authorization", TCIAConstants.MASHAPE_AUTHORIZATION).
-                            header("api_key", TCIAConstants.API_KEY).
+                            header("X-Mashape-Authorization", tciaClient.getMashapeAuthorization()).
+                            header("api_key", tciaClient.getApiKey()).
                             asJson();
             return response.toString();
         } else {
@@ -263,22 +267,23 @@ public class TciaInvoker extends InterfaceManager {
 
     /**
      * Returns the Raw Data for the query.
+     *
      * @param query the search query
      * @return InputStream
      * @throws IOException
      * @throws TCIAClientException
      */
     public InputStream getRawData(String query) throws IOException, TCIAClientException {
+        TCIAClientImpl tciaClient = TCIAClientImpl.getTCIAClientImpl();
         URI uri = null;
         try {
-            uri = new URI(TCIAConstants.BASE_URL + "/" + query);
+            uri = new URI(tciaClient.getBaseUrl() + "/" + query);
         } catch (URISyntaxException e) {
             logger.error("URI syntax was wrong", e);
         }
-        TCIAClientImpl client = new TCIAClientImpl(TCIAConstants.API_KEY, TCIAConstants.BASE_URL);
 
-        return client.getRawData(uri);
-        }
+        return tciaClient.getRawData(uri);
+    }
 
     /**
      * /GET Image
@@ -295,6 +300,7 @@ public class TciaInvoker extends InterfaceManager {
 
     /**
      * Get image query
+     *
      * @param seriesInstanceUID, instance ID of the series. Mandatory
      * @return image query.
      */
@@ -302,7 +308,7 @@ public class TciaInvoker extends InterfaceManager {
         String query = "getImage";
         String temp = "";
         temp = TciaUtil.addParam(temp, TCIAConstants.SERIES_INSTANCE_UID, seriesInstanceUID);
-        temp = TciaUtil.addParam(temp, API_KEY_FIELD, apiKey);
+        temp = TciaUtil.addParam(temp, API_KEY_FIELD, TCIAClientImpl.getApiKey());
         query += temp;
         return query;
     }

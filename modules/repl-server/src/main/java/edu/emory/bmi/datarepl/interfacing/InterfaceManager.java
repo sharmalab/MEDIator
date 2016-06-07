@@ -13,6 +13,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import edu.emory.bmi.datarepl.exception.DataReplException;
 import edu.emory.bmi.datarepl.constants.TCIAConstants;
+import edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -58,8 +59,8 @@ public abstract class InterfaceManager implements InterfaceAPI{
      */
     public HttpResponse retrieveMetadata(String query) throws UnirestException {
         return Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).
-                header("X-Mashape-Authorization", TCIAConstants.MASHAPE_AUTHORIZATION).
-                header("api_key", TCIAConstants.API_KEY).
+                header("X-Mashape-Authorization", TCIAClientImpl.getMashapeAuthorization()).
+                header("api_key", TCIAClientImpl.getApiKey()).
                 asJson();
     }
 
@@ -72,8 +73,8 @@ public abstract class InterfaceManager implements InterfaceAPI{
      */
     public HttpResponse retrieveImage(String query) throws UnirestException {
         HttpResponse<InputStream> request = Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).
-                header("X-Mashape-Authorization", TCIAConstants.MASHAPE_AUTHORIZATION).
-                header("api_key", TCIAConstants.API_KEY).
+                header("X-Mashape-Authorization", TCIAClientImpl.getMashapeAuthorization()).
+                header("api_key", TCIAClientImpl.getApiKey()).
                 asBinary();
         if (logger.isDebugEnabled()) {
             logger.debug("Downloading the image again: " + query);
