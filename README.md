@@ -22,9 +22,9 @@ Building
 --------
      mvn package
 
-It is expected to have the API_KEY set in the TCIAConstants to build with tests.
+It is expected to have the TCIA API_KEY set in the environment variables to build with tests.
 
-If you have not received your API_KEY yet, please build with skipping the tests.
+If you do not have a TCIA API_KEY yet, please build with skipping the tests.
 
     mvn package -DskipTests
 
