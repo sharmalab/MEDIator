@@ -299,6 +299,11 @@ public class TciaInvoker extends InterfaceManager {
      * @return image query.
      */
     public String getImagesOfTheSeriesString(String seriesInstanceUID) {
-        return "getImage?SeriesInstanceUID=" + seriesInstanceUID;
+        String query = "getImage?SeriesInstanceUID=" + seriesInstanceUID;
+
+        String temp = "";
+        temp = TciaUtil.addParam(temp, API_KEY_FIELD, apiKey);
+        query += temp;
+        return query;
     }
 }

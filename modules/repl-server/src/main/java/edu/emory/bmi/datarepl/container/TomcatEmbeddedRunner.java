@@ -44,6 +44,9 @@ public class TomcatEmbeddedRunner {
         Tomcat.addServlet(rootCtx, "duplicateRsServlet", new DuplicateRsServlet());
         rootCtx.addServletMapping("/duplicateRs", "duplicateRsServlet");
 
+        Tomcat.addServlet(rootCtx, "listRsServlet", new ListRsServlet());
+        rootCtx.addServletMapping("/listRs", "listRsServlet");
+
         Wrapper defaultServlet = rootCtx.createWrapper();
         defaultServlet.setName("default");
         defaultServlet.setServletClass("org.apache.catalina.servlets.DefaultServlet");
