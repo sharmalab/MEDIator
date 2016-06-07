@@ -28,6 +28,8 @@ import java.net.URISyntaxException;
 public class TciaInvoker extends InterfaceManager {
     private static Logger logger = LogManager.getLogger(TciaInvoker.class.getName());
     private boolean isMashapeMode;
+    private final static String API_KEY_FIELD = "api_key";
+    private String apiKey = TCIAConstants.API_KEY;
 
     public void setMashapeMode(boolean isMashapeMode) {
         this.isMashapeMode = isMashapeMode;
@@ -45,6 +47,7 @@ public class TciaInvoker extends InterfaceManager {
         String query = "getCollectionValues";
         String temp = "";
         temp = TciaUtil.addParam(temp, TCIAConstants.FORMAT, iFormat);
+        temp = TciaUtil.addParam(temp, API_KEY_FIELD, apiKey);
         query += temp;
 
         return getHttpResponse(query);
@@ -68,6 +71,7 @@ public class TciaInvoker extends InterfaceManager {
         temp = TciaUtil.addParam(temp, TCIAConstants.COLLECTION, iCollection);
         temp = TciaUtil.addParam(temp, TCIAConstants.BODY_PART_EXAMINED, iBodyPartExamined);
         temp = TciaUtil.addParam(temp, TCIAConstants.MODALITY, iModality);
+        temp = TciaUtil.addParam(temp, API_KEY_FIELD, apiKey);
         query += temp;
 
         return getHttpResponse(query);
@@ -91,6 +95,7 @@ public class TciaInvoker extends InterfaceManager {
         temp = TciaUtil.addParam(temp, TCIAConstants.COLLECTION, iCollection);
         temp = TciaUtil.addParam(temp, TCIAConstants.BODY_PART_EXAMINED, iBodyPartExamined);
         temp = TciaUtil.addParam(temp, TCIAConstants.MODALITY, iModality);
+        temp = TciaUtil.addParam(temp, API_KEY_FIELD, apiKey);
         query += temp;
 
         return getHttpResponse(query);
@@ -114,6 +119,7 @@ public class TciaInvoker extends InterfaceManager {
         temp = TciaUtil.addParam(temp, TCIAConstants.COLLECTION, iCollection);
         temp = TciaUtil.addParam(temp, TCIAConstants.BODY_PART_EXAMINED, iBodyPartExamined);
         temp = TciaUtil.addParam(temp, TCIAConstants.MODALITY, iModality);
+        temp = TciaUtil.addParam(temp, API_KEY_FIELD, apiKey);
         query += temp;
 
         return getHttpResponse(query);
@@ -144,6 +150,7 @@ public class TciaInvoker extends InterfaceManager {
         String temp = "";
         temp = TciaUtil.addParam(temp, TCIAConstants.FORMAT, iFormat);
         temp = TciaUtil.addParam(temp, TCIAConstants.COLLECTION, iCollection);
+        temp = TciaUtil.addParam(temp, API_KEY_FIELD, apiKey);
         query += temp;
         return query;
     }
@@ -181,6 +188,7 @@ public class TciaInvoker extends InterfaceManager {
         temp = TciaUtil.addParam(temp, TCIAConstants.COLLECTION, iCollection);
         temp = TciaUtil.addParam(temp, TCIAConstants.PATIENT_ID, iPatientID);
         temp = TciaUtil.addParam(temp, TCIAConstants.STUDY_INSTANCE_UID, iStudyInstanceUID);
+        temp = TciaUtil.addParam(temp, API_KEY_FIELD, apiKey);
         query += temp;
         return query;
     }
@@ -222,6 +230,7 @@ public class TciaInvoker extends InterfaceManager {
         temp = TciaUtil.addParam(temp, TCIAConstants.PATIENT_ID, iPatientID);
         temp = TciaUtil.addParam(temp, TCIAConstants.STUDY_INSTANCE_UID, iStudyInstanceUID);
         temp = TciaUtil.addParam(temp, TCIAConstants.MODALITY, iModality);
+        temp = TciaUtil.addParam(temp, API_KEY_FIELD, apiKey);
         query += temp;
         return query;
     }
@@ -266,7 +275,7 @@ public class TciaInvoker extends InterfaceManager {
         } catch (URISyntaxException e) {
             logger.error("URI syntax was wrong", e);
         }
-        TCIAClientImpl client = new TCIAClientImpl(TCIAConstants.API_KEY, TCIAConstants.API_KEY);
+        TCIAClientImpl client = new TCIAClientImpl(TCIAConstants.API_KEY, TCIAConstants.BASE_URL);
 
         return client.getRawData(uri);
         }
