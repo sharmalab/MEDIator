@@ -94,3 +94,12 @@ $ tar -zxvf 652ccf44-cfda-4e99-81ac-d8f4c0eca6be.tar
 
 ## Further customizations
 If you wish to reproduce the system in another deployment, please refer to documentation/HOW-TO.
+
+
+## Citing MEDIator
+If you have used MEDIator in your research, please cite the below paper.
+
+Kathiravelu, P. & Sharma, A. (2015). MEDIator: A Data Sharing Synchronization Platform for Heterogeneous Medical Image 
+Archives. In Workshop on Connected Health at Big Data Era (BigCHat'15) , co-located with 21st ACM SIGKDD Conference on 
+Knowledge Discovery and Data Mining (KDD 2015). Aug. 2015. ACM. 6 pages. http://doi.org/10.13140/RG.2.1.3709.4248
+
