@@ -1,0 +1,20 @@
+  <HTML>
+    <HEAD>
+      <TITLE>$title</TITLE>
+    </HEAD>
+
+
+    <BODY>
+      <TABLE  border="1">
+        <tr>
+          <th>List of Users</th>
+        </tr>
+        #foreach( $user in $usersList )
+           <TR  style="border-bottom:1px solid black">
+             <TD>$user</TD>
+            </TR>
+        #end
+      </TABLE>
+
+    </BODY>
+  </HTML>

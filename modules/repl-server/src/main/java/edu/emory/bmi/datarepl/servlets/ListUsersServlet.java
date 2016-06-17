@@ -13,10 +13,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * Servlet to list the replica sets of the specified user
+ * Servlet to display the list of users.
  */
-public class ListRsServlet extends HttpServlet{
-    private static Logger logger = LogManager.getLogger(ListRsServlet.class.getName());
+public class ListUsersServlet extends HttpServlet{
+    private static Logger logger = LogManager.getLogger(ListUsersServlet.class.getName());
 
 
     @Override
@@ -26,15 +26,13 @@ public class ListRsServlet extends HttpServlet{
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
-        String dUserId = request.getParameter("dUserID");
-
         TciaReplicaSetInterface tciaReplicaSetInterface = (TciaReplicaSetInterface) TciaReplicaSetInterface.getInfiniCore();
 
-        logger.info("Listing the replica sets of the user..");
+        logger.info("Listing the users..");
 
-        Long[] replicaSets = tciaReplicaSetInterface.getUserReplicaSets(dUserId);
+        String[] users = tciaReplicaSetInterface.getUsers();
 
-        String output = UIGenerator.returnReplicaSetOutput(replicaSets);
+        String output = UIGenerator.returnUsersOutput(users);
 
         logger.info("Listing the Replica Sets of the Receiving User");
         out.println(output);
