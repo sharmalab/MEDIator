@@ -8,7 +8,7 @@
 
 package edu.emory.bmi.datarepl.servlets;
 
-import edu.emory.bmi.datarepl.tcia.DataProSpecs;
+import edu.emory.bmi.datarepl.tcia.TciaReplicaSetInterface;
 import edu.emory.bmi.datarepl.ui.UIGenerator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,12 +39,12 @@ public class CreateRsServlet extends HttpServlet {
         String[] lSeriesInstanceUID = request.getParameter("iSeriesInstanceUID").split(",");
 
 
-        DataProSpecs dataProSpecs = (DataProSpecs) DataProSpecs.getInfiniCore();
+        TciaReplicaSetInterface tciaReplicaSetInterface = (TciaReplicaSetInterface) TciaReplicaSetInterface.getInfiniCore();
         if (request.getParameter("iRsID")==null || request.getParameter("iRsID").trim().length()==0) {
             logger.info("Creating the replica set for the user..");
-            dataProSpecs.createReplicaSet(userId, lCollectionName, lPatientID, lStudyInstanceUID, lSeriesInstanceUID);
+            tciaReplicaSetInterface.createReplicaSet(userId, lCollectionName, lPatientID, lStudyInstanceUID, lSeriesInstanceUID);
 
-            Long[] replicaSets = dataProSpecs.getUserReplicaSets(userId);
+            Long[] replicaSets = tciaReplicaSetInterface.getUserReplicaSets(userId);
 
             String output = UIGenerator.returnReplicaSetOutput(replicaSets);
 
@@ -53,7 +53,7 @@ public class CreateRsServlet extends HttpServlet {
         } else {
             logger.info("Updating the replica set for the user..");
             Long rsID = Long.parseLong(request.getParameter("iRsID").trim());
-            dataProSpecs.updateReplicaSet(rsID, lCollectionName, lPatientID, lStudyInstanceUID, lSeriesInstanceUID);
+            tciaReplicaSetInterface.updateReplicaSet(rsID, lCollectionName, lPatientID, lStudyInstanceUID, lSeriesInstanceUID);
 
             out.println("<HTML>    <BODY>\n");
             out.println("Successfully updated the replicaSet with ID: " + rsID);

@@ -1,6 +1,6 @@
 package edu.emory.bmi.datarepl.servlets;
 
-import edu.emory.bmi.datarepl.tcia.DataProSpecs;
+import edu.emory.bmi.datarepl.tcia.TciaReplicaSetInterface;
 import edu.emory.bmi.datarepl.ui.UIGenerator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,12 +29,12 @@ public class DuplicateRsServlet extends HttpServlet{
         long replicaSetID = Long.parseLong(request.getParameter("replicaSetID"));
         String dUserId = request.getParameter("dUserID");
 
-        DataProSpecs dataProSpecs = (DataProSpecs) DataProSpecs.getInfiniCore();
+        TciaReplicaSetInterface tciaReplicaSetInterface = (TciaReplicaSetInterface) TciaReplicaSetInterface.getInfiniCore();
 
         logger.info("Duplicating the replica set of the user..");
-        dataProSpecs.duplicateReplicaSet(replicaSetID, dUserId);
+        tciaReplicaSetInterface.duplicateReplicaSet(replicaSetID, dUserId);
 
-        Long[] replicaSets = dataProSpecs.getUserReplicaSets(dUserId);
+        Long[] replicaSets = tciaReplicaSetInterface.getUserReplicaSets(dUserId);
 
         String output = UIGenerator.returnReplicaSetOutput(replicaSets);
 

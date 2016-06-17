@@ -1,6 +1,6 @@
 package edu.emory.bmi.datarepl.servlets;
 
-import edu.emory.bmi.datarepl.tcia.DataProSpecs;
+import edu.emory.bmi.datarepl.tcia.TciaReplicaSetInterface;
 import edu.emory.bmi.datarepl.ui.UIGenerator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,13 +29,13 @@ public class DeleteRsServlet extends HttpServlet {
         long replicaSetID = Long.parseLong(request.getParameter("replicaSetID"));
         String userId = request.getParameter("userID");
 
-        DataProSpecs dataProSpecs = (DataProSpecs) DataProSpecs.getInfiniCore();
+        TciaReplicaSetInterface tciaReplicaSetInterface = (TciaReplicaSetInterface) TciaReplicaSetInterface.getInfiniCore();
 
         logger.info("Deleting the replica set of the user..");
-        boolean deleted = dataProSpecs.deleteReplicaSet(userId, replicaSetID);
+        boolean deleted = tciaReplicaSetInterface.deleteReplicaSet(userId, replicaSetID);
 
         if (deleted) {
-            Long[] replicaSets = dataProSpecs.getUserReplicaSets(userId);
+            Long[] replicaSets = tciaReplicaSetInterface.getUserReplicaSets(userId);
 
             String output = UIGenerator.returnReplicaSetOutput(replicaSets);
 
