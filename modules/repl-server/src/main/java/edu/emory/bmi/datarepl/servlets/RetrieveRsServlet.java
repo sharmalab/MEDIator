@@ -31,14 +31,16 @@ public class RetrieveRsServlet extends HttpServlet{
 
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-
-        Long replicaSetID = Long.parseLong(request.getParameter("replicaSetID"));
-
-        logger.info("Retrieving the replica set for the user..");
-
-        TciaReplicaSetInterface tciaReplicaSetInterface = (TciaReplicaSetInterface) TciaReplicaSetInterface.getInfiniCore();
-        String output = tciaReplicaSetInterface.getReplicaSet(replicaSetID);
-
+        String output;
+        if (!request.getParameter("replicaSetID").equals("") && request.getParameter("replicaSetID")!=null) {
+            Long replicaSetID = Long.parseLong(request.getParameter("replicaSetID"));
+            logger.info("Retrieving the replica set for the user..");
+            TciaReplicaSetInterface tciaReplicaSetInterface = (TciaReplicaSetInterface) TciaReplicaSetInterface.getInfiniCore();
+            output = tciaReplicaSetInterface.getReplicaSet(replicaSetID);
+        }
+        else {
+            output = "Empty values provided for the replica set ID";
+        }
         out.println(output);
     }
 }
