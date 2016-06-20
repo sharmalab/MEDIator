@@ -1,6 +1,6 @@
 package edu.emory.bmi.datarepl.servlets;
 
-import edu.emory.bmi.datarepl.tcia.DataProSpecs;
+import edu.emory.bmi.datarepl.tcia.TciaReplicaSetInterface;
 import edu.emory.bmi.datarepl.ui.UIGenerator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,25 +26,38 @@ public class DeleteRsServlet extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
-        long replicaSetID = Long.parseLong(request.getParameter("replicaSetID"));
         String userId = request.getParameter("userID");
+        if (request.getParameter("replicaSetID") != null && !request.getParameter("replicaSetID").equals("") &&
+                !userId.trim().equals("")) {
+            try {
+                long replicaSetID = Long.parseLong(request.getParameter("replicaSetID"));
 
-        DataProSpecs dataProSpecs = (DataProSpecs) DataProSpecs.getInfiniCore();
+                TciaReplicaSetInterface tciaReplicaSetInterface = (TciaReplicaSetInterface) TciaReplicaSetInterface.getInfiniCore();
 
-        logger.info("Deleting the replica set of the user..");
-        boolean deleted = dataProSpecs.deleteReplicaSet(userId, replicaSetID);
+                logger.info("Deleting the replica set of the user..");
+                boolean deleted = tciaReplicaSetInterface.deleteReplicaSet(userId, replicaSetID);
 
-        if (deleted) {
-            Long[] replicaSets = dataProSpecs.getUserReplicaSets(userId);
+                if (deleted) {
+                    Long[] replicaSets = tciaReplicaSetInterface.getUserReplicaSets(userId);
 
-            String output = UIGenerator.returnReplicaSetOutput(replicaSets);
+                    String output = UIGenerator.returnReplicaSetOutput(replicaSets);
 
-            logger.info("Listing the Replica Sets of the User");
-            out.println(output);
+                    logger.info("Listing the Replica Sets of the User");
+                    out.println(output);
+                } else {
+                    out.println("<HTML>    <BODY>\n");
+                    out.println("Error in Deleting the replicaSet with ReplicaSet ID: " + replicaSetID);
+                    out.println("</body></html>");
+                }
+            } catch (NumberFormatException e) {
+                String output = "Illegal values provided for the replica Set ID. It should be a long integer.";
+                logger.error(output);
+                out.println(output);
+            }
         } else {
-            out.println("<HTML>    <BODY>\n");
-            out.println("Error in Deleting the replicaSet with ReplicaSet ID: " + replicaSetID);
-            out.println("</body></html>");
+            String output = "Empty values provided for the user ID or the replica Set ID";
+            logger.error(output);
+            out.println(output);
         }
     }
 }

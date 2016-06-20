@@ -142,6 +142,20 @@ public class InfDataAccessIntegration implements PubConsAPI {
     }
 
     /**
+     * GET /getUses
+     *
+     * @return users: String[]
+     */
+    public String[] getUsers() {
+        Object[] temp = userReplicasMap.keySet().toArray();
+        String[] users = new String[temp.length];
+        for (int i = 0; i < temp.length; i++) {
+            users[i] = temp[i].toString();
+        }
+        return users;
+    }
+
+    /**
      * GET /getReplicaSet
      *
      * @param replicaSetId, long

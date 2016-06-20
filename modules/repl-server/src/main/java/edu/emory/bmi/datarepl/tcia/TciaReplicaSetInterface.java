@@ -25,11 +25,11 @@ import java.util.UUID;
 /**
  * Extending DataAccessIntegration for Tcia.
  */
-public class DataProSpecs extends InfDataAccessIntegration {
+public class TciaReplicaSetInterface extends InfDataAccessIntegration {
 
-    private static DataProSpecs infDataAccessIntegration = null;
+    private static TciaReplicaSetInterface infDataAccessIntegration = null;
 
-    private static Logger logger = LogManager.getLogger(DataProSpecs.class.getName());
+    private static Logger logger = LogManager.getLogger(TciaReplicaSetInterface.class.getName());
     private static TciaInvoker tciaInvoker = new TciaInvoker();
 
     protected static Cache<Long, Boolean[]> tciaMetaMap;
@@ -43,7 +43,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
      *
      * @throws java.io.IOException, if getting the cache failed.
      */
-    protected DataProSpecs() throws IOException {
+    protected TciaReplicaSetInterface() throws IOException {
         super();
         tciaMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_META);
         collectionsMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_COLLECTIONS);
@@ -60,7 +60,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
     public static InfDataAccessIntegration getInfiniCore() {
         if (infDataAccessIntegration == null) {
             try {
-                infDataAccessIntegration = new DataProSpecs();
+                infDataAccessIntegration = new TciaReplicaSetInterface();
             } catch (IOException e) {
                 logger.error("Exception when trying to initialize Infinispan.", e);
             }
@@ -137,6 +137,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
 
     /**
      * Gets the Raw Data for the replicaSetID
+     *
      * @param aReplicaSetID, the replicaSetID to be queried for the raw data.
      * @return raw data as a list of InputStream
      */
@@ -189,7 +190,8 @@ public class DataProSpecs extends InfDataAccessIntegration {
 
     /**
      * Get Patients of the Collection
-     * @param iFormat format
+     *
+     * @param iFormat     format
      * @param iCollection collection name
      * @return raw data as Input Stream
      */
@@ -209,9 +211,10 @@ public class DataProSpecs extends InfDataAccessIntegration {
 
     /**
      * Get Studies of the Patient
-     * @param iFormat format
-     * @param iCollection collection name
-     * @param iPatientID patient id
+     *
+     * @param iFormat           format
+     * @param iCollection       collection name
+     * @param iPatientID        patient id
      * @param iStudyInstanceUID study instance uid
      * @return raw data as Input Stream
      */
@@ -232,11 +235,12 @@ public class DataProSpecs extends InfDataAccessIntegration {
 
     /**
      * Get Series of the Study
-     * @param iFormat format
-     * @param iCollection collection name
-     * @param iPatientID patient id
+     *
+     * @param iFormat           format
+     * @param iCollection       collection name
+     * @param iPatientID        patient id
      * @param iStudyInstanceUID study instance uid
-     * @param iModality modality
+     * @param iModality         modality
      * @return raw data as Input Stream
      */
     public static InputStream getRawSeriesOfTheStudies(String iFormat, String iCollection, String iPatientID,
@@ -257,6 +261,7 @@ public class DataProSpecs extends InfDataAccessIntegration {
 
     /**
      * Get Images of the Series
+     *
      * @param seriesInstanceUID series instance UID
      * @return raw data as Input Stream
      */
@@ -342,14 +347,19 @@ public class DataProSpecs extends InfDataAccessIntegration {
      */
     @Override
     public long duplicateReplicaSet(long replicaSetId, String userId) {
-        long duplicateReplicaSetId = UUID.randomUUID().getLeastSignificantBits();
+        long duplicateReplicaSetId = 0;
         Boolean[] replicaSet = getMetaMap(replicaSetId);
-        tciaMetaMap.put(duplicateReplicaSetId, replicaSet);
-        addToUserReplicasMap(userId, duplicateReplicaSetId);
-        collectionsMap.put(duplicateReplicaSetId, getCollectionsSet(replicaSetId));
-        patientsMap.put(duplicateReplicaSetId, getPatientsSet(replicaSetId));
-        studiesMap.put(duplicateReplicaSetId, getStudiesSet(replicaSetId));
-        seriesMap.put(duplicateReplicaSetId, getSeriesSet(replicaSetId));
+        if (replicaSet!=null) {
+            duplicateReplicaSetId = UUID.randomUUID().getLeastSignificantBits();
+            tciaMetaMap.put(duplicateReplicaSetId, replicaSet);
+            addToUserReplicasMap(userId, duplicateReplicaSetId);
+            collectionsMap.put(duplicateReplicaSetId, getCollectionsSet(replicaSetId));
+            patientsMap.put(duplicateReplicaSetId, getPatientsSet(replicaSetId));
+            studiesMap.put(duplicateReplicaSetId, getStudiesSet(replicaSetId));
+            seriesMap.put(duplicateReplicaSetId, getSeriesSet(replicaSetId));
+        } else {
+            logger.error("Non-existent user or replica set entered. Please check the user ID and the replica set ID");
+        }
         return duplicateReplicaSetId;
     }
 

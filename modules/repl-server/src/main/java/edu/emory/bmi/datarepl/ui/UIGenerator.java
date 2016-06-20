@@ -65,6 +65,27 @@ public class UIGenerator {
         return returnPrintable("replicaSets.vm");
     }
 
+    /**
+     * Prints the list of users into an HTML page
+     * @param userIDs, an array of user IDs.
+     */
+    public static void printUserList(String[] userIDs) {
+        context = new VelocityContext();
+        context.put("usersList", userIDs);
+        printToFile("users.vm", "users.html");
+    }
+
+    /**
+     * Return printable output of the users list
+     * @param userIDs, an array of user IDs.
+     * @return list of user IDs
+     */
+    public static String returnUsersOutput(String[] userIDs) {
+        context = new VelocityContext();
+        context.put("usersList", userIDs);
+        return returnPrintable("users.vm");
+    }
+
     private static void getSeriesContext(String response) {
         context = new VelocityContext();
         JSONArray jsonMainArr = new JSONArray(response);

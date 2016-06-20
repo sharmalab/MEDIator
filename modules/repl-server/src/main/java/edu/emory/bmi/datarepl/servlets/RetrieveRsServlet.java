@@ -8,7 +8,7 @@
 
 package edu.emory.bmi.datarepl.servlets;
 
-import edu.emory.bmi.datarepl.tcia.DataProSpecs;
+import edu.emory.bmi.datarepl.tcia.TciaReplicaSetInterface;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,7 +22,7 @@ import java.io.PrintWriter;
 /**
  * Servlet for retrieving replica sets.
  */
-public class RetrieveRsServlet extends HttpServlet{
+public class RetrieveRsServlet extends HttpServlet {
     private static Logger logger = LogManager.getLogger(RetrieveRsServlet.class.getName());
 
     @Override
@@ -31,14 +31,20 @@ public class RetrieveRsServlet extends HttpServlet{
 
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-
-        Long replicaSetID = Long.parseLong(request.getParameter("replicaSetID"));
-
-        logger.info("Retrieving the replica set for the user..");
-
-        DataProSpecs dataProSpecs = (DataProSpecs) DataProSpecs.getInfiniCore();
-        String output = dataProSpecs.getReplicaSet(replicaSetID);
-
+        String output;
+        if (!request.getParameter("replicaSetID").equals("") && request.getParameter("replicaSetID") != null) {
+            try {
+                Long replicaSetID = Long.parseLong(request.getParameter("replicaSetID"));
+                logger.info("Retrieving the replica set for the user..");
+                TciaReplicaSetInterface tciaReplicaSetInterface = (TciaReplicaSetInterface) TciaReplicaSetInterface.getInfiniCore();
+                output = tciaReplicaSetInterface.getReplicaSet(replicaSetID);
+            } catch (NumberFormatException e) {
+                output = "Illegal values provided for the replica Set ID. It should be a long integer.";
+                logger.error(output);
+            }
+        } else {
+            output = "Empty values provided for the replica set ID";
+        }
         out.println(output);
     }
 }
