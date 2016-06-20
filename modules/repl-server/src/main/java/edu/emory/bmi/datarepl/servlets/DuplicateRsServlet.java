@@ -15,7 +15,7 @@ import java.io.PrintWriter;
 /**
  * Servlet to duplicate the replica set to the specified user
  */
-public class DuplicateRsServlet extends HttpServlet{
+public class DuplicateRsServlet extends HttpServlet {
     private static Logger logger = LogManager.getLogger(DuplicateRsServlet.class.getName());
 
 
@@ -26,18 +26,30 @@ public class DuplicateRsServlet extends HttpServlet{
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
-        long replicaSetID = Long.parseLong(request.getParameter("replicaSetID"));
         String dUserId = request.getParameter("dUserID");
+        long replicaSetID;
+        String output = "";
 
-        TciaReplicaSetInterface tciaReplicaSetInterface = (TciaReplicaSetInterface) TciaReplicaSetInterface.getInfiniCore();
 
-        logger.info("Duplicating the replica set of the user..");
-        tciaReplicaSetInterface.duplicateReplicaSet(replicaSetID, dUserId);
+        if (((request.getParameter("replicaSetID") != null) && ((!request.getParameter("replicaSetID").equals(""))))&& (!dUserId.equals(""))) {
+            replicaSetID = Long.parseLong(request.getParameter("replicaSetID"));
 
-        Long[] replicaSets = tciaReplicaSetInterface.getUserReplicaSets(dUserId);
+            TciaReplicaSetInterface tciaReplicaSetInterface = (TciaReplicaSetInterface) TciaReplicaSetInterface.getInfiniCore();
 
-        String output = UIGenerator.returnReplicaSetOutput(replicaSets);
+            logger.info("Duplicating the replica set of the user..");
 
+            if (dUserId != null) {
+                tciaReplicaSetInterface.duplicateReplicaSet(replicaSetID, dUserId);
+
+                Long[] replicaSets = tciaReplicaSetInterface.getUserReplicaSets(dUserId);
+
+
+                output = UIGenerator.returnReplicaSetOutput(replicaSets);
+
+            }
+        } else {
+            output = "Empty values entered for the replica set ID or user ID";
+        }
         logger.info("Listing the Replica Sets of the Receiving User");
         out.println(output);
     }
