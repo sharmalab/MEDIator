@@ -35,6 +35,9 @@ public class TomcatEmbeddedRunner {
 		Tomcat.addServlet(rootCtx, "createRsServlet", new CreateRsServlet());
         rootCtx.addServletMapping("/createRs", "createRsServlet");
 
+		Tomcat.addServlet(rootCtx, "appendRsServlet", new AppendRsServlet());
+        rootCtx.addServletMapping("/appendRs", "appendRsServlet");
+
 		Tomcat.addServlet(rootCtx, "retrieveRsServlet", new RetrieveRsServlet());
         rootCtx.addServletMapping("/retrieveRs", "retrieveRsServlet");
 

@@ -1,0 +1,23 @@
+  <HTML>
+    <HEAD>
+      <TITLE>Append Replica Set</TITLE>
+    </HEAD>
+
+
+    <BODY>
+    <H2>Add More Entries to an Existing Replica Set</H2>
+    <p>Enter the Collection Names, Patient, Study, and Series IDs as comma separated lists..</p>
+
+    <form method="GET" action="/mediator/appendRs">
+        <p> Replica Set ID <input type="text" name="iRsID" size="20"></p>
+        <p> Collection Names <input type="text" name="iCollection" size="20"></p>
+        <p> Patient IDs <input type="text" name="iPatientID" size="20"></p>
+        <p> Study Instance UIDs <input type="text" name="iStudyInstanceUID" size="20"></p>
+        <p> Series Instance UIDs  <input type="text" name="iSeriesInstanceUID" size="20"></p>
+        <p><input type="submit" value="Append ReplicaSet" name="B1"></p>
+    </form>
+    <p>&nbsp;</p>
+
+    </BODY>
+  </HTML>
+

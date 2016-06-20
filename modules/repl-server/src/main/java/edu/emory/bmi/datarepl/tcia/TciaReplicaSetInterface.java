@@ -19,6 +19,7 @@ import org.infinispan.Cache;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -119,6 +120,74 @@ public class TciaReplicaSetInterface extends InfDataAccessIntegration {
         }
         if (seriesInstanceUID != null) {
             putSeriesSet(replicaSetId, seriesInstanceUID);
+        }
+        return metaMap;
+    }
+
+    /**
+     * PUT /appendReplicaSet
+     *
+     * @param replicaSetId,     the id of the replica to be modified.
+     * @param collection        collection names
+     * @param patientID         String[]
+     * @param studyInstanceUID  String[]
+     * @param seriesInstanceUID String[]
+     * @return the updated/appended replica set.
+     */
+    public Boolean[] appendReplicaSet(long replicaSetId, String[] collection, String[] patientID,
+                                      String[] studyInstanceUID, String[] seriesInstanceUID) {
+
+        Boolean[] metaMap = getMetaMap(replicaSetId);
+
+        metaMap[0] = metaMap[0] || (collection != null);
+        metaMap[1] = metaMap[0] || (patientID != null);
+        metaMap[2] = metaMap[0] || (studyInstanceUID != null);
+        metaMap[3] = metaMap[0] || (seriesInstanceUID != null);
+
+        putMetaMap(replicaSetId, metaMap);
+
+
+        List<String> collectionNames = new ArrayList<>();
+        List<String> patientIDs = new ArrayList<>();
+        List<String> studyInstanceUIDs = new ArrayList<>();
+        List<String> seriesInstanceUIDs = new ArrayList<>();
+
+        if (metaMap[0]) {
+            collectionNames.addAll(Arrays.asList(getCollectionsSet(replicaSetId)));
+            if (collection!=null) {
+                collectionNames.addAll(Arrays.asList(collection));
+            }
+        }
+        if (metaMap[1]) {
+            patientIDs.addAll(Arrays.asList(getPatientsSet(replicaSetId)));
+            if (patientID!=null) {
+                patientIDs.addAll(Arrays.asList(patientID));
+            }
+        }
+        if (metaMap[2]) {
+            studyInstanceUIDs.addAll(Arrays.asList(getStudiesSet(replicaSetId)));
+            if (studyInstanceUID!=null) {
+                studyInstanceUIDs.addAll(Arrays.asList(studyInstanceUID));
+            }
+        }
+        if (metaMap[3]) {
+            seriesInstanceUIDs.addAll(Arrays.asList(getSeriesSet(replicaSetId)));
+            if (seriesInstanceUID!=null) {
+                seriesInstanceUIDs.addAll(Arrays.asList(seriesInstanceUID));
+            }
+        }
+
+        if (collection != null) {
+            putCollectionSet(replicaSetId, collectionNames.stream().toArray(String[]::new));
+        }
+        if (patientID != null) {
+            putPatientSet(replicaSetId, patientIDs.stream().toArray(String[]::new));
+        }
+        if (studyInstanceUID != null) {
+            putStudiesSet(replicaSetId, studyInstanceUIDs.stream().toArray(String[]::new));
+        }
+        if (seriesInstanceUID != null) {
+            putSeriesSet(replicaSetId, seriesInstanceUIDs.stream().toArray(String[]::new));
         }
         return metaMap;
     }
