@@ -33,15 +33,20 @@ public class CreateRsServlet extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         String userId = request.getParameter("iUserID");
-        if (userId!=null && !userId.trim().equals("")) {
-            String[] lCollectionName = request.getParameter("iCollection").split(",");
-            String[] lPatientID = request.getParameter("iPatientID").split(",");
-            String[] lStudyInstanceUID = request.getParameter("iStudyInstanceUID").split(",");
-            String[] lSeriesInstanceUID = request.getParameter("iSeriesInstanceUID").split(",");
+        String[] lCollectionName = request.getParameter("iCollection").split(",");
+        String[] lPatientID = request.getParameter("iPatientID").split(",");
+        String[] lStudyInstanceUID = request.getParameter("iStudyInstanceUID").split(",");
+        String[] lSeriesInstanceUID = request.getParameter("iSeriesInstanceUID").split(",");
 
 
-            TciaReplicaSetInterface tciaReplicaSetInterface = (TciaReplicaSetInterface) TciaReplicaSetInterface.getInfiniCore();
-            if (request.getParameter("iRsID") == null || request.getParameter("iRsID").trim().length() == 0) {
+        TciaReplicaSetInterface tciaReplicaSetInterface = (TciaReplicaSetInterface) TciaReplicaSetInterface.getInfiniCore();
+        if (request.getParameter("iRsID") == null || request.getParameter("iRsID").trim().length() == 0) {
+            if (userId == null || userId.trim().equals("")) {
+                String output = "Empty or invalid user or replica set ID provided";
+                logger.error(output);
+                out.println(output);
+            } else {
+
                 logger.info("Creating the replica set for the user..");
                 tciaReplicaSetInterface.createReplicaSet(userId, lCollectionName, lPatientID, lStudyInstanceUID, lSeriesInstanceUID);
 
@@ -51,19 +56,15 @@ public class CreateRsServlet extends HttpServlet {
 
                 logger.info("Listing the Replica Sets of the User");
                 out.println(output);
-            } else {
-                logger.info("Updating the replica set for the user..");
-                Long rsID = Long.parseLong(request.getParameter("iRsID").trim());
-                tciaReplicaSetInterface.updateReplicaSet(rsID, lCollectionName, lPatientID, lStudyInstanceUID, lSeriesInstanceUID);
-
-                out.println("<HTML>    <BODY>\n");
-                out.println("Successfully updated the replicaSet with ID: " + rsID);
-                out.println("</body></html>");
             }
         } else {
-            String output = "Empty or invalid user or replica set ID provided";
-            logger.error(output);
-            out.println(output);
+            logger.info("Updating the replica set for the user..");
+            Long rsID = Long.parseLong(request.getParameter("iRsID").trim());
+            tciaReplicaSetInterface.updateReplicaSet(rsID, lCollectionName, lPatientID, lStudyInstanceUID, lSeriesInstanceUID);
+
+            out.println("<HTML>    <BODY>\n");
+            out.println("Successfully updated the replicaSet with ID: " + rsID);
+            out.println("</body></html>");
         }
     }
 }

@@ -77,10 +77,29 @@ public class TciaReplicaSetInterface extends InfDataAccessIntegration {
      * @param patientID         String[]
      * @param studyInstanceUID  String[]
      * @param seriesInstanceUID String[]
+     * @return the created replica set.
      */
-    public void createReplicaSet(String userId, String[] collection, String[] patientID,
+    public Boolean[] createReplicaSet(String userId, String[] collection, String[] patientID,
                                  String[] studyInstanceUID, String[] seriesInstanceUID) {
         long replicaSetId = UUID.randomUUID().getLeastSignificantBits();
+        addToUserReplicasMap(userId, replicaSetId);
+
+        return updateReplicaSet(replicaSetId, collection,patientID,studyInstanceUID,seriesInstanceUID);
+    }
+
+
+    /**
+     * PUSH /updateReplicaSet
+     *
+     * @param replicaSetId,     the id of the replica to be modified.
+     * @param collection        collection names
+     * @param patientID         String[]
+     * @param studyInstanceUID  String[]
+     * @param seriesInstanceUID String[]
+     * @return the updated replica set.
+     */
+    public Boolean[] updateReplicaSet(long replicaSetId, String[] collection, String[] patientID,
+                                      String[] studyInstanceUID, String[] seriesInstanceUID) {
 
         Boolean[] metaMap = new Boolean[4];
         metaMap[0] = collection != null;
@@ -101,7 +120,7 @@ public class TciaReplicaSetInterface extends InfDataAccessIntegration {
         if (seriesInstanceUID != null) {
             putSeriesSet(replicaSetId, seriesInstanceUID);
         }
-        addToUserReplicasMap(userId, replicaSetId);
+        return metaMap;
     }
 
     /**
@@ -309,32 +328,6 @@ public class TciaReplicaSetInterface extends InfDataAccessIntegration {
             seriesMap.remove(replicaSetId);
             return true;
         }
-    }
-
-    /**
-     * PUSH /updateReplicaSet
-     *
-     * @param replicaSetId,     the id of the replica to be modified.
-     * @param collection        collection names
-     * @param patientID         String[]
-     * @param studyInstanceUID  String[]
-     * @param seriesInstanceUID String[]
-     * @return the updated replica set.
-     */
-    public Boolean[] updateReplicaSet(long replicaSetId, String[] collection, String[] patientID,
-                                      String[] studyInstanceUID, String[] seriesInstanceUID) {
-        Boolean[] metaMap = new Boolean[4];
-        metaMap[0] = collection != null;
-        metaMap[1] = patientID != null;
-        metaMap[2] = studyInstanceUID != null;
-        metaMap[3] = seriesInstanceUID != null;
-
-        putMetaMap(replicaSetId, metaMap);
-        putCollectionSet(replicaSetId, collection);
-        putPatientSet(replicaSetId, patientID);
-        putStudiesSet(replicaSetId, studyInstanceUID);
-        putSeriesSet(replicaSetId, seriesInstanceUID);
-        return metaMap;
     }
 
 
