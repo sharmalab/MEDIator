@@ -31,21 +31,22 @@ public class DuplicateRsServlet extends HttpServlet {
         String output = "";
 
 
-        if (((request.getParameter("replicaSetID") != null) && ((!request.getParameter("replicaSetID").equals(""))))&& (!dUserId.equals(""))) {
-            replicaSetID = Long.parseLong(request.getParameter("replicaSetID"));
+        if (((request.getParameter("replicaSetID") != null) && ((!request.getParameter("replicaSetID").equals("")))) && (!dUserId.equals(""))) {
+            try {
+                replicaSetID = Long.parseLong(request.getParameter("replicaSetID"));
 
-            TciaReplicaSetInterface tciaReplicaSetInterface = (TciaReplicaSetInterface) TciaReplicaSetInterface.getInfiniCore();
+                TciaReplicaSetInterface tciaReplicaSetInterface = (TciaReplicaSetInterface) TciaReplicaSetInterface.getInfiniCore();
 
-            logger.info("Duplicating the replica set of the user..");
+                logger.info("Duplicating the replica set of the user..");
 
-            if (dUserId != null) {
-                tciaReplicaSetInterface.duplicateReplicaSet(replicaSetID, dUserId);
-
-                Long[] replicaSets = tciaReplicaSetInterface.getUserReplicaSets(dUserId);
-
-
-                output = UIGenerator.returnReplicaSetOutput(replicaSets);
-
+                if (dUserId != null) {
+                    tciaReplicaSetInterface.duplicateReplicaSet(replicaSetID, dUserId);
+                    Long[] replicaSets = tciaReplicaSetInterface.getUserReplicaSets(dUserId);
+                    output = UIGenerator.returnReplicaSetOutput(replicaSets);
+                }
+            } catch (NumberFormatException e) {
+                output = "Illegal values provided for the replica Set ID. It should be a long integer.";
+                logger.error(output);
             }
         } else {
             output = "Empty values entered for the replica set ID or user ID";

@@ -61,7 +61,7 @@ public class CreateRsServlet extends HttpServlet {
                 out.println("</body></html>");
             }
         } else {
-            String output = "Empty user or replica set ID provided";
+            String output = "Empty or invalid user or replica set ID provided";
             logger.error(output);
             out.println(output);
         }

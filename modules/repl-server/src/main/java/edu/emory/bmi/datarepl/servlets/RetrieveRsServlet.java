@@ -22,7 +22,7 @@ import java.io.PrintWriter;
 /**
  * Servlet for retrieving replica sets.
  */
-public class RetrieveRsServlet extends HttpServlet{
+public class RetrieveRsServlet extends HttpServlet {
     private static Logger logger = LogManager.getLogger(RetrieveRsServlet.class.getName());
 
     @Override
@@ -32,13 +32,17 @@ public class RetrieveRsServlet extends HttpServlet{
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
         String output;
-        if (!request.getParameter("replicaSetID").equals("") && request.getParameter("replicaSetID")!=null) {
-            Long replicaSetID = Long.parseLong(request.getParameter("replicaSetID"));
-            logger.info("Retrieving the replica set for the user..");
-            TciaReplicaSetInterface tciaReplicaSetInterface = (TciaReplicaSetInterface) TciaReplicaSetInterface.getInfiniCore();
-            output = tciaReplicaSetInterface.getReplicaSet(replicaSetID);
-        }
-        else {
+        if (!request.getParameter("replicaSetID").equals("") && request.getParameter("replicaSetID") != null) {
+            try {
+                Long replicaSetID = Long.parseLong(request.getParameter("replicaSetID"));
+                logger.info("Retrieving the replica set for the user..");
+                TciaReplicaSetInterface tciaReplicaSetInterface = (TciaReplicaSetInterface) TciaReplicaSetInterface.getInfiniCore();
+                output = tciaReplicaSetInterface.getReplicaSet(replicaSetID);
+            } catch (NumberFormatException e) {
+                output = "Illegal values provided for the replica Set ID. It should be a long integer.";
+                logger.error(output);
+            }
+        } else {
             output = "Empty values provided for the replica set ID";
         }
         out.println(output);
