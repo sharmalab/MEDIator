@@ -8,7 +8,7 @@
 
 package edu.emory.bmi.datarepl.servlets;
 
-import edu.emory.bmi.datarepl.tcia.TciaReplicaSetInterface;
+import edu.emory.bmi.datarepl.tcia.TciaReplicaSetAPI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,8 +36,8 @@ public class RetrieveRsServlet extends HttpServlet {
             try {
                 Long replicaSetID = Long.parseLong(request.getParameter("replicaSetID"));
                 logger.info("Retrieving the replica set for the user..");
-                TciaReplicaSetInterface tciaReplicaSetInterface = (TciaReplicaSetInterface) TciaReplicaSetInterface.getInfiniCore();
-                output = tciaReplicaSetInterface.getReplicaSet(replicaSetID);
+                TciaReplicaSetAPI tciaReplicaSetAPI = (TciaReplicaSetAPI) TciaReplicaSetAPI.getInfiniCore();
+                output = tciaReplicaSetAPI.getReplicaSet(replicaSetID);
             } catch (NumberFormatException e) {
                 output = "Illegal values provided for the replica Set ID. It should be a long integer.";
                 logger.error(output);

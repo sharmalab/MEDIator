@@ -8,8 +8,7 @@
 
 package edu.emory.bmi.datarepl.servlets;
 
-import edu.emory.bmi.datarepl.tcia.TciaReplicaSetInterface;
-import edu.emory.bmi.datarepl.ui.UIGenerator;
+import edu.emory.bmi.datarepl.tcia.TciaReplicaSetAPI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -38,7 +37,7 @@ public class AppendRsServlet extends HttpServlet {
         String[] lSeriesInstanceUID = request.getParameter("iSeriesInstanceUID").split(",");
 
 
-        TciaReplicaSetInterface tciaReplicaSetInterface = (TciaReplicaSetInterface) TciaReplicaSetInterface.getInfiniCore();
+        TciaReplicaSetAPI tciaReplicaSetAPI = (TciaReplicaSetAPI) TciaReplicaSetAPI.getInfiniCore();
         if (request.getParameter("iRsID") == null || request.getParameter("iRsID").trim().length() == 0) {
             String output = "Empty or invalid replica set ID provided";
             logger.error(output);
@@ -46,7 +45,7 @@ public class AppendRsServlet extends HttpServlet {
         } else {
             logger.info("Appending the replica set for the user..");
             Long rsID = Long.parseLong(request.getParameter("iRsID").trim());
-            tciaReplicaSetInterface.appendReplicaSet(rsID, lCollectionName, lPatientID, lStudyInstanceUID, lSeriesInstanceUID);
+            tciaReplicaSetAPI.appendReplicaSet(rsID, lCollectionName, lPatientID, lStudyInstanceUID, lSeriesInstanceUID);
 
             out.println("<HTML>    <BODY>\n");
             out.println("Successfully appended the replicaSet with ID: " + rsID);

@@ -26,11 +26,11 @@ import java.util.UUID;
 /**
  * Extending DataAccessIntegration for Tcia.
  */
-public class TciaReplicaSetInterface extends InfDataAccessIntegration {
+public class TciaReplicaSetAPI extends InfDataAccessIntegration {
 
-    private static TciaReplicaSetInterface infDataAccessIntegration = null;
+    private static TciaReplicaSetAPI infDataAccessIntegration = null;
 
-    private static Logger logger = LogManager.getLogger(TciaReplicaSetInterface.class.getName());
+    private static Logger logger = LogManager.getLogger(TciaReplicaSetAPI.class.getName());
     private static TciaInvoker tciaInvoker = new TciaInvoker();
 
     protected static Cache<Long, Boolean[]> tciaMetaMap;
@@ -44,7 +44,7 @@ public class TciaReplicaSetInterface extends InfDataAccessIntegration {
      *
      * @throws java.io.IOException, if getting the cache failed.
      */
-    protected TciaReplicaSetInterface() throws IOException {
+    protected TciaReplicaSetAPI() throws IOException {
         super();
         tciaMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_META);
         collectionsMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_COLLECTIONS);
@@ -61,7 +61,7 @@ public class TciaReplicaSetInterface extends InfDataAccessIntegration {
     public static InfDataAccessIntegration getInfiniCore() {
         if (infDataAccessIntegration == null) {
             try {
-                infDataAccessIntegration = new TciaReplicaSetInterface();
+                infDataAccessIntegration = new TciaReplicaSetAPI();
             } catch (IOException e) {
                 logger.error("Exception when trying to initialize Infinispan.", e);
             }
