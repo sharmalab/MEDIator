@@ -136,5 +136,9 @@
           <groupId>com.sparkjava</groupId>
           <artifactId>spark-core</artifactId>
       </dependency>
+      <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-simple</artifactId>
+      </dependency>
   </dependencies>
 </project>

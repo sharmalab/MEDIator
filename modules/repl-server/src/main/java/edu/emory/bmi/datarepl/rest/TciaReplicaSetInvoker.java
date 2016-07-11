@@ -23,6 +23,7 @@ import edu.emory.bmi.datarepl.ui.DataRetriever;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,13 +52,21 @@ public class TciaReplicaSetInvoker {
          Response:
          (replicaSetID).
          -4764762120292626164
+
+         or
+
+         <html>
+         <body>
+         <h2>500 Internal Error</h2>
+         </body>
+         </html>
          */
         post("/replicasets", (request, response) -> {
             String userId = request.queryParams("iUserID");
-            String[] collection = request.queryParams("iCollection").split(",");
-            String[] patientId = request.queryParams("iPatientID").split(",");
-            String[] studyInstanceUID = request.queryParams("iStudyInstanceUID").split(",");
-            String[] seriesInstanceUID = request.queryParams("iSeriesInstanceUID").split(",");
+            String[] collection = (request.queryParams("iCollection")!=null) ? request.queryParams("iCollection").split(",") : new String[0];
+            String[] patientId = (request.queryParams("iPatientID")!=null) ? request.queryParams("iPatientID").split(",") : new String[0];
+            String[] studyInstanceUID = (request.queryParams("iStudyInstanceUID")!=null) ? request.queryParams("iStudyInstanceUID").split(",") : new String[0];
+            String[] seriesInstanceUID = (request.queryParams("iSeriesInstanceUID")!=null)? request.queryParams("iSeriesInstanceUID").split(",") : new String[0];
             long id = tciaReplicaSetAPI.createNewReplicaSet(userId, collection, patientId, studyInstanceUID, seriesInstanceUID);
             response.status(201); // 201 Created
             return id;
@@ -65,12 +74,16 @@ public class TciaReplicaSetInvoker {
 
 
         /**
-         Get Replica Sets of the user:
+         Retrieve Replica Sets of the user:
          /GET
          http://localhost:9090/replicasets/12
 
          Response:
          [-7466653342708752832, -7059417815353339196, -6908825180316283930, -6365519002970140943]
+
+         or
+
+         Replicasets not found for the user: 123
          */
         get("/replicasets/:id", (request, response) -> {
             Long[] replicaSets = tciaReplicaSetAPI.getUserReplicaSets(request.params(":id"));
@@ -85,14 +98,44 @@ public class TciaReplicaSetInvoker {
             }
         });
 
+
+        /**
+         *
+         Retrieve Replica Set:
+        /GET
+         http://localhost:9090/replicaset/-5760861907871124991
+
+         Response:
+         Collection Names: [TCGA-GBM]. Patient IDs: [TCGA-06-6701, TCGA-08-0831]. StudyInstanceUIDs: [1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895]. SeriesInstanceUIDs: [1.3.6.1.4.1.14519.5.2.1.4591.4001.179004339156422100336233996679]
+
+         or
+
+         <html>
+         <body>
+         <h2>500 Internal Error</h2>
+         </body>
+         </html>
+
+
+         */
+        get("/replicaset/:id", (request, response) -> {
+            long replicaSetID = Long.parseLong(request.params(":id"));
+            String replicaSet = tciaReplicaSetAPI.getReplicaSet(replicaSetID);
+            if (replicaSet != null) {
+                return replicaSet;
+            } else {
+                response.status(404); // 404 Not found
+                return "Replicaset not found: " + request.params(":id");
+            }
+        });
+
+
         /**
          Duplicate Replica Set:
          curl "http://lion.bmi.emory.edu:8080/mediator/duplicateRs?dUserID=123&replicaSetID=-8818562079351590113"
 
 
 
-         Retrieve Replica Set:
-         curl "http://lion.bmi.emory.edu:8080/mediator/retrieveRs?replicaSetID=-8818562079351590113"
 
          Update Replica Set:
          curl "http://lion.bmi.emory.edu:8080/mediator/createRs?iRsID=-8818562079351590113&iCollection=TCGA-GBM&iPatientID=TCGA-06-6701%2CTCGA-08-0831&iStudyInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895&iSeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.179004339156422100336233996679"
@@ -142,14 +185,6 @@ public class TciaReplicaSetInvoker {
             }
         });
 
-        // Gets all available book resources (ids)
-        get("/replicasets", (request, response) -> {
-            String ids = "";
-            for (String id : books.keySet()) {
-                ids += id + " ";
-            }
-            return ids;
-        });
     }
 
     public static class Book {

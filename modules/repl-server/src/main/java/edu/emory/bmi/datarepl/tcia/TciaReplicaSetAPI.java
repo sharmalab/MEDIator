@@ -218,6 +218,38 @@ public class TciaReplicaSetAPI extends InfDataAccessIntegration {
      * @param aReplicaSetID replicaSet ID
      * @return replicaSet as a printable output
      */
+    public String getReplicaSet(long aReplicaSetID) {
+        logger.info("Getting the ReplicaSet with ID: " + aReplicaSetID);
+
+        String[] collectionNames = {};
+        String[] patientIDs = {};
+        String[] studyInstanceUIDs = {};
+        String[] seriesInstanceUIDs = {};
+
+        Boolean[] metaMap = getMetaMap(aReplicaSetID);
+        if (metaMap[0]) {
+            collectionNames = getCollectionsSet(aReplicaSetID);
+        }
+        if (metaMap[1]) {
+            patientIDs = getPatientsSet(aReplicaSetID);
+        }
+        if (metaMap[2]) {
+            studyInstanceUIDs = getStudiesSet(aReplicaSetID);
+        }
+        if (metaMap[3]) {
+            seriesInstanceUIDs = getSeriesSet(aReplicaSetID);
+        }
+        String out = "Collection Names: " + Arrays.toString(collectionNames) + ". Patient IDs: " + Arrays.toString(patientIDs) +
+                ". StudyInstanceUIDs: " + Arrays.toString(studyInstanceUIDs) + ". SeriesInstanceUIDs: " + Arrays.toString(seriesInstanceUIDs);
+        return out;
+    }
+
+    /**
+     * GET /get the replicaSet of the given replicaSetID
+     *
+     * @param aReplicaSetID replicaSet ID
+     * @return replicaSet as a printable output
+     */
     public String getReplicaSet(Long aReplicaSetID) {
         logger.info("Getting the ReplicaSet with ID: " + aReplicaSetID);
 
@@ -239,8 +271,11 @@ public class TciaReplicaSetAPI extends InfDataAccessIntegration {
         if (metaMap[3]) {
             seriesInstanceUIDs = getSeriesSet(aReplicaSetID);
         }
-        return ReplicaSetRetriever.retrieveReplicaSet(aReplicaSetID, collectionNames, patientIDs, studyInstanceUIDs,
+        logger.info("SeriesInstanceUIDs: " + Arrays.toString(seriesInstanceUIDs));
+        String out = ReplicaSetRetriever.retrieveReplicaSet(aReplicaSetID, collectionNames, patientIDs, studyInstanceUIDs,
                 seriesInstanceUIDs);
+        logger.info("out: " + out);
+        return out;
     }
 
     /**
