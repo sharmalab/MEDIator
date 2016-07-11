@@ -15,6 +15,7 @@
  */
 package edu.emory.bmi.datarepl.rest;
 
+import edu.emory.bmi.datarepl.constants.CommonConstants;
 import edu.emory.bmi.datarepl.interfacing.TciaInvoker;
 import edu.emory.bmi.datarepl.tcia.TciaLogInInitiator;
 import edu.emory.bmi.datarepl.tcia.TciaReplicaSetAPI;
@@ -35,7 +36,7 @@ public class TciaReplicaSetInvoker {
 
     public static void main(String[] args) {
 
-        port(5678);
+        port(CommonConstants.REST_PORT);
 
         TciaLogInInitiator logInInitiator = new TciaLogInInitiator();
         logInInitiator.init();
@@ -49,7 +50,7 @@ public class TciaReplicaSetInvoker {
         /**
          * Create Replica Set:
          /POST
-         http://localhost:5678/replicasets?iUserID=12&iCollection=TCGA-GBM&iPatientID=TCGA-06-6701%2CTCGA-08-0831&iStudyInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895&iSeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.179004339156422100336233996679
+         http://localhost:9090/replicasets?iUserID=12&iCollection=TCGA-GBM&iPatientID=TCGA-06-6701%2CTCGA-08-0831&iStudyInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895&iSeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.179004339156422100336233996679
 
          Response:
          (replicaSetID).

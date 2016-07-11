@@ -13,4 +13,5 @@ package edu.emory.bmi.datarepl.constants;
  */
 public final class CommonConstants {
     public static final int EMBEDDED_TOMCAT_PORT = 9090;
+    public static final int REST_PORT = 9090;
 }
