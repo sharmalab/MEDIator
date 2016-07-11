@@ -81,11 +81,11 @@ public class TciaReplicaSetAPI extends InfDataAccessIntegration {
      * @return the created replica set.
      */
     public Boolean[] createReplicaSet(String userId, String[] collection, String[] patientID,
-                                 String[] studyInstanceUID, String[] seriesInstanceUID) {
+                                      String[] studyInstanceUID, String[] seriesInstanceUID) {
         long replicaSetId = UUID.randomUUID().getLeastSignificantBits();
         addToUserReplicasMap(userId, replicaSetId);
 
-        return updateReplicaSet(replicaSetId, collection,patientID,studyInstanceUID,seriesInstanceUID);
+        return updateReplicaSet(replicaSetId, collection, patientID, studyInstanceUID, seriesInstanceUID);
     }
 
     /**
@@ -100,11 +100,11 @@ public class TciaReplicaSetAPI extends InfDataAccessIntegration {
      * @return the created replica set.
      */
     public long createNewReplicaSet(String userId, String[] collection, String[] patientID,
-                                 String[] studyInstanceUID, String[] seriesInstanceUID) {
+                                    String[] studyInstanceUID, String[] seriesInstanceUID) {
         long replicaSetId = UUID.randomUUID().getLeastSignificantBits();
         addToUserReplicasMap(userId, replicaSetId);
 
-        updateReplicaSet(replicaSetId, collection,patientID,studyInstanceUID,seriesInstanceUID);
+        updateReplicaSet(replicaSetId, collection, patientID, studyInstanceUID, seriesInstanceUID);
         return replicaSetId;
     }
 
@@ -145,6 +145,23 @@ public class TciaReplicaSetAPI extends InfDataAccessIntegration {
     }
 
     /**
+     * PUSH /updateReplicaSet
+     *
+     * @param replicaSetId,     the id of the replica to be modified.
+     * @param collection        collection names
+     * @param patientID         String[]
+     * @param studyInstanceUID  String[]
+     * @param seriesInstanceUID String[]
+     * @return true, if successfully replaced.
+     */
+    public Boolean replaceReplicaSet(long replicaSetId, String[] collection, String[] patientID,
+                                     String[] studyInstanceUID, String[] seriesInstanceUID) {
+
+        updateReplicaSet(replicaSetId, collection, patientID, studyInstanceUID, seriesInstanceUID);
+        return true;
+    }
+
+    /**
      * PUT /appendReplicaSet
      *
      * @param replicaSetId,     the id of the replica to be modified.
@@ -174,25 +191,25 @@ public class TciaReplicaSetAPI extends InfDataAccessIntegration {
 
         if (metaMap[0]) {
             collectionNames.addAll(Arrays.asList(getCollectionsSet(replicaSetId)));
-            if (collection!=null) {
+            if (collection != null) {
                 collectionNames.addAll(Arrays.asList(collection));
             }
         }
         if (metaMap[1]) {
             patientIDs.addAll(Arrays.asList(getPatientsSet(replicaSetId)));
-            if (patientID!=null) {
+            if (patientID != null) {
                 patientIDs.addAll(Arrays.asList(patientID));
             }
         }
         if (metaMap[2]) {
             studyInstanceUIDs.addAll(Arrays.asList(getStudiesSet(replicaSetId)));
-            if (studyInstanceUID!=null) {
+            if (studyInstanceUID != null) {
                 studyInstanceUIDs.addAll(Arrays.asList(studyInstanceUID));
             }
         }
         if (metaMap[3]) {
             seriesInstanceUIDs.addAll(Arrays.asList(getSeriesSet(replicaSetId)));
-            if (seriesInstanceUID!=null) {
+            if (seriesInstanceUID != null) {
                 seriesInstanceUIDs.addAll(Arrays.asList(seriesInstanceUID));
             }
         }
@@ -210,6 +227,22 @@ public class TciaReplicaSetAPI extends InfDataAccessIntegration {
             putSeriesSet(replicaSetId, seriesInstanceUIDs.stream().toArray(String[]::new));
         }
         return metaMap;
+    }
+
+    /**
+     * PUT /addToReplicaSet
+     *
+     * @param replicaSetId,     the id of the replica to be modified.
+     * @param collection        collection names
+     * @param patientID         String[]
+     * @param studyInstanceUID  String[]
+     * @param seriesInstanceUID String[]
+     * @return true, if successfully appended.
+     */
+    public Boolean addToReplicaSet(long replicaSetId, String[] collection, String[] patientID,
+                                   String[] studyInstanceUID, String[] seriesInstanceUID) {
+        appendReplicaSet(replicaSetId, collection, patientID, studyInstanceUID, seriesInstanceUID);
+        return true;
     }
 
     /**
@@ -466,7 +499,7 @@ public class TciaReplicaSetAPI extends InfDataAccessIntegration {
     public long duplicateReplicaSet(long replicaSetId, String userId) {
         long duplicateReplicaSetId = 0;
         Boolean[] replicaSet = getMetaMap(replicaSetId);
-        if (replicaSet!=null) {
+        if (replicaSet != null) {
             duplicateReplicaSetId = UUID.randomUUID().getLeastSignificantBits();
             tciaMetaMap.put(duplicateReplicaSetId, replicaSet);
             addToUserReplicasMap(userId, duplicateReplicaSetId);

@@ -32,7 +32,6 @@ import java.util.Random;
 import static spark.Spark.*;
 
 public class TciaReplicaSetInvoker {
-    private static Map<String, Book> books = new HashMap<String, Book>();
     private static Logger logger = LogManager.getLogger(DataRetriever.class.getName());
 
     public static void main(String[] args) {
@@ -158,75 +157,48 @@ public class TciaReplicaSetInvoker {
             return tciaReplicaSetAPI.deleteReplicaSet(userId, replicaSetID);
         });
 
+
+        /**
+         *
+         Replace Replica Set:
+         /POST
+         http://localhost:9090/replicaset/-5841894688098285105?iStudyInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895&iSeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.179004339156422100336233996679
+         */
+        post("/replicaset/:id", (request, response) -> {
+            long replicaSetId = Long.parseLong(request.params(":id"));
+
+            String[] collection = (request.queryParams("iCollection") != null) ? request.queryParams("iCollection").split(",") : new String[0];
+            String[] patientId = (request.queryParams("iPatientID") != null) ? request.queryParams("iPatientID").split(",") : new String[0];
+            String[] studyInstanceUID = (request.queryParams("iStudyInstanceUID") != null) ? request.queryParams("iStudyInstanceUID").split(",") : new String[0];
+            String[] seriesInstanceUID = (request.queryParams("iSeriesInstanceUID") != null) ? request.queryParams("iSeriesInstanceUID").split(",") : new String[0];
+
+            Boolean out = tciaReplicaSetAPI.replaceReplicaSet(replicaSetId, collection, patientId, studyInstanceUID, seriesInstanceUID);
+            response.status(201); // 201 Created
+            return out;
+        });
+
+        /**
+         *
+         Append Replica Set:
+         /PUT
+         http://localhost:9090/replicaset/-5841894688098285105?iCollection=TCGA-GBM
+         */
+        put("/replicaset/:id", (request, response) -> {
+            long replicaSetId = Long.parseLong(request.params(":id"));
+
+            String[] collection = (request.queryParams("iCollection") != null) ? request.queryParams("iCollection").split(",") : new String[0];
+            String[] patientId = (request.queryParams("iPatientID") != null) ? request.queryParams("iPatientID").split(",") : new String[0];
+            String[] studyInstanceUID = (request.queryParams("iStudyInstanceUID") != null) ? request.queryParams("iStudyInstanceUID").split(",") : new String[0];
+            String[] seriesInstanceUID = (request.queryParams("iSeriesInstanceUID") != null) ? request.queryParams("iSeriesInstanceUID").split(",") : new String[0];
+
+            Boolean out = tciaReplicaSetAPI.addToReplicaSet(replicaSetId, collection, patientId, studyInstanceUID, seriesInstanceUID);
+            response.status(201); // 201 Created
+            return out;
+        });
+
         /**
          Duplicate Replica Set:
          curl "http://lion.bmi.emory.edu:8080/mediator/duplicateRs?dUserID=123&replicaSetID=-8818562079351590113"
-
-
-
-
-         Update Replica Set:
-         curl "http://lion.bmi.emory.edu:8080/mediator/createRs?iRsID=-8818562079351590113&iCollection=TCGA-GBM&iPatientID=TCGA-06-6701%2CTCGA-08-0831&iStudyInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895&iSeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.179004339156422100336233996679"
-
-         Append Replica Set:
-         curl "http://lion.bmi.emory.edu:8080/mediator/appendRs?iRsID=-8818562079351590113&iCollection=&iPatientID=A111111111111&iStudyInstanceUID=CCCCC1111111111111&iSeriesInstanceUID="
-
-
-
-
-         Search Series (TCIA):
-         curl "http://lion.bmi.emory.edu:8080/mediator/init?iCollection=TCGA-GBM&iPatientID=TCGA-06-6701&iStudyInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895&iModality=MR"
          */
-
-
-        // Updates the book resource for the provided id with new information
-        // author and title are sent in the request body as x-www-urlencoded values e.g. author=Foo&title=Bar
-        // you get them by using request.queryParams("valuename")
-        put("/replicasets/:id", (request, response) -> {
-            String id = request.params(":id");
-            Book book = books.get(id);
-            if (book != null) {
-                String newAuthor = request.queryParams("author");
-                String newTitle = request.queryParams("title");
-                if (newAuthor != null) {
-                    book.setAuthor(newAuthor);
-                }
-                if (newTitle != null) {
-                    book.setTitle(newTitle);
-                }
-                return "Book with id '" + id + "' updated";
-            } else {
-                response.status(404); // 404 Not found
-                return "Book not found";
-            }
-        });
-
-
-    }
-
-    public static class Book {
-
-        public String author, title;
-
-        public Book(String author, String title) {
-            this.author = author;
-            this.title = title;
-        }
-
-        public String getAuthor() {
-            return author;
-        }
-
-        public void setAuthor(String author) {
-            this.author = author;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
     }
 }
