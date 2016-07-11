@@ -1,6 +1,6 @@
 package edu.emory.bmi.datarepl.servlets;
 
-import edu.emory.bmi.datarepl.tcia.TciaReplicaSetInterface;
+import edu.emory.bmi.datarepl.tcia.TciaReplicaSetAPI;
 import edu.emory.bmi.datarepl.ui.UIGenerator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,11 +26,11 @@ public class ListUsersServlet extends HttpServlet{
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
-        TciaReplicaSetInterface tciaReplicaSetInterface = (TciaReplicaSetInterface) TciaReplicaSetInterface.getInfiniCore();
+        TciaReplicaSetAPI tciaReplicaSetAPI = (TciaReplicaSetAPI) TciaReplicaSetAPI.getInfiniCore();
 
         logger.info("Listing the users..");
 
-        String[] users = tciaReplicaSetInterface.getUsers();
+        String[] users = tciaReplicaSetAPI.getUsers();
 
         String output = UIGenerator.returnUsersOutput(users);
 

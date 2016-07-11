@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class TciaLogInInitiator extends LogInInitiator {
     private static Logger logger = LogManager.getLogger(TciaLogInInitiator.class.getName());
-    private static TciaReplicaSetInterface tciaReplicaSetInterface;
+    private static TciaReplicaSetAPI tciaReplicaSetAPI;
 
     /**
      * When the user logs in, retrieve the stored replica sets
@@ -27,11 +27,11 @@ public class TciaLogInInitiator extends LogInInitiator {
      * @param userId Id of the user.
      */
     public void login(String userId) {
-        tciaReplicaSetInterface = (TciaReplicaSetInterface) TciaReplicaSetInterface.getInfiniCore();
+        tciaReplicaSetAPI = (TciaReplicaSetAPI) TciaReplicaSetAPI.getInfiniCore();
 
         tciaInvoker = new TciaInvoker();
 
-        Long[] replicaSetIDs = tciaReplicaSetInterface.getUserReplicaSets(userId);
+        Long[] replicaSetIDs = tciaReplicaSetAPI.getUserReplicaSets(userId);
 
         //currently getting all the replicaSets.
         if (replicaSetIDs != null) {
@@ -39,7 +39,7 @@ public class TciaLogInInitiator extends LogInInitiator {
             UIGenerator.printReplicaSetList(replicaSetIDs);
 
             for (Long aReplicaSetID : replicaSetIDs) {
-                tciaReplicaSetInterface.getReplicaSet(aReplicaSetID);
+                tciaReplicaSetAPI.getReplicaSet(aReplicaSetID);
             }
         }
     }
@@ -48,7 +48,11 @@ public class TciaLogInInitiator extends LogInInitiator {
      * Initiate replication and synchronization tool at the start time, without the user id.
      */
     public void init() {
-        tciaReplicaSetInterface = (TciaReplicaSetInterface) TciaReplicaSetInterface.getInfiniCore();
+        tciaReplicaSetAPI = (TciaReplicaSetAPI) TciaReplicaSetAPI.getInfiniCore();
         tciaInvoker = new TciaInvoker();
+    }
+
+    public static TciaReplicaSetAPI getTciaReplicaSetAPI() {
+        return tciaReplicaSetAPI;
     }
 }

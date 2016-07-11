@@ -26,11 +26,11 @@ import java.util.UUID;
 /**
  * Extending DataAccessIntegration for Tcia.
  */
-public class TciaReplicaSetInterface extends InfDataAccessIntegration {
+public class TciaReplicaSetAPI extends InfDataAccessIntegration {
 
-    private static TciaReplicaSetInterface infDataAccessIntegration = null;
+    private static TciaReplicaSetAPI infDataAccessIntegration = null;
 
-    private static Logger logger = LogManager.getLogger(TciaReplicaSetInterface.class.getName());
+    private static Logger logger = LogManager.getLogger(TciaReplicaSetAPI.class.getName());
     private static TciaInvoker tciaInvoker = new TciaInvoker();
 
     protected static Cache<Long, Boolean[]> tciaMetaMap;
@@ -44,7 +44,7 @@ public class TciaReplicaSetInterface extends InfDataAccessIntegration {
      *
      * @throws java.io.IOException, if getting the cache failed.
      */
-    protected TciaReplicaSetInterface() throws IOException {
+    protected TciaReplicaSetAPI() throws IOException {
         super();
         tciaMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_META);
         collectionsMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_COLLECTIONS);
@@ -61,7 +61,7 @@ public class TciaReplicaSetInterface extends InfDataAccessIntegration {
     public static InfDataAccessIntegration getInfiniCore() {
         if (infDataAccessIntegration == null) {
             try {
-                infDataAccessIntegration = new TciaReplicaSetInterface();
+                infDataAccessIntegration = new TciaReplicaSetAPI();
             } catch (IOException e) {
                 logger.error("Exception when trying to initialize Infinispan.", e);
             }
@@ -81,11 +81,31 @@ public class TciaReplicaSetInterface extends InfDataAccessIntegration {
      * @return the created replica set.
      */
     public Boolean[] createReplicaSet(String userId, String[] collection, String[] patientID,
-                                 String[] studyInstanceUID, String[] seriesInstanceUID) {
+                                      String[] studyInstanceUID, String[] seriesInstanceUID) {
         long replicaSetId = UUID.randomUUID().getLeastSignificantBits();
         addToUserReplicasMap(userId, replicaSetId);
 
-        return updateReplicaSet(replicaSetId, collection,patientID,studyInstanceUID,seriesInstanceUID);
+        return updateReplicaSet(replicaSetId, collection, patientID, studyInstanceUID, seriesInstanceUID);
+    }
+
+    /**
+     * Creates a replicaSet for the user in the format: {collection: boolean, patient: boolean,
+     * study: boolean, series: boolean}
+     *
+     * @param userId            the user
+     * @param collection        collection names
+     * @param patientID         String[]
+     * @param studyInstanceUID  String[]
+     * @param seriesInstanceUID String[]
+     * @return the created replica set.
+     */
+    public long createNewReplicaSet(String userId, String[] collection, String[] patientID,
+                                    String[] studyInstanceUID, String[] seriesInstanceUID) {
+        long replicaSetId = UUID.randomUUID().getLeastSignificantBits();
+        addToUserReplicasMap(userId, replicaSetId);
+
+        updateReplicaSet(replicaSetId, collection, patientID, studyInstanceUID, seriesInstanceUID);
+        return replicaSetId;
     }
 
 
@@ -125,6 +145,23 @@ public class TciaReplicaSetInterface extends InfDataAccessIntegration {
     }
 
     /**
+     * PUSH /updateReplicaSet
+     *
+     * @param replicaSetId,     the id of the replica to be modified.
+     * @param collection        collection names
+     * @param patientID         String[]
+     * @param studyInstanceUID  String[]
+     * @param seriesInstanceUID String[]
+     * @return true, if successfully replaced.
+     */
+    public Boolean replaceReplicaSet(long replicaSetId, String[] collection, String[] patientID,
+                                     String[] studyInstanceUID, String[] seriesInstanceUID) {
+
+        updateReplicaSet(replicaSetId, collection, patientID, studyInstanceUID, seriesInstanceUID);
+        return true;
+    }
+
+    /**
      * PUT /appendReplicaSet
      *
      * @param replicaSetId,     the id of the replica to be modified.
@@ -154,25 +191,25 @@ public class TciaReplicaSetInterface extends InfDataAccessIntegration {
 
         if (metaMap[0]) {
             collectionNames.addAll(Arrays.asList(getCollectionsSet(replicaSetId)));
-            if (collection!=null) {
+            if (collection != null) {
                 collectionNames.addAll(Arrays.asList(collection));
             }
         }
         if (metaMap[1]) {
             patientIDs.addAll(Arrays.asList(getPatientsSet(replicaSetId)));
-            if (patientID!=null) {
+            if (patientID != null) {
                 patientIDs.addAll(Arrays.asList(patientID));
             }
         }
         if (metaMap[2]) {
             studyInstanceUIDs.addAll(Arrays.asList(getStudiesSet(replicaSetId)));
-            if (studyInstanceUID!=null) {
+            if (studyInstanceUID != null) {
                 studyInstanceUIDs.addAll(Arrays.asList(studyInstanceUID));
             }
         }
         if (metaMap[3]) {
             seriesInstanceUIDs.addAll(Arrays.asList(getSeriesSet(replicaSetId)));
-            if (seriesInstanceUID!=null) {
+            if (seriesInstanceUID != null) {
                 seriesInstanceUIDs.addAll(Arrays.asList(seriesInstanceUID));
             }
         }
@@ -190,6 +227,54 @@ public class TciaReplicaSetInterface extends InfDataAccessIntegration {
             putSeriesSet(replicaSetId, seriesInstanceUIDs.stream().toArray(String[]::new));
         }
         return metaMap;
+    }
+
+    /**
+     * PUT /addToReplicaSet
+     *
+     * @param replicaSetId,     the id of the replica to be modified.
+     * @param collection        collection names
+     * @param patientID         String[]
+     * @param studyInstanceUID  String[]
+     * @param seriesInstanceUID String[]
+     * @return true, if successfully appended.
+     */
+    public Boolean addToReplicaSet(long replicaSetId, String[] collection, String[] patientID,
+                                   String[] studyInstanceUID, String[] seriesInstanceUID) {
+        appendReplicaSet(replicaSetId, collection, patientID, studyInstanceUID, seriesInstanceUID);
+        return true;
+    }
+
+    /**
+     * GET /get the replicaSet of the given replicaSetID
+     *
+     * @param aReplicaSetID replicaSet ID
+     * @return replicaSet as a printable output
+     */
+    public String getReplicaSet(long aReplicaSetID) {
+        logger.info("Getting the ReplicaSet with ID: " + aReplicaSetID);
+
+        String[] collectionNames = {};
+        String[] patientIDs = {};
+        String[] studyInstanceUIDs = {};
+        String[] seriesInstanceUIDs = {};
+
+        Boolean[] metaMap = getMetaMap(aReplicaSetID);
+        if (metaMap[0]) {
+            collectionNames = getCollectionsSet(aReplicaSetID);
+        }
+        if (metaMap[1]) {
+            patientIDs = getPatientsSet(aReplicaSetID);
+        }
+        if (metaMap[2]) {
+            studyInstanceUIDs = getStudiesSet(aReplicaSetID);
+        }
+        if (metaMap[3]) {
+            seriesInstanceUIDs = getSeriesSet(aReplicaSetID);
+        }
+        String out = "Collection Names: " + Arrays.toString(collectionNames) + ". Patient IDs: " + Arrays.toString(patientIDs) +
+                ". StudyInstanceUIDs: " + Arrays.toString(studyInstanceUIDs) + ". SeriesInstanceUIDs: " + Arrays.toString(seriesInstanceUIDs);
+        return out;
     }
 
     /**
@@ -219,8 +304,11 @@ public class TciaReplicaSetInterface extends InfDataAccessIntegration {
         if (metaMap[3]) {
             seriesInstanceUIDs = getSeriesSet(aReplicaSetID);
         }
-        return ReplicaSetRetriever.retrieveReplicaSet(aReplicaSetID, collectionNames, patientIDs, studyInstanceUIDs,
+        logger.info("SeriesInstanceUIDs: " + Arrays.toString(seriesInstanceUIDs));
+        String out = ReplicaSetRetriever.retrieveReplicaSet(aReplicaSetID, collectionNames, patientIDs, studyInstanceUIDs,
                 seriesInstanceUIDs);
+        logger.info("out: " + out);
+        return out;
     }
 
     /**
@@ -411,7 +499,7 @@ public class TciaReplicaSetInterface extends InfDataAccessIntegration {
     public long duplicateReplicaSet(long replicaSetId, String userId) {
         long duplicateReplicaSetId = 0;
         Boolean[] replicaSet = getMetaMap(replicaSetId);
-        if (replicaSet!=null) {
+        if (replicaSet != null) {
             duplicateReplicaSetId = UUID.randomUUID().getLeastSignificantBits();
             tciaMetaMap.put(duplicateReplicaSetId, replicaSet);
             addToUserReplicasMap(userId, duplicateReplicaSetId);

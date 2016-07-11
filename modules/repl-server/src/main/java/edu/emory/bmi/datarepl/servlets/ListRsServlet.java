@@ -1,6 +1,6 @@
 package edu.emory.bmi.datarepl.servlets;
 
-import edu.emory.bmi.datarepl.tcia.TciaReplicaSetInterface;
+import edu.emory.bmi.datarepl.tcia.TciaReplicaSetAPI;
 import edu.emory.bmi.datarepl.ui.UIGenerator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,11 +28,11 @@ public class ListRsServlet extends HttpServlet{
 
         String dUserId = request.getParameter("dUserID");
 
-        TciaReplicaSetInterface tciaReplicaSetInterface = (TciaReplicaSetInterface) TciaReplicaSetInterface.getInfiniCore();
+        TciaReplicaSetAPI tciaReplicaSetAPI = (TciaReplicaSetAPI) TciaReplicaSetAPI.getInfiniCore();
 
         logger.info("Listing the replica sets of the user..");
 
-        Long[] replicaSets = tciaReplicaSetInterface.getUserReplicaSets(dUserId);
+        Long[] replicaSets = tciaReplicaSetAPI.getUserReplicaSets(dUserId);
 
         String output = UIGenerator.returnReplicaSetOutput(replicaSets);
 
