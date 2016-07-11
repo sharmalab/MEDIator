@@ -16,19 +16,13 @@
 package edu.emory.bmi.datarepl.rest;
 
 import edu.emory.bmi.datarepl.constants.CommonConstants;
-import edu.emory.bmi.datarepl.interfacing.TciaInvoker;
 import edu.emory.bmi.datarepl.tcia.TciaLogInInitiator;
 import edu.emory.bmi.datarepl.tcia.TciaReplicaSetAPI;
 import edu.emory.bmi.datarepl.ui.DataRetriever;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
 import static spark.Spark.*;
 
 public class TciaReplicaSetInvoker {
@@ -196,9 +190,23 @@ public class TciaReplicaSetInvoker {
             return out;
         });
 
+
         /**
          Duplicate Replica Set:
-         curl "http://lion.bmi.emory.edu:8080/mediator/duplicateRs?dUserID=123&replicaSetID=-8818562079351590113"
+         /POST
+         http://localhost:9090/replicaset?userID=1234567&replicaSetID=-7507841597257128817
+
+         Response:
+         -5054196249282594410
+         (replicaset ID)
          */
+        post("/replicaset", (request, response) -> {
+            String userId = request.queryParams("userID");
+            long replicaSetID = Long.parseLong(request.queryParams("replicaSetID"));
+
+            long newReplicaSetID = tciaReplicaSetAPI.duplicateReplicaSet(replicaSetID, userId);
+            response.status(201); // 201 Created
+            return newReplicaSetID;
+        });
     }
 }
