@@ -25,7 +25,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Arrays;
 import static spark.Spark.*;
 
-public class TciaReplicaSetInvoker {
+public class TciaReplicaSetManager {
     private static Logger logger = LogManager.getLogger(DataRetriever.class.getName());
 
     public static void main(String[] args) {
