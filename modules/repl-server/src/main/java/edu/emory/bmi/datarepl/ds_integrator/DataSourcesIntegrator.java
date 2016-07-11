@@ -8,8 +8,8 @@
 
 package edu.emory.bmi.datarepl.ds_integrator;
 
-import edu.emory.bmi.datarepl.ds_impl.DSInfDai;
 import edu.emory.bmi.datarepl.constants.DataSourcesConstants;
+import edu.emory.bmi.datarepl.core.InfDataAccessIntegration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,10 +28,10 @@ public abstract class DataSourcesIntegrator implements Integrator {
      * @return if exists.
      */
     public static boolean doesExistInDataSource(String key, int metaArrayIndex) {
-        if (DSInfDai.getMetaMap().get(key) == null) {
+        if (InfDataAccessIntegration.getMetaMap().get(key) == null) {
             return false;
         } else {
-            Boolean[] existence = DSInfDai.getMetaMap().get(key);
+            Boolean[] existence = InfDataAccessIntegration.getMetaMap().get(key);
             return existence[metaArrayIndex];
         }
     }
@@ -71,13 +71,13 @@ public abstract class DataSourcesIntegrator implements Integrator {
         Boolean[] newEntry = {false, false, false, false};
         newEntry[metaArrayIndex] = existence;
 
-        if (DSInfDai.getMetaMap().get(key) == null) {
-            DSInfDai.getMetaMap().put(key, newEntry);
+        if (InfDataAccessIntegration.getMetaMap().get(key) == null) {
+            InfDataAccessIntegration.getMetaMap().put(key, newEntry);
             logger.info("Adding new entry to the meta map.." + key);
         } else {
-            Boolean[] existingEntry = DSInfDai.getMetaMap().get(key);
+            Boolean[] existingEntry = InfDataAccessIntegration.getMetaMap().get(key);
             existingEntry[metaArrayIndex] = existence;
-            DSInfDai.getMetaMap().put(key, existingEntry);
+            InfDataAccessIntegration.getMetaMap().put(key, existingEntry);
             logger.info("Existing entry is updated in the map.." + key);
 
         }

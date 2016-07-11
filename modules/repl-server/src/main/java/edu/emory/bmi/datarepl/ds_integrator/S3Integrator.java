@@ -8,8 +8,8 @@
 
 package edu.emory.bmi.datarepl.ds_integrator;
 
-import edu.emory.bmi.datarepl.ds_impl.DSInfDai;
 import edu.emory.bmi.datarepl.constants.DataSourcesConstants;
+import edu.emory.bmi.datarepl.core.InfDataAccessIntegration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -39,7 +39,7 @@ public class S3Integrator extends DataSourcesIntegrator {
      */
     public static void updateMetaData(String longKey, String[] metaArray) {
         String patientID = longKey.substring(0, 12);
-        DSInfDai.getS3MetaMap().put(patientID, metaArray[0]);
+        InfDataAccessIntegration.getS3MetaMap().put(patientID, metaArray[0]);
         updateExistenceInDataSource(patientID, DataSourcesConstants.S3_META_POSITION, true);
     }
 
@@ -50,7 +50,7 @@ public class S3Integrator extends DataSourcesIntegrator {
      * @param meta, meta to be stored
      */
     public static void updateMetaData(String key, String meta) {
-        DSInfDai.getS3MetaMap().put(key, meta);
+        InfDataAccessIntegration.getS3MetaMap().put(key, meta);
     }
 
     /**
@@ -59,7 +59,7 @@ public class S3Integrator extends DataSourcesIntegrator {
      * @return url.
      */
     public static String retrieveUrl(String id) {
-        String fileName = DSInfDai.getS3MetaMap().get(id);
+        String fileName = InfDataAccessIntegration.getS3MetaMap().get(id);
         String url;
         if (fileName.contains(DataSourcesConstants.S3_LEVEL2)) {
             url = DataSourcesConstants.S3_BASE_URL + DataSourcesConstants.S3_LEVEL2 +
@@ -82,7 +82,7 @@ public class S3Integrator extends DataSourcesIntegrator {
      */
     public static String getMetaData(String id) {
         if (DataSourcesIntegrator.doesExistInDataSource(id, DataSourcesConstants.S3_META_POSITION)) {
-            return DSInfDai.getS3MetaMap().get(id);
+            return InfDataAccessIntegration.getS3MetaMap().get(id);
         } else {
             logger.info("Meta data does not exist in the map for the key, " + id);
             return null;
@@ -107,7 +107,7 @@ public class S3Integrator extends DataSourcesIntegrator {
      */
     public static void deleteMetaData(String id) {
         if (DataSourcesIntegrator.doesExistInDataSource(id, DataSourcesConstants.S3_META_POSITION)) {
-            DSInfDai.getS3MetaMap().remove(id);
+            InfDataAccessIntegration.getS3MetaMap().remove(id);
             updateExistenceInDataSource(id, DataSourcesConstants.S3_META_POSITION, false);
         } else {
             logger.info("Meta data does not exist in the map for the key, " + id);

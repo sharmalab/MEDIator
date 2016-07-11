@@ -8,7 +8,7 @@
 
 package edu.emory.bmi.datarepl.servlets;
 
-import edu.emory.bmi.datarepl.tcia.TciaReplicaSetAPI;
+import edu.emory.bmi.datarepl.replicaset.TciaReplicaSetHandler;
 import edu.emory.bmi.datarepl.ui.UIGenerator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,7 +39,7 @@ public class CreateRsServlet extends HttpServlet {
         String[] lSeriesInstanceUID = request.getParameter("iSeriesInstanceUID").split(",");
 
 
-        TciaReplicaSetAPI tciaReplicaSetAPI = (TciaReplicaSetAPI) TciaReplicaSetAPI.getInfiniCore();
+        TciaReplicaSetHandler tciaReplicaSetHandler = (TciaReplicaSetHandler) TciaReplicaSetHandler.getInfiniCore();
         if (request.getParameter("iRsID") == null || request.getParameter("iRsID").trim().length() == 0) {
             if (userId == null || userId.trim().equals("")) {
                 String output = "Empty or invalid user or replica set ID provided";
@@ -48,9 +48,9 @@ public class CreateRsServlet extends HttpServlet {
             } else {
 
                 logger.info("Creating the replica set for the user..");
-                tciaReplicaSetAPI.createReplicaSet(userId, lCollectionName, lPatientID, lStudyInstanceUID, lSeriesInstanceUID);
+                tciaReplicaSetHandler.createReplicaSet(userId, lCollectionName, lPatientID, lStudyInstanceUID, lSeriesInstanceUID);
 
-                Long[] replicaSets = tciaReplicaSetAPI.getUserReplicaSets(userId);
+                Long[] replicaSets = tciaReplicaSetHandler.getUserReplicaSets(userId);
 
                 String output = UIGenerator.returnReplicaSetOutput(replicaSets);
 
@@ -60,7 +60,7 @@ public class CreateRsServlet extends HttpServlet {
         } else {
             logger.info("Updating the replica set for the user..");
             Long rsID = Long.parseLong(request.getParameter("iRsID").trim());
-            tciaReplicaSetAPI.updateReplicaSet(rsID, lCollectionName, lPatientID, lStudyInstanceUID, lSeriesInstanceUID);
+            tciaReplicaSetHandler.updateReplicaSet(rsID, lCollectionName, lPatientID, lStudyInstanceUID, lSeriesInstanceUID);
 
             out.println("<HTML>    <BODY>\n");
             out.println("Successfully updated the replicaSet with ID: " + rsID);

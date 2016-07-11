@@ -9,6 +9,7 @@
 package edu.emory.bmi.datarepl.tcia;
 
 import edu.emory.bmi.datarepl.interfacing.TciaInvoker;
+import edu.emory.bmi.datarepl.replicaset.TciaReplicaSetHandler;
 import edu.emory.bmi.datarepl.ui.LogInInitiator;
 import edu.emory.bmi.datarepl.ui.UIGenerator;
 import org.apache.logging.log4j.LogManager;
@@ -19,7 +20,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class TciaLogInInitiator extends LogInInitiator {
     private static Logger logger = LogManager.getLogger(TciaLogInInitiator.class.getName());
-    private static TciaReplicaSetAPI tciaReplicaSetAPI;
+    private static TciaReplicaSetHandler tciaReplicaSetHandler;
 
     /**
      * When the user logs in, retrieve the stored replica sets
@@ -27,11 +28,11 @@ public class TciaLogInInitiator extends LogInInitiator {
      * @param userId Id of the user.
      */
     public void login(String userId) {
-        tciaReplicaSetAPI = (TciaReplicaSetAPI) TciaReplicaSetAPI.getInfiniCore();
+        tciaReplicaSetHandler = (TciaReplicaSetHandler) TciaReplicaSetHandler.getInfiniCore();
 
         tciaInvoker = new TciaInvoker();
 
-        Long[] replicaSetIDs = tciaReplicaSetAPI.getUserReplicaSets(userId);
+        Long[] replicaSetIDs = tciaReplicaSetHandler.getUserReplicaSets(userId);
 
         //currently getting all the replicaSets.
         if (replicaSetIDs != null) {
@@ -39,7 +40,7 @@ public class TciaLogInInitiator extends LogInInitiator {
             UIGenerator.printReplicaSetList(replicaSetIDs);
 
             for (Long aReplicaSetID : replicaSetIDs) {
-                tciaReplicaSetAPI.getReplicaSet(aReplicaSetID);
+                tciaReplicaSetHandler.getReplicaSet(aReplicaSetID);
             }
         }
     }
@@ -48,11 +49,11 @@ public class TciaLogInInitiator extends LogInInitiator {
      * Initiate replication and synchronization tool at the start time, without the user id.
      */
     public void init() {
-        tciaReplicaSetAPI = (TciaReplicaSetAPI) TciaReplicaSetAPI.getInfiniCore();
+        tciaReplicaSetHandler = (TciaReplicaSetHandler) TciaReplicaSetHandler.getInfiniCore();
         tciaInvoker = new TciaInvoker();
     }
 
-    public static TciaReplicaSetAPI getTciaReplicaSetAPI() {
-        return tciaReplicaSetAPI;
+    public static TciaReplicaSetHandler getTciaReplicaSetHandler() {
+        return tciaReplicaSetHandler;
     }
 }

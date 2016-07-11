@@ -1,6 +1,6 @@
 package edu.emory.bmi.datarepl.servlets;
 
-import edu.emory.bmi.datarepl.tcia.TciaReplicaSetAPI;
+import edu.emory.bmi.datarepl.replicaset.TciaReplicaSetHandler;
 import edu.emory.bmi.datarepl.ui.UIGenerator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,13 +35,13 @@ public class DuplicateRsServlet extends HttpServlet {
             try {
                 replicaSetID = Long.parseLong(request.getParameter("replicaSetID"));
 
-                TciaReplicaSetAPI tciaReplicaSetAPI = (TciaReplicaSetAPI) TciaReplicaSetAPI.getInfiniCore();
+                TciaReplicaSetHandler tciaReplicaSetHandler = (TciaReplicaSetHandler) TciaReplicaSetHandler.getInfiniCore();
 
                 logger.info("Duplicating the replica set of the user..");
 
                 if (dUserId != null) {
-                    tciaReplicaSetAPI.duplicateReplicaSet(replicaSetID, dUserId);
-                    Long[] replicaSets = tciaReplicaSetAPI.getUserReplicaSets(dUserId);
+                    tciaReplicaSetHandler.duplicateReplicaSet(replicaSetID, dUserId);
+                    Long[] replicaSets = tciaReplicaSetHandler.getUserReplicaSets(dUserId);
                     output = UIGenerator.returnReplicaSetOutput(replicaSets);
                 }
             } catch (NumberFormatException e) {

@@ -8,8 +8,8 @@
 
 package edu.emory.bmi.datarepl.ds_integrator;
 
-import edu.emory.bmi.datarepl.ds_impl.DSInfDai;
 import edu.emory.bmi.datarepl.constants.DataSourcesConstants;
+import edu.emory.bmi.datarepl.core.InfDataAccessIntegration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,7 +27,7 @@ public class CsvIntegrator extends DataSourcesIntegrator {
      */
     public static void updateMetaData(String key, String[] metaArray) {
         if (!key.contains(DataSourcesConstants.NA)) {
-            DSInfDai.getCsvMetaMap().put(key, metaArray);
+            InfDataAccessIntegration.getCsvMetaMap().put(key, metaArray);
             updateExistenceInDataSource(key,
                     DataSourcesConstants.CSV_META_POSITION, true);
         }
@@ -40,7 +40,7 @@ public class CsvIntegrator extends DataSourcesIntegrator {
      */
     public static String[] getMetaData(String id) {
         if (DataSourcesIntegrator.doesExistInDataSource(id, DataSourcesConstants.CSV_META_POSITION)) {
-            return DSInfDai.getCsvMetaMap().get(id);
+            return InfDataAccessIntegration.getCsvMetaMap().get(id);
         } else {
             logger.info("Meta data does not exist in the map for the key, " + id);
             return null;
@@ -65,7 +65,7 @@ public class CsvIntegrator extends DataSourcesIntegrator {
      */
     public static void deleteMetaData(String id) {
         if (DataSourcesIntegrator.doesExistInDataSource(id, DataSourcesConstants.CSV_META_POSITION)) {
-            DSInfDai.getCaMetaMap().remove(id);
+            InfDataAccessIntegration.getCaMetaMap().remove(id);
             updateExistenceInDataSource(id, DataSourcesConstants.CSV_META_POSITION, false);
         } else {
             logger.info("Meta data does not exist in the map for the key, " + id);

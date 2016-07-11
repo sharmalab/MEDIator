@@ -6,11 +6,12 @@
  * Copyright (c) 2014, Pradeeban Kathiravelu <pradeeban.kathiravelu@tecnico.ulisboa.pt>
  */
 
-package edu.emory.bmi.datarepl.tcia;
+package edu.emory.bmi.datarepl.replicaset;
 
 import edu.emory.bmi.datarepl.constants.InfConstants;
 import edu.emory.bmi.datarepl.core.InfDataAccessIntegration;
 import edu.emory.bmi.datarepl.interfacing.TciaInvoker;
+import edu.emory.bmi.datarepl.tcia.ReplicaSetRetriever;
 import edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,14 +27,13 @@ import java.util.UUID;
 /**
  * Extending DataAccessIntegration for Tcia.
  */
-public class TciaReplicaSetAPI extends InfDataAccessIntegration {
+public class TciaReplicaSetHandler extends InfDataAccessIntegration {
 
-    private static TciaReplicaSetAPI infDataAccessIntegration = null;
+    private static TciaReplicaSetHandler infDataAccessIntegration = null;
 
-    private static Logger logger = LogManager.getLogger(TciaReplicaSetAPI.class.getName());
+    private static Logger logger = LogManager.getLogger(TciaReplicaSetHandler.class.getName());
     private static TciaInvoker tciaInvoker = new TciaInvoker();
 
-    protected static Cache<Long, Boolean[]> tciaMetaMap;
     protected static Cache<Long, String[]> collectionsMap;
     protected static Cache<Long, String[]> patientsMap;
     protected static Cache<Long, String[]> studiesMap;
@@ -44,9 +44,8 @@ public class TciaReplicaSetAPI extends InfDataAccessIntegration {
      *
      * @throws java.io.IOException, if getting the cache failed.
      */
-    protected TciaReplicaSetAPI() throws IOException {
+    protected TciaReplicaSetHandler() throws IOException {
         super();
-        tciaMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_META);
         collectionsMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_COLLECTIONS);
         patientsMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_PATIENTS);
         studiesMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_STUDIES);
@@ -61,7 +60,7 @@ public class TciaReplicaSetAPI extends InfDataAccessIntegration {
     public static InfDataAccessIntegration getInfiniCore() {
         if (infDataAccessIntegration == null) {
             try {
-                infDataAccessIntegration = new TciaReplicaSetAPI();
+                infDataAccessIntegration = new TciaReplicaSetHandler();
             } catch (IOException e) {
                 logger.error("Exception when trying to initialize Infinispan.", e);
             }
@@ -174,7 +173,7 @@ public class TciaReplicaSetAPI extends InfDataAccessIntegration {
     public Boolean[] appendReplicaSet(long replicaSetId, String[] collection, String[] patientID,
                                       String[] studyInstanceUID, String[] seriesInstanceUID) {
 
-        Boolean[] metaMap = getMetaMap(replicaSetId);
+        Boolean[] metaMap = getTciaMetaMap(replicaSetId);
 
         metaMap[0] = metaMap[0] || (collection != null);
         metaMap[1] = metaMap[0] || (patientID != null);
@@ -259,7 +258,7 @@ public class TciaReplicaSetAPI extends InfDataAccessIntegration {
         String[] studyInstanceUIDs = {};
         String[] seriesInstanceUIDs = {};
 
-        Boolean[] metaMap = getMetaMap(aReplicaSetID);
+        Boolean[] metaMap = getTciaMetaMap(aReplicaSetID);
         if (metaMap[0]) {
             collectionNames = getCollectionsSet(aReplicaSetID);
         }
@@ -291,7 +290,7 @@ public class TciaReplicaSetAPI extends InfDataAccessIntegration {
         String[] studyInstanceUIDs = {};
         String[] seriesInstanceUIDs = {};
 
-        Boolean[] metaMap = getMetaMap(aReplicaSetID);
+        Boolean[] metaMap = getTciaMetaMap(aReplicaSetID);
         if (metaMap[0]) {
             collectionNames = getCollectionsSet(aReplicaSetID);
         }
@@ -325,7 +324,7 @@ public class TciaReplicaSetAPI extends InfDataAccessIntegration {
         String[] studyInstanceUIDs;
         String[] seriesInstanceUIDs;
 
-        Boolean[] metaMap = getMetaMap(aReplicaSetID);
+        Boolean[] metaMap = getTciaMetaMap(aReplicaSetID);
         if (metaMap[0]) {
             collectionNames = getCollectionsSet(aReplicaSetID);
             for (String aCollection : collectionNames) {
@@ -498,7 +497,7 @@ public class TciaReplicaSetAPI extends InfDataAccessIntegration {
     @Override
     public long duplicateReplicaSet(long replicaSetId, String userId) {
         long duplicateReplicaSetId = 0;
-        Boolean[] replicaSet = getMetaMap(replicaSetId);
+        Boolean[] replicaSet = getTciaMetaMap(replicaSetId);
         if (replicaSet != null) {
             duplicateReplicaSetId = UUID.randomUUID().getLeastSignificantBits();
             tciaMetaMap.put(duplicateReplicaSetId, replicaSet);
@@ -576,17 +575,6 @@ public class TciaReplicaSetAPI extends InfDataAccessIntegration {
     public long putSeriesSet(long replicaSetId, String[] metadata) {
         seriesMap.put(replicaSetId, metadata);
         return replicaSetId;
-    }
-
-    /**
-     * GET /getMetaMap
-     * Gets the meta map entry of the given replicaSetID.
-     *
-     * @param replicaSetId, long
-     * @return replicaSet:Boolean[]
-     */
-    public Boolean[] getMetaMap(long replicaSetId) {
-        return tciaMetaMap.get(replicaSetId);
     }
 
     /**

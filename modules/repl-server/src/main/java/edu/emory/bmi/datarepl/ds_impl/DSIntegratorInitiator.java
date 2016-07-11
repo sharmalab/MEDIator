@@ -19,7 +19,7 @@ public class DSIntegratorInitiator {
     private static Logger logger = LogManager.getLogger(DSIntegratorInitiator.class.getName());
 
     public static void main(String[] args) {
-        InfDataAccessIntegration infDataAccessIntegration = DSInfDai.getInfiniCore();
+        InfDataAccessIntegration infDataAccessIntegration = InfDataAccessIntegration.getInfiniCore();
         logger.info("Infinispan Initiator instance started..");
 
         MetaDataLoader.parseCSV(edu.emory.bmi.datarepl.constants.DataSourcesConstants.META_CSV_FILE, edu.emory.bmi.datarepl.constants.DataSourcesConstants.CSV_META_POSITION,

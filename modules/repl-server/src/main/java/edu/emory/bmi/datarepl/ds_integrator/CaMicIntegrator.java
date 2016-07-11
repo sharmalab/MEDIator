@@ -8,8 +8,8 @@
 
 package edu.emory.bmi.datarepl.ds_integrator;
 
-import edu.emory.bmi.datarepl.ds_impl.DSInfDai;
 import edu.emory.bmi.datarepl.constants.DataSourcesConstants;
+import edu.emory.bmi.datarepl.core.InfDataAccessIntegration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,11 +26,11 @@ public class CaMicIntegrator extends DataSourcesIntegrator {
      */
     public static String getPatientStudies(String patientID) {
         if (DataSourcesIntegrator.doesExistInDataSource(patientID, DataSourcesConstants.CA_META_POSITION)) {
-            return DSInfDai.getCaMetaMap().get(patientID);
+            return InfDataAccessIntegration.getCaMetaMap().get(patientID);
         } else {
             String url = DataSourcesConstants.CA_MICROSCOPE_BASE_URL + DataSourcesConstants.CA_MICROSCOPE_QUERY_URL +
                     patientID;
-            DSInfDai.getCaMetaMap().put(patientID, url);
+            InfDataAccessIntegration.getCaMetaMap().put(patientID, url);
             updateExistenceInDataSource(patientID, DataSourcesConstants.CA_META_POSITION, true);
             return url;
         }
@@ -43,7 +43,7 @@ public class CaMicIntegrator extends DataSourcesIntegrator {
      * @param object, object value
      */
     public static void updateMetaData(String key, String object) {
-        DSInfDai.getCaMetaMap().put(key, object);
+        InfDataAccessIntegration.getCaMetaMap().put(key, object);
     }
 
     /**
@@ -53,7 +53,7 @@ public class CaMicIntegrator extends DataSourcesIntegrator {
      */
     public static String getMetaData(String id) {
         if (DataSourcesIntegrator.doesExistInDataSource(id, DataSourcesConstants.CA_META_POSITION)) {
-            return DSInfDai.getCaMetaMap().get(id);
+            return InfDataAccessIntegration.getCaMetaMap().get(id);
         } else {
             logger.info("Meta data does not exist in the map for the key, " + id);
             return null;
@@ -78,7 +78,7 @@ public class CaMicIntegrator extends DataSourcesIntegrator {
      */
     public static void deleteMetaData(String id) {
         if (DataSourcesIntegrator.doesExistInDataSource(id, DataSourcesConstants.CA_META_POSITION)) {
-            DSInfDai.getCaMetaMap().remove(id);
+            InfDataAccessIntegration.getCaMetaMap().remove(id);
             updateExistenceInDataSource(id, DataSourcesConstants.CSV_META_POSITION, false);
         } else {
             logger.info("Meta data does not exist in the map for the key, " + id);

@@ -16,8 +16,8 @@
 package edu.emory.bmi.datarepl.rest;
 
 import edu.emory.bmi.datarepl.constants.CommonConstants;
+import edu.emory.bmi.datarepl.replicaset.TciaReplicaSetHandler;
 import edu.emory.bmi.datarepl.tcia.TciaLogInInitiator;
-import edu.emory.bmi.datarepl.tcia.TciaReplicaSetAPI;
 import edu.emory.bmi.datarepl.ui.DataRetriever;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,7 +35,7 @@ public class TciaReplicaSetManager {
         TciaLogInInitiator logInInitiator = new TciaLogInInitiator();
         logInInitiator.init();
 
-        TciaReplicaSetAPI tciaReplicaSetAPI = TciaLogInInitiator.getTciaReplicaSetAPI();
+        TciaReplicaSetHandler tciaReplicaSetHandler = TciaLogInInitiator.getTciaReplicaSetHandler();
 
 
         /**
@@ -53,7 +53,7 @@ public class TciaReplicaSetManager {
             String[] patientId = (request.queryParams("iPatientID") != null) ? request.queryParams("iPatientID").split(",") : new String[0];
             String[] studyInstanceUID = (request.queryParams("iStudyInstanceUID") != null) ? request.queryParams("iStudyInstanceUID").split(",") : new String[0];
             String[] seriesInstanceUID = (request.queryParams("iSeriesInstanceUID") != null) ? request.queryParams("iSeriesInstanceUID").split(",") : new String[0];
-            long id = tciaReplicaSetAPI.createNewReplicaSet(userId, collection, patientId, studyInstanceUID, seriesInstanceUID);
+            long id = tciaReplicaSetHandler.createNewReplicaSet(userId, collection, patientId, studyInstanceUID, seriesInstanceUID);
             response.status(201); // 201 Created
             return id;
         });
@@ -72,7 +72,7 @@ public class TciaReplicaSetManager {
          Replicasets not found for the user: 123
          */
         get("/replicasets/:id", (request, response) -> {
-            Long[] replicaSets = tciaReplicaSetAPI.getUserReplicaSets(request.params(":id"));
+            Long[] replicaSets = tciaReplicaSetHandler.getUserReplicaSets(request.params(":id"));
 
             String out = Arrays.toString(replicaSets);
 
@@ -106,7 +106,7 @@ public class TciaReplicaSetManager {
          */
         get("/replicaset/:id", (request, response) -> {
             long replicaSetID = Long.parseLong(request.params(":id"));
-            String replicaSet = tciaReplicaSetAPI.getReplicaSet(replicaSetID);
+            String replicaSet = tciaReplicaSetHandler.getReplicaSet(replicaSetID);
             if (replicaSet != null) {
                 return replicaSet;
             } else {
@@ -133,7 +133,7 @@ public class TciaReplicaSetManager {
             String userId = request.params(":id");
             long replicaSetID = Long.parseLong(request.queryParams("replicaSetID"));
 
-            return tciaReplicaSetAPI.deleteReplicaSet(userId, replicaSetID);
+            return tciaReplicaSetHandler.deleteReplicaSet(userId, replicaSetID);
         });
 
 
@@ -158,7 +158,7 @@ public class TciaReplicaSetManager {
             String[] studyInstanceUID = (request.queryParams("iStudyInstanceUID") != null) ? request.queryParams("iStudyInstanceUID").split(",") : new String[0];
             String[] seriesInstanceUID = (request.queryParams("iSeriesInstanceUID") != null) ? request.queryParams("iSeriesInstanceUID").split(",") : new String[0];
 
-            Boolean out = tciaReplicaSetAPI.replaceReplicaSet(replicaSetId, collection, patientId, studyInstanceUID, seriesInstanceUID);
+            Boolean out = tciaReplicaSetHandler.replaceReplicaSet(replicaSetId, collection, patientId, studyInstanceUID, seriesInstanceUID);
             response.status(201); // 201 Created
             return out;
         });
@@ -185,7 +185,7 @@ public class TciaReplicaSetManager {
             String[] studyInstanceUID = (request.queryParams("iStudyInstanceUID") != null) ? request.queryParams("iStudyInstanceUID").split(",") : new String[0];
             String[] seriesInstanceUID = (request.queryParams("iSeriesInstanceUID") != null) ? request.queryParams("iSeriesInstanceUID").split(",") : new String[0];
 
-            Boolean out = tciaReplicaSetAPI.addToReplicaSet(replicaSetId, collection, patientId, studyInstanceUID, seriesInstanceUID);
+            Boolean out = tciaReplicaSetHandler.addToReplicaSet(replicaSetId, collection, patientId, studyInstanceUID, seriesInstanceUID);
             response.status(201); // 201 Created
             return out;
         });
@@ -204,7 +204,7 @@ public class TciaReplicaSetManager {
             String userId = request.queryParams("userID");
             long replicaSetID = Long.parseLong(request.queryParams("replicaSetID"));
 
-            long newReplicaSetID = tciaReplicaSetAPI.duplicateReplicaSet(replicaSetID, userId);
+            long newReplicaSetID = tciaReplicaSetHandler.duplicateReplicaSet(replicaSetID, userId);
             response.status(201); // 201 Created
             return newReplicaSetID;
         });

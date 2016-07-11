@@ -23,8 +23,17 @@ import java.util.UUID;
  */
 public class InfDataAccessIntegration implements PubConsAPI {
     private static InfDataAccessIntegration infDataAccessIntegration = null;
+
     protected static Cache<Long, String> replicaSetsMap;
     protected static Cache<String, Long[]> userReplicasMap;
+
+    protected static Cache<String, Boolean[]> metaMap; /*csv, ca, tcia, s3*/
+
+    protected static Cache<String, String[]> csvMetaMap;
+    protected static Cache<String, String> caMetaMap;
+    protected static Cache<String, String> s3MetaMap;
+    protected static Cache<Long, Boolean[]> tciaMetaMap;
+
 
     protected DefaultCacheManager manager;
 
@@ -40,6 +49,14 @@ public class InfDataAccessIntegration implements PubConsAPI {
         manager = new DefaultCacheManager(InfConstants.INFINISPAN_CONFIG_FILE);
         userReplicasMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
         replicaSetsMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_RS);
+
+        metaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
+
+        csvMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_META);
+        s3MetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_S3);
+        tciaMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_META);
+        caMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_CA);
+
         logger.info("Initialized the Infinispan Cache for the Data Replication Tool..");
     }
 
@@ -218,5 +235,35 @@ public class InfDataAccessIntegration implements PubConsAPI {
     public void getRawData(String key) {
         //implement the JNLP/Java Web Start code for downloading the respective file for the replicaSetIDS as a zip.
     }
+
+
+    public static Cache<String, String[]> getCsvMetaMap() {
+        return csvMetaMap;
+    }
+
+    public static Cache<String, Boolean[]> getMetaMap() {
+        return metaMap;
+    }
+
+    public static Cache<String, String> getS3MetaMap() {
+        return s3MetaMap;
+    }
+
+    public static Cache<String, String> getCaMetaMap() {
+        return caMetaMap;
+    }
+
+
+    /**
+     * GET /getTciaMetaMap
+     * Gets the meta map entry of the given replicaSetID.
+     *
+     * @param replicaSetId, long
+     * @return replicaSet:Boolean[]
+     */
+    public Boolean[] getTciaMetaMap(long replicaSetId) {
+        return tciaMetaMap.get(replicaSetId);
+    }
+
 }
 

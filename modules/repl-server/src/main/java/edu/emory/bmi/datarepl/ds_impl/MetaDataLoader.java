@@ -8,6 +8,7 @@
 
 package edu.emory.bmi.datarepl.ds_impl;
 
+import edu.emory.bmi.datarepl.core.InfDataAccessIntegration;
 import edu.emory.bmi.datarepl.ds_integrator.DataSourcesIntegrator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -96,7 +97,7 @@ public class MetaDataLoader {
                 String[] metaArray = new String[length - 1];
                 System.arraycopy(entry, 1, metaArray, 0, length - 1);
 
-                DSInfDai.getCsvMetaMap().put(entry[0], metaArray);
+                InfDataAccessIntegration.getCsvMetaMap().put(entry[0], metaArray);
 
             }
 
