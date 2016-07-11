@@ -43,6 +43,7 @@ public class TciaReplicaSetInvoker {
 
         TciaReplicaSetAPI tciaReplicaSetAPI = TciaLogInInitiator.getTciaReplicaSetAPI();
 
+
         /**
          * Create Replica Set:
          /POST
@@ -51,14 +52,6 @@ public class TciaReplicaSetInvoker {
          Response:
          (replicaSetID).
          -4764762120292626164
-
-         or
-
-         <html>
-         <body>
-         <h2>500 Internal Error</h2>
-         </body>
-         </html>
          */
         post("/replicasets", (request, response) -> {
             String userId = request.queryParams("iUserID");
@@ -141,14 +134,6 @@ public class TciaReplicaSetInvoker {
          or
 
          false
-
-         or
-
-         <html>
-         <body>
-         <h2>500 Internal Error</h2>
-         </body>
-         </html>
          */
         delete("/replicaset/:id", (request, response) -> {
             String userId = request.params(":id");
@@ -163,6 +148,13 @@ public class TciaReplicaSetInvoker {
          Replace Replica Set:
          /POST
          http://localhost:9090/replicaset/-5841894688098285105?iStudyInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895&iSeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.179004339156422100336233996679
+
+         Response:
+         true
+
+         or
+
+         false
          */
         post("/replicaset/:id", (request, response) -> {
             long replicaSetId = Long.parseLong(request.params(":id"));
@@ -177,11 +169,19 @@ public class TciaReplicaSetInvoker {
             return out;
         });
 
+
         /**
          *
          Append Replica Set:
          /PUT
          http://localhost:9090/replicaset/-5841894688098285105?iCollection=TCGA-GBM
+
+         Response:
+         true
+
+         or
+
+         false
          */
         put("/replicaset/:id", (request, response) -> {
             long replicaSetId = Long.parseLong(request.params(":id"));
