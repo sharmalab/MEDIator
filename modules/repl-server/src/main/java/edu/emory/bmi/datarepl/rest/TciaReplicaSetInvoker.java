@@ -63,10 +63,10 @@ public class TciaReplicaSetInvoker {
          */
         post("/replicasets", (request, response) -> {
             String userId = request.queryParams("iUserID");
-            String[] collection = (request.queryParams("iCollection")!=null) ? request.queryParams("iCollection").split(",") : new String[0];
-            String[] patientId = (request.queryParams("iPatientID")!=null) ? request.queryParams("iPatientID").split(",") : new String[0];
-            String[] studyInstanceUID = (request.queryParams("iStudyInstanceUID")!=null) ? request.queryParams("iStudyInstanceUID").split(",") : new String[0];
-            String[] seriesInstanceUID = (request.queryParams("iSeriesInstanceUID")!=null)? request.queryParams("iSeriesInstanceUID").split(",") : new String[0];
+            String[] collection = (request.queryParams("iCollection") != null) ? request.queryParams("iCollection").split(",") : new String[0];
+            String[] patientId = (request.queryParams("iPatientID") != null) ? request.queryParams("iPatientID").split(",") : new String[0];
+            String[] studyInstanceUID = (request.queryParams("iStudyInstanceUID") != null) ? request.queryParams("iStudyInstanceUID").split(",") : new String[0];
+            String[] seriesInstanceUID = (request.queryParams("iSeriesInstanceUID") != null) ? request.queryParams("iSeriesInstanceUID").split(",") : new String[0];
             long id = tciaReplicaSetAPI.createNewReplicaSet(userId, collection, patientId, studyInstanceUID, seriesInstanceUID);
             response.status(201); // 201 Created
             return id;
@@ -102,7 +102,7 @@ public class TciaReplicaSetInvoker {
         /**
          *
          Retrieve Replica Set:
-        /GET
+         /GET
          http://localhost:9090/replicaset/-5760861907871124991
 
          Response:
@@ -131,6 +131,34 @@ public class TciaReplicaSetInvoker {
 
 
         /**
+         *
+         Delete Replica Set:
+         /DELETE
+         http://localhost:9090/replicaset/12?replicaSetID=-5722101370224504108
+
+         Response:
+         true
+
+         or
+
+         false
+
+         or
+
+         <html>
+         <body>
+         <h2>500 Internal Error</h2>
+         </body>
+         </html>
+         */
+        delete("/replicaset/:id", (request, response) -> {
+            String userId = request.params(":id");
+            long replicaSetID = Long.parseLong(request.queryParams("replicaSetID"));
+
+            return tciaReplicaSetAPI.deleteReplicaSet(userId, replicaSetID);
+        });
+
+        /**
          Duplicate Replica Set:
          curl "http://lion.bmi.emory.edu:8080/mediator/duplicateRs?dUserID=123&replicaSetID=-8818562079351590113"
 
@@ -143,8 +171,8 @@ public class TciaReplicaSetInvoker {
          Append Replica Set:
          curl "http://lion.bmi.emory.edu:8080/mediator/appendRs?iRsID=-8818562079351590113&iCollection=&iPatientID=A111111111111&iStudyInstanceUID=CCCCC1111111111111&iSeriesInstanceUID="
 
-         Delete Replica Set:
-         curl "http://lion.bmi.emory.edu:8080/mediator/deleteRs?userID=123&replicaSetID=-5844980299248549862"
+
+
 
          Search Series (TCIA):
          curl "http://lion.bmi.emory.edu:8080/mediator/init?iCollection=TCGA-GBM&iPatientID=TCGA-06-6701&iStudyInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895&iModality=MR"
@@ -173,17 +201,6 @@ public class TciaReplicaSetInvoker {
             }
         });
 
-        // Deletes the book resource for the provided id
-        delete("/replicasets/:id", (request, response) -> {
-            String id = request.params(":id");
-            Book book = books.remove(id);
-            if (book != null) {
-                return "Book with id '" + id + "' deleted";
-            } else {
-                response.status(404); // 404 Not found
-                return "Book not found";
-            }
-        });
 
     }
 
