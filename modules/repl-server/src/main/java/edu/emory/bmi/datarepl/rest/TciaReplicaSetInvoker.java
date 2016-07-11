@@ -23,6 +23,7 @@ import edu.emory.bmi.datarepl.ui.DataRetriever;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -32,7 +33,6 @@ import static spark.Spark.*;
 public class TciaReplicaSetInvoker {
     private static Map<String, Book> books = new HashMap<String, Book>();
     private static Logger logger = LogManager.getLogger(DataRetriever.class.getName());
-    private static TciaInvoker tciaInvoker;
 
     public static void main(String[] args) {
 
@@ -41,11 +41,7 @@ public class TciaReplicaSetInvoker {
         TciaLogInInitiator logInInitiator = new TciaLogInInitiator();
         logInInitiator.init();
 
-        tciaInvoker = logInInitiator.getTciaInvoker();
-
         TciaReplicaSetAPI tciaReplicaSetAPI = TciaLogInInitiator.getTciaReplicaSetAPI();
-
-        final Random random = new Random();
 
         /**
          * Create Replica Set:
@@ -56,24 +52,44 @@ public class TciaReplicaSetInvoker {
          (replicaSetID).
          -4764762120292626164
          */
-         post("/replicasets", (request, response) -> {
-         String userId = request.queryParams("iUserID");
-         String[] collection = request.queryParams("iCollection").split(",");
-         String[] patientId = request.queryParams("iPatientID").split(",");
-         String[] studyInstanceUID = request.queryParams("iStudyInstanceUID").split(",");
-         String[] seriesInstanceUID = request.queryParams("iSeriesInstanceUID").split(",");
-         long id = tciaReplicaSetAPI.createNewReplicaSet(userId,collection,patientId,studyInstanceUID,seriesInstanceUID);
-         response.status(201); // 201 Created
-         return id;
-         });
+        post("/replicasets", (request, response) -> {
+            String userId = request.queryParams("iUserID");
+            String[] collection = request.queryParams("iCollection").split(",");
+            String[] patientId = request.queryParams("iPatientID").split(",");
+            String[] studyInstanceUID = request.queryParams("iStudyInstanceUID").split(",");
+            String[] seriesInstanceUID = request.queryParams("iSeriesInstanceUID").split(",");
+            long id = tciaReplicaSetAPI.createNewReplicaSet(userId, collection, patientId, studyInstanceUID, seriesInstanceUID);
+            response.status(201); // 201 Created
+            return id;
+        });
 
 
-         /**
+        /**
+         Get Replica Sets of the user:
+         /GET
+         http://localhost:9090/replicasets/12
+
+         Response:
+         [-7466653342708752832, -7059417815353339196, -6908825180316283930, -6365519002970140943]
+         */
+        get("/replicasets/:id", (request, response) -> {
+            Long[] replicaSets = tciaReplicaSetAPI.getUserReplicaSets(request.params(":id"));
+
+            String out = Arrays.toString(replicaSets);
+
+            if (replicaSets != null) {
+                return out;
+            } else {
+                response.status(404); // 404 Not found
+                return "Replicasets not found for the user: " + request.params(":id");
+            }
+        });
+
+        /**
          Duplicate Replica Set:
          curl "http://lion.bmi.emory.edu:8080/mediator/duplicateRs?dUserID=123&replicaSetID=-8818562079351590113"
 
-         List Replica Sets:
-         curl "http://lion.bmi.emory.edu:8080/mediator/listRs?dUserID=12"
+
 
          Retrieve Replica Set:
          curl "http://lion.bmi.emory.edu:8080/mediator/retrieveRs?replicaSetID=-8818562079351590113"
@@ -91,16 +107,6 @@ public class TciaReplicaSetInvoker {
          curl "http://lion.bmi.emory.edu:8080/mediator/init?iCollection=TCGA-GBM&iPatientID=TCGA-06-6701&iStudyInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895&iModality=MR"
          */
 
-        // Gets the book resource for the provided id
-        get("/replicasets/:id", (request, response) -> {
-            Book book = books.get(request.params(":id"));
-            if (book != null) {
-                return "Title: " + book.getTitle() + ", Author: " + book.getAuthor();
-            } else {
-                response.status(404); // 404 Not found
-                return "Book not found";
-            }
-        });
 
         // Updates the book resource for the provided id with new information
         // author and title are sent in the request body as x-www-urlencoded values e.g. author=Foo&title=Bar
