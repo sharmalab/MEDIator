@@ -8,6 +8,7 @@
 
 package edu.emory.bmi.datarepl.core;
 
+import edu.emory.bmi.datarepl.integrator.ReplicaSetsIntegrator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,7 +19,7 @@ public class Initiator {
     private static Logger logger = LogManager.getLogger(Initiator.class.getName());
 
     public static void main(String[] args) {
-        InfDataAccessIntegration infDataAccessIntegration = InfDataAccessIntegration.getInfiniCore();
+        ReplicaSetsIntegrator replicaSetsIntegrator = ReplicaSetsIntegrator.getInfiniCore();
         logger.info("Infinispan Initiator instance started..");
     }
 }

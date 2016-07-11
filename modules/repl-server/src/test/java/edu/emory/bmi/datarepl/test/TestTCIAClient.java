@@ -8,10 +8,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import edu.emory.bmi.datarepl.tcia_rest_api.ITCIAClient;
-import edu.emory.bmi.datarepl.tcia_rest_api.OutputFormat;
-import edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientException;
-import edu.emory.bmi.datarepl.tcia_rest_api.TCIAClientImpl;
+import edu.emory.bmi.datarepl.ds_mgmt.tcia.ITCIAClient;
+import edu.emory.bmi.datarepl.ds_mgmt.tcia.OutputFormat;
+import edu.emory.bmi.datarepl.ds_mgmt.tcia.TCIAClientException;
+import edu.emory.bmi.datarepl.ds_mgmt.tcia.TCIAClientImpl;
 import org.junit.Test;
 
 

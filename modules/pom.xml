@@ -50,7 +50,7 @@
                 <assembleDirectory>target</assembleDirectory>
                 <programs>
                     <program>
-                        <mainClass>edu.emory.bmi.datarepl.ui.DataRetriever</mainClass>
+                        <mainClass>edu.emory.bmi.datarepl.webapp.DataRetriever</mainClass>
                         <name>webapp</name>
                     </program>
                 </programs>

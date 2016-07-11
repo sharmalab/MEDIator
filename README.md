@@ -40,6 +40,7 @@ Logging
 Make sure to include log4j2-test.xml into your class path to be able to configure and view the logs. Default log level is [WARN].
 
 
+
 ## Dependencies
 This project depends on the below major projects.
 
@@ -51,23 +52,45 @@ This project depends on the below major projects.
 * Mashape Unirest
 
 
-## Resources
 
-[1] TCIA REST API
------------------
-[1.1]  TCIA Programmatic Interface (REST API) Usage Guide - 
-https://wiki.cancerimagingarchive.net/display/Public/TCIA+Programmatic+Interface+%28REST+API%29+Usage+Guide
+## Interfaces
 
-[1.2] TCIA on Mashape - https://www.mashape.com/tcia/the-cancer-imaging-archive
+[1] Data Source Management
+--------------------------
+Relevant classes can be found in the package: ds_mgmt.
 
-[1.3] TCIA REST API Client - https://github.com/nadirsaghar/TCIA-REST-API-Client
+Data source management module manages the data sources themselves. 
+
+The relevant interfaces and implementations are often provided by the data sources or the data providers, and hence 
+orthogonal to MEDIator. However, a TCIA data source management RESTful interface and implementation are included.
 
 
-[2] Infinispan - MongoDB Integration
-------------------------------------
-[2.1] Using MongoDB as cache store - http://blog.infinispan.org/2013/06/using-mongodb-as-cache-store.html
+[2] Replica Set Management
+--------------------------
+Relevant classes can be found in the package: rs_mgmt.
 
-[2.2] Infinispan MongoDB Cache Store - https://github.com/infinispan/infinispan-cachestore-mongodb
+Replicaset management module manages the replica sets pointing to each of the data sources.
+
+ReplicaSetHandlers are implemented for each of the data sources that are federated by MEDIator. The ReplicaSetHandlers
+offer an internal implementation of the replica sets management.
+
+ReplicaSetManagers are the core REST APIs of MEDIator. They leverage the ReplicaSetHandlers to manage the replica sets 
+of each of the data sources. There is a one-to-one mapping between the ReplicaSetManager api implementations and the 
+data sources.
+
+TciaReplicaSetManager provides the REST API for managing the TCIA replica sets. Relevant documentation can be found in 
+the class as the method-level comments.
+
+
+[3] Integrator
+---------------
+Relevant classes can be found in the package: integrator.
+
+ReplicaSetsIntegrator is a singleton that manages integration of all the data sources for the replica set management.
+
+Hence, ReplicaSetsIntegrator is a single entity that has a one-to-many relationship with the data sources of MEDIator
+for the replicaset management.
+
 
 
 ## Connect to An EC2 Instance
@@ -92,8 +115,10 @@ $ nohup wget https://tcga-data.nci.nih.gov/tcgafiles/ftp_auth/distro_ftpusers/an
 $ tar -zxvf 652ccf44-cfda-4e99-81ac-d8f4c0eca6be.tar
 
 
+
 ## Further customizations
 If you wish to reproduce the system in another deployment, please refer to documentation/HOW-TO.
+
 
 
 ## Citing MEDIator
