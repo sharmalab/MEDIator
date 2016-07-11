@@ -88,6 +88,26 @@ public class TciaReplicaSetAPI extends InfDataAccessIntegration {
         return updateReplicaSet(replicaSetId, collection,patientID,studyInstanceUID,seriesInstanceUID);
     }
 
+    /**
+     * Creates a replicaSet for the user in the format: {collection: boolean, patient: boolean,
+     * study: boolean, series: boolean}
+     *
+     * @param userId            the user
+     * @param collection        collection names
+     * @param patientID         String[]
+     * @param studyInstanceUID  String[]
+     * @param seriesInstanceUID String[]
+     * @return the created replica set.
+     */
+    public long createNewReplicaSet(String userId, String[] collection, String[] patientID,
+                                 String[] studyInstanceUID, String[] seriesInstanceUID) {
+        long replicaSetId = UUID.randomUUID().getLeastSignificantBits();
+        addToUserReplicasMap(userId, replicaSetId);
+
+        updateReplicaSet(replicaSetId, collection,patientID,studyInstanceUID,seriesInstanceUID);
+        return replicaSetId;
+    }
+
 
     /**
      * PUSH /updateReplicaSet

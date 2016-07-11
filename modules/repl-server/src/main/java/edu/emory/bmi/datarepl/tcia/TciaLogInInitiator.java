@@ -51,4 +51,8 @@ public class TciaLogInInitiator extends LogInInitiator {
         tciaReplicaSetAPI = (TciaReplicaSetAPI) TciaReplicaSetAPI.getInfiniCore();
         tciaInvoker = new TciaInvoker();
     }
+
+    public static TciaReplicaSetAPI getTciaReplicaSetAPI() {
+        return tciaReplicaSetAPI;
+    }
 }

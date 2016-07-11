@@ -17,6 +17,7 @@ package edu.emory.bmi.datarepl.rest;
 
 import edu.emory.bmi.datarepl.interfacing.TciaInvoker;
 import edu.emory.bmi.datarepl.tcia.TciaLogInInitiator;
+import edu.emory.bmi.datarepl.tcia.TciaReplicaSetAPI;
 import edu.emory.bmi.datarepl.ui.DataRetriever;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,10 +42,32 @@ public class TciaReplicaSetInvoker {
 
         tciaInvoker = logInInitiator.getTciaInvoker();
 
+        TciaReplicaSetAPI tciaReplicaSetAPI = TciaLogInInitiator.getTciaReplicaSetAPI();
+
+        final Random random = new Random();
+
         /**
          * Create Replica Set:
-         curl "http://lion.bmi.emory.edu:8080/mediator/createRs?iUserID=12&iCollection=TCGA-GBM&iPatientID=&iStudyInstanceUID=&iSeriesInstanceUID"
+         /POST
+         http://localhost:5678/replicasets?iUserID=12&iCollection=TCGA-GBM&iPatientID=TCGA-06-6701%2CTCGA-08-0831&iStudyInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895&iSeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.179004339156422100336233996679
 
+         Response:
+         (replicaSetID).
+         -4764762120292626164
+         */
+         post("/replicasets", (request, response) -> {
+         String userId = request.queryParams("iUserID");
+         String[] collection = request.queryParams("iCollection").split(",");
+         String[] patientId = request.queryParams("iPatientID").split(",");
+         String[] studyInstanceUID = request.queryParams("iStudyInstanceUID").split(",");
+         String[] seriesInstanceUID = request.queryParams("iSeriesInstanceUID").split(",");
+         long id = tciaReplicaSetAPI.createNewReplicaSet(userId,collection,patientId,studyInstanceUID,seriesInstanceUID);
+         response.status(201); // 201 Created
+         return id;
+         });
+
+
+         /**
          Duplicate Replica Set:
          curl "http://lion.bmi.emory.edu:8080/mediator/duplicateRs?dUserID=123&replicaSetID=-8818562079351590113"
 
@@ -66,23 +89,6 @@ public class TciaReplicaSetInvoker {
          Search Series (TCIA):
          curl "http://lion.bmi.emory.edu:8080/mediator/init?iCollection=TCGA-GBM&iPatientID=TCGA-06-6701&iStudyInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895&iModality=MR"
          */
-
-        final Random random = new Random();
-
-        // Creates a new book resource, will return the ID to the created resource
-        // author and title are sent in the post body as x-www-urlencoded values e.g. author=Foo&title=Bar
-        // you get them by using request.queryParams("valuename")
-        post("/replicasets", (request, response) -> {
-            String author = request.queryParams("author");
-            String title = request.queryParams("title");
-            Book book = new Book(author, title);
-
-            int id = random.nextInt(Integer.MAX_VALUE);
-            books.put(String.valueOf(id), book);
-
-            response.status(201); // 201 Created
-            return id;
-        });
 
         // Gets the book resource for the provided id
         get("/replicasets/:id", (request, response) -> {
