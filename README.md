@@ -31,9 +31,23 @@ If you do not have a TCIA API_KEY yet, please build with skipping the tests.
 
 Executing
 ---------
+[1] MEDIator REST APIs.
+
+In order to expose the MEDIator REST APIs, execute the MEDIatorEngine class.
+
+Extend or leverage the exposed APIs, or simply test using a REST client such as the Postman Chrome application.
+
+
+[2] MEDIator Web Application
+   
      sh modules/repl-server/target/bin/webapp
 
-Go to http://localhost:9090/mediator/ using your browser to access the Data Replication and Synchronization Tool.
+Go to http://localhost:9090/mediator/ using your browser to access the Web Application.
+
+
+
+You may run the Initiator class in parallel, to create a MEDIator cluster in both cases.
+
 
 Logging
 -------
