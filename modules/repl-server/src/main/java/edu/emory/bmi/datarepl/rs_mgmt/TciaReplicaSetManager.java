@@ -30,17 +30,9 @@ import static spark.Spark.*;
  * Offers a REST API for TCIA replica sets management.
  */
 public class TciaReplicaSetManager {
-    private static Logger logger = LogManager.getLogger(DataRetriever.class.getName());
 
-    public static void main(String[] args) {
-
-        port(CommonConstants.REST_PORT);
-
-        TciaInitializer tciaInitializer = new TciaInitializer();
-        tciaInitializer.init();
-
+    public static void initialize () {
         TciaReplicaSetHandler tciaReplicaSetHandler = TciaInitializer.getTciaReplicaSetHandler();
-
 
         /**
          * Create Replica Set:
@@ -106,8 +98,6 @@ public class TciaReplicaSetManager {
          <h2>500 Internal Error</h2>
          </body>
          </html>
-
-
          */
         get("/replicaset/:id", (request, response) -> {
             long replicaSetID = Long.parseLong(request.params(":id"));
@@ -232,5 +222,6 @@ public class TciaReplicaSetManager {
             response.status(201); // 201 Created
             return newReplicaSetID;
         });
+
     }
 }
