@@ -83,4 +83,12 @@ public abstract class RsIntegratorCore implements IIntegrator {
 
         }
     }
+
+    public static void updateExistenceInDataSource(long id, int metaArrayIndex, boolean existence) {
+        updateExistenceInDataSource(String.valueOf(id), metaArrayIndex, existence);
+    }
+
+    public static boolean doesExistInDataSource(long id, int metaArrayIndex) {
+        return doesExistInDataSource(String.valueOf(id), metaArrayIndex);
+    }
 }
