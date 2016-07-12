@@ -18,7 +18,7 @@ package edu.emory.bmi.datarepl.rs_mgmt;
 import edu.emory.bmi.datarepl.constants.CommonConstants;
 import edu.emory.bmi.datarepl.constants.DataSourcesConstants;
 import edu.emory.bmi.datarepl.integrator.RsIntegratorCore;
-import edu.emory.bmi.datarepl.tcia.TciaInitializer;
+import edu.emory.bmi.datarepl.core.TciaInitializer;
 import edu.emory.bmi.datarepl.webapp.DataRetriever;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,8 +36,8 @@ public class TciaReplicaSetManager {
 
         port(CommonConstants.REST_PORT);
 
-        TciaInitializer logInInitiator = new TciaInitializer();
-        logInInitiator.init();
+        TciaInitializer tciaInitializer = new TciaInitializer();
+        tciaInitializer.init();
 
         TciaReplicaSetHandler tciaReplicaSetHandler = TciaInitializer.getTciaReplicaSetHandler();
 

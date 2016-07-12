@@ -8,8 +8,7 @@
 
 package edu.emory.bmi.datarepl.webapp;
 
-import edu.emory.bmi.datarepl.ds_mgmt.TciaDSManager;
-import edu.emory.bmi.datarepl.tcia.TciaInitializer;
+import edu.emory.bmi.datarepl.core.TciaInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,24 +16,15 @@ import java.io.FileNotFoundException;
 import org.apache.catalina.LifecycleException;
 
 /**
- * Sample Main class to test the implementation
+ * The core class of MEDIator webapp based on Embedded Tomcat.
  */
 public class DataRetriever {
     private static Logger logger = LogManager.getLogger(DataRetriever.class.getName());
-    private static TciaDSManager tciaDSManager;
-
 
     public static void main(String[] args) throws FileNotFoundException, LifecycleException {
-        TciaInitializer logInInitiator = new TciaInitializer();
-        logInInitiator.init();
-
-        tciaDSManager = logInInitiator.getTciaDSManager();
+        TciaInitializer tciaInitializer = new TciaInitializer();
+        tciaInitializer.init();
         logger.info("Starting Tomcat ..");
         new TomcatEmbeddedRunner().startServer();
     }
-
-    public static TciaDSManager getTciaDSManager() {
-        return tciaDSManager;
-    }
-
 }

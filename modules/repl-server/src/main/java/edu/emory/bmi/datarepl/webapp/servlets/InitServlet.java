@@ -9,7 +9,7 @@
 package edu.emory.bmi.datarepl.webapp.servlets;
 
 import edu.emory.bmi.datarepl.ds_mgmt.TciaDSManager;
-import edu.emory.bmi.datarepl.webapp.DataRetriever;
+import edu.emory.bmi.datarepl.core.TciaInitializer;
 import edu.emory.bmi.datarepl.webapp.UIGenerator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,7 +33,7 @@ public class InitServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        TciaDSManager tciaDSManager = DataRetriever.getTciaDSManager();
+        TciaDSManager tciaDSManager = TciaInitializer.getTciaDSManager();
 
         String response1;
 
