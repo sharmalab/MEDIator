@@ -16,7 +16,9 @@
 package edu.emory.bmi.datarepl.rs_mgmt;
 
 import edu.emory.bmi.datarepl.constants.CommonConstants;
-import edu.emory.bmi.datarepl.tcia.TciaInitializer;
+import edu.emory.bmi.datarepl.constants.DataSourcesConstants;
+import edu.emory.bmi.datarepl.integrator.RsIntegratorCore;
+import edu.emory.bmi.datarepl.core.TciaInitializer;
 import edu.emory.bmi.datarepl.webapp.DataRetriever;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,17 +30,9 @@ import static spark.Spark.*;
  * Offers a REST API for TCIA replica sets management.
  */
 public class TciaReplicaSetManager {
-    private static Logger logger = LogManager.getLogger(DataRetriever.class.getName());
 
-    public static void main(String[] args) {
-
-        port(CommonConstants.REST_PORT);
-
-        TciaInitializer logInInitiator = new TciaInitializer();
-        logInInitiator.init();
-
+    public static void initialize () {
         TciaReplicaSetHandler tciaReplicaSetHandler = TciaInitializer.getTciaReplicaSetHandler();
-
 
         /**
          * Create Replica Set:
@@ -55,9 +49,10 @@ public class TciaReplicaSetManager {
             String[] patientId = (request.queryParams("iPatientID") != null) ? request.queryParams("iPatientID").split(",") : new String[0];
             String[] studyInstanceUID = (request.queryParams("iStudyInstanceUID") != null) ? request.queryParams("iStudyInstanceUID").split(",") : new String[0];
             String[] seriesInstanceUID = (request.queryParams("iSeriesInstanceUID") != null) ? request.queryParams("iSeriesInstanceUID").split(",") : new String[0];
-            long id = tciaReplicaSetHandler.createNewReplicaSet(userId, collection, patientId, studyInstanceUID, seriesInstanceUID);
+            long replicaSetID = tciaReplicaSetHandler.createNewReplicaSet(userId, collection, patientId, studyInstanceUID, seriesInstanceUID);
+            RsIntegratorCore.updateExistenceInDataSource(replicaSetID, DataSourcesConstants.TCIA_META_POSITION, true);
             response.status(201); // 201 Created
-            return id;
+            return replicaSetID;
         });
 
 
@@ -91,7 +86,7 @@ public class TciaReplicaSetManager {
          *
          Retrieve Replica Set:
          /GET
-         http://localhost:9090/replicaset/-5760861907871124991
+         http://localhost:9090/replicaset/-9176938584709039161
 
          Response:
          Collection Names: [TCGA-GBM]. Patient IDs: [TCGA-06-6701, TCGA-08-0831]. StudyInstanceUIDs: [1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895]. SeriesInstanceUIDs: [1.3.6.1.4.1.14519.5.2.1.4591.4001.179004339156422100336233996679]
@@ -103,17 +98,20 @@ public class TciaReplicaSetManager {
          <h2>500 Internal Error</h2>
          </body>
          </html>
-
-
          */
         get("/replicaset/:id", (request, response) -> {
             long replicaSetID = Long.parseLong(request.params(":id"));
-            String replicaSet = tciaReplicaSetHandler.getReplicaSet(replicaSetID);
-            if (replicaSet != null) {
-                return replicaSet;
+            if (RsIntegratorCore.doesExistInDataSource(replicaSetID, DataSourcesConstants.TCIA_META_POSITION)) {
+                String replicaSet = tciaReplicaSetHandler.getReplicaSet(replicaSetID);
+                if (replicaSet != null) {
+                    return replicaSet;
+                } else {
+                    response.status(404); // 404 Not found
+                    return "Replicaset not found: " + request.params(":id");
+                }
             } else {
                 response.status(404); // 404 Not found
-                return "Replicaset not found: " + request.params(":id");
+                return "Replicaset does not exist: " + request.params(":id");
             }
         });
 
@@ -122,7 +120,7 @@ public class TciaReplicaSetManager {
          *
          Delete Replica Set:
          /DELETE
-         http://localhost:9090/replicaset/12?replicaSetID=-5722101370224504108
+         http://localhost:9090/replicaset/12?replicaSetID=-9176938584709039161
 
          Response:
          true
@@ -135,7 +133,12 @@ public class TciaReplicaSetManager {
             String userId = request.params(":id");
             long replicaSetID = Long.parseLong(request.queryParams("replicaSetID"));
 
-            return tciaReplicaSetHandler.deleteReplicaSet(userId, replicaSetID);
+            boolean deleted = tciaReplicaSetHandler.deleteReplicaSet(userId, replicaSetID);
+
+            if (deleted) { // Update existence only if the action was successful.
+                RsIntegratorCore.updateExistenceInDataSource(replicaSetID, DataSourcesConstants.TCIA_META_POSITION, false);
+            }
+            return deleted;
         });
 
 
@@ -153,14 +156,17 @@ public class TciaReplicaSetManager {
          false
          */
         post("/replicaset/:id", (request, response) -> {
-            long replicaSetId = Long.parseLong(request.params(":id"));
+            long replicaSetID = Long.parseLong(request.params(":id"));
 
             String[] collection = (request.queryParams("iCollection") != null) ? request.queryParams("iCollection").split(",") : new String[0];
             String[] patientId = (request.queryParams("iPatientID") != null) ? request.queryParams("iPatientID").split(",") : new String[0];
             String[] studyInstanceUID = (request.queryParams("iStudyInstanceUID") != null) ? request.queryParams("iStudyInstanceUID").split(",") : new String[0];
             String[] seriesInstanceUID = (request.queryParams("iSeriesInstanceUID") != null) ? request.queryParams("iSeriesInstanceUID").split(",") : new String[0];
 
-            Boolean out = tciaReplicaSetHandler.replaceReplicaSet(replicaSetId, collection, patientId, studyInstanceUID, seriesInstanceUID);
+            Boolean out = tciaReplicaSetHandler.replaceReplicaSet(replicaSetID, collection, patientId, studyInstanceUID, seriesInstanceUID);
+            if (out) { // Update existence only if the action was successful.
+                RsIntegratorCore.updateExistenceInDataSource(replicaSetID, DataSourcesConstants.TCIA_META_POSITION, true);
+            }
             response.status(201); // 201 Created
             return out;
         });
@@ -180,14 +186,18 @@ public class TciaReplicaSetManager {
          false
          */
         put("/replicaset/:id", (request, response) -> {
-            long replicaSetId = Long.parseLong(request.params(":id"));
+            long replicaSetID = Long.parseLong(request.params(":id"));
 
             String[] collection = (request.queryParams("iCollection") != null) ? request.queryParams("iCollection").split(",") : new String[0];
             String[] patientId = (request.queryParams("iPatientID") != null) ? request.queryParams("iPatientID").split(",") : new String[0];
             String[] studyInstanceUID = (request.queryParams("iStudyInstanceUID") != null) ? request.queryParams("iStudyInstanceUID").split(",") : new String[0];
             String[] seriesInstanceUID = (request.queryParams("iSeriesInstanceUID") != null) ? request.queryParams("iSeriesInstanceUID").split(",") : new String[0];
 
-            Boolean out = tciaReplicaSetHandler.addToReplicaSet(replicaSetId, collection, patientId, studyInstanceUID, seriesInstanceUID);
+            Boolean out = tciaReplicaSetHandler.addToReplicaSet(replicaSetID, collection, patientId, studyInstanceUID, seriesInstanceUID);
+
+            if (out) { // Update existence only if the action was successful.
+                RsIntegratorCore.updateExistenceInDataSource(replicaSetID, DataSourcesConstants.TCIA_META_POSITION, true);
+            }
             response.status(201); // 201 Created
             return out;
         });
@@ -196,7 +206,7 @@ public class TciaReplicaSetManager {
         /**
          Duplicate Replica Set:
          /POST
-         http://localhost:9090/replicaset?userID=1234567&replicaSetID=-7507841597257128817
+         http://localhost:9090/replicaset?userID=1234567&replicaSetID=-7196077834010820228
 
          Response:
          -5054196249282594410
@@ -207,8 +217,11 @@ public class TciaReplicaSetManager {
             long replicaSetID = Long.parseLong(request.queryParams("replicaSetID"));
 
             long newReplicaSetID = tciaReplicaSetHandler.duplicateReplicaSet(replicaSetID, userId);
+            RsIntegratorCore.updateExistenceInDataSource(newReplicaSetID, DataSourcesConstants.TCIA_META_POSITION, true);
+
             response.status(201); // 201 Created
             return newReplicaSetID;
         });
+
     }
 }

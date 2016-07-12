@@ -83,4 +83,43 @@ public abstract class RsIntegratorCore implements IIntegrator {
 
         }
     }
+
+    public static void updateExistenceInDataSource(long id, int metaArrayIndex, boolean existence) {
+        updateExistenceInDataSource(String.valueOf(id), metaArrayIndex, existence);
+    }
+
+    public static boolean doesExistInDataSource(long id, int metaArrayIndex) {
+        return doesExistInDataSource(String.valueOf(id), metaArrayIndex);
+    }
+
+    /**
+     * Get the meta map, given the replicaSetID
+     *
+     * @param id, the replicaSetID
+     * @return the metamap as a String array.
+     */
+    public static String[] getMetaData(long id) {
+        return getMetaData(String.valueOf(id));
+    }
+
+    /**
+     * Get the metamap, given the key
+     *
+     * @param key, the key
+     * @return the metamap as a String array
+     */
+    public static String[] getMetaData(String key) {
+        Boolean[] existenceArray = ReplicaSetsIntegrator.getMetaMap().get(key);
+
+        String[] outArray = new String[existenceArray.length];
+
+        for (int i = 0; i < existenceArray.length; i++) {
+            if (existenceArray[i]) {
+                outArray[i] = DataSourcesConstants.META_MAP.get(i) + " (Exists)";
+            } else {
+                outArray[i] = DataSourcesConstants.META_MAP.get(i) + " (Does Not Exist)";
+            }
+        }
+        return outArray;
+    }
 }

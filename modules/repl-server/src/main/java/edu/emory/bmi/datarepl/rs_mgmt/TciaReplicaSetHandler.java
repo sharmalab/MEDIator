@@ -306,10 +306,8 @@ public class TciaReplicaSetHandler extends ReplicaSetsIntegrator {
         if (metaMap[3]) {
             seriesInstanceUIDs = getSeriesSet(aReplicaSetID);
         }
-        logger.info("SeriesInstanceUIDs: " + Arrays.toString(seriesInstanceUIDs));
         String out = ReplicaSetRetriever.retrieveReplicaSet(aReplicaSetID, collectionNames, patientIDs, studyInstanceUIDs,
                 seriesInstanceUIDs);
-        logger.info("out: " + out);
         return out;
     }
 

@@ -10,6 +10,7 @@ package edu.emory.bmi.datarepl.webapp;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 import edu.emory.bmi.datarepl.ds_mgmt.TciaDSManager;
+import edu.emory.bmi.datarepl.core.TciaInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.velocity.VelocityContext;
@@ -37,7 +38,7 @@ public class ReplicaSetRetriever {
      */
     public static String retrieveReplicaSet(Long replicaSetID, String[] collectionNames, String[] patientIDs,
                                             String[] studyInstanceUIDs, String[] seriesInstanceUIDs) {
-        TciaDSManager tciaDSManager = DataRetriever.getTciaDSManager();
+        TciaDSManager tciaDSManager = TciaInitializer.getTciaDSManager();
         VelocityContext context = new VelocityContext();
         context.put("collectionsList", collectionNames);
         context.put("patientsList", patientIDs);

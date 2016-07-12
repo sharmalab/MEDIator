@@ -8,6 +8,9 @@
 
 package edu.emory.bmi.datarepl.constants;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Constants related to data sources.
  */
@@ -40,5 +43,10 @@ public final class DataSourcesConstants {
     public static final String S3_LEVEL3 = "level3";
     public static final String URL_SEPARATOR = "/";
 
-
+    public static final Map<Integer, String> META_MAP = new HashMap<Integer, String>() {{
+        put(CSV_META_POSITION, "CSV");
+        put(CA_META_POSITION, "CA");
+        put(TCIA_META_POSITION, "TCIA");
+        put(S3_META_POSITION, "S3");
+    }};
 }
