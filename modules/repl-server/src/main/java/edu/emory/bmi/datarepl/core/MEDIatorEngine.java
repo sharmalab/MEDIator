@@ -16,6 +16,7 @@
 package edu.emory.bmi.datarepl.core;
 
 import edu.emory.bmi.datarepl.constants.CommonConstants;
+import edu.emory.bmi.datarepl.integrator.ReplicaSetsIntegrator;
 import edu.emory.bmi.datarepl.rs_mgmt.TciaReplicaSetManager;
 import edu.emory.bmi.datarepl.webapp.DataRetriever;
 import org.apache.logging.log4j.LogManager;
@@ -38,5 +39,6 @@ public class MEDIatorEngine {
 
         logger.info("Initializing MEDIator REST APIs");
         TciaReplicaSetManager.initialize();
+        ReplicaSetsIntegrator.initialize();
     }
 }

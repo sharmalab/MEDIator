@@ -8,6 +8,7 @@
 
 package edu.emory.bmi.datarepl.integrator;
 
+import edu.emory.bmi.datarepl.constants.DataSourcesConstants;
 import edu.emory.bmi.datarepl.constants.InfConstants;
 import edu.emory.bmi.datarepl.rs_mgmt.IReplicaSetHandler;
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +19,8 @@ import org.infinispan.manager.DefaultCacheManager;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
+
+import static spark.Spark.*;
 
 /**
  * The core singleton ReplicaSetsIntegrator.
@@ -270,6 +273,56 @@ public class ReplicaSetsIntegrator extends RsIntegratorCore implements IReplicaS
         replicaSetsMap.put(duplicateReplicaSetId, replicaSet);
         addToUserReplicasMap(userId, duplicateReplicaSetId);
         return duplicateReplicaSetId;
+    }
+
+    /**
+     * Get the meta map, given the replicaSetID
+     *
+     * @param id, the replicaSetID
+     * @return the metamap as a String array.
+     */
+    public static String[] getMetaData(long id) {
+        return getMetaData(String.valueOf(id));
+    }
+
+    /**
+     * Get the metamap, given the key
+     *
+     * @param key, the key
+     * @return the metamap as a String array
+     */
+    public static String[] getMetaData(String key) {
+        Boolean[] existenceArray = metaMap.get(key);
+
+        String[] outArray = new String[existenceArray.length];
+
+        for (int i = 0; i < existenceArray.length; i++) {
+            if (existenceArray[i]) {
+                outArray[i] = DataSourcesConstants.META_MAP.get(i) + " (Exists)";
+            } else {
+                outArray[i] = DataSourcesConstants.META_MAP.get(i) + " (Does Not Exist)";
+            }
+        }
+        return outArray;
+    }
+
+    /**
+     * Initialize the Interface.
+     */
+    public static void initialize() {
+        /**
+         *
+         Retrieve Replica Set Meta Data for a replica set ID:
+         /GET
+         http://localhost:9090/meta/-9176938584709039161
+
+         Response:
+         [CSV (Does Not Exist), CA (Does Not Exist), TCIA (Exists), S3 (Does Not Exist)]
+         */
+        get("/meta/:id", (request, response) -> {
+            long replicaSetID = Long.parseLong(request.params(":id"));
+            return Arrays.toString(getMetaData(replicaSetID));
+        });
     }
 }
 
