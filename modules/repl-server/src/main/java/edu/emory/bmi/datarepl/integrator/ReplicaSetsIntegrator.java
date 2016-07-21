@@ -25,7 +25,7 @@ import static spark.Spark.*;
 /**
  * The core singleton ReplicaSetsIntegrator.
  */
-public class ReplicaSetsIntegrator extends RsIntegratorCore implements IReplicaSetHandler, IIntegrator  {
+public class ReplicaSetsIntegrator extends RsIntegratorCore implements IReplicaSetHandler, IIntegrator {
     private static ReplicaSetsIntegrator replicaSetsIntegrator = null;
 
     protected static Cache<Long, String> replicaSetsMap;
@@ -72,7 +72,7 @@ public class ReplicaSetsIntegrator extends RsIntegratorCore implements IReplicaS
             try {
                 replicaSetsIntegrator = new ReplicaSetsIntegrator();
             } catch (IOException e) {
-               logger.error("Exception when trying to initialize Infinispan.", e);
+                logger.error("Exception when trying to initialize Infinispan.", e);
             }
         }
         return replicaSetsIntegrator;
@@ -99,7 +99,8 @@ public class ReplicaSetsIntegrator extends RsIntegratorCore implements IReplicaS
 
     /**
      * /PUSH add replicaSetId to the userReplicasMap
-     * @param userId Id of the user
+     *
+     * @param userId       Id of the user
      * @param replicaSetId new replicaSetIds to be added
      */
     public void addToUserReplicasMap(String userId, long replicaSetId) {
@@ -107,8 +108,7 @@ public class ReplicaSetsIntegrator extends RsIntegratorCore implements IReplicaS
         if (userReplicasMap.get(userId) != null) {
             replicaSetIDs = Arrays.copyOf(userReplicasMap.get(userId), userReplicasMap.get(userId).length + 1);
             replicaSetIDs[replicaSetIDs.length - 1] = replicaSetId;
-        }
-        else {
+        } else {
             replicaSetIDs = new Long[1];
             replicaSetIDs[0] = replicaSetId;
         }
@@ -171,7 +171,8 @@ public class ReplicaSetsIntegrator extends RsIntegratorCore implements IReplicaS
 
     /**
      * Creates a replicaSet
-     * @param userId the user that the replicaSet is associated with
+     *
+     * @param userId     the user that the replicaSet is associated with
      * @param replicaSet the replica set
      * @return replicaSetId
      */
@@ -186,7 +187,8 @@ public class ReplicaSetsIntegrator extends RsIntegratorCore implements IReplicaS
 
     /**
      * Creates a replicaSet
-     * @param userId the user that the replicaSet is associated with
+     *
+     * @param userId     the user that the replicaSet is associated with
      * @param replicaSet the array of replica sets
      */
     public void createMultipleReplicaSets(String userId, String[] replicaSet) {
@@ -201,7 +203,7 @@ public class ReplicaSetsIntegrator extends RsIntegratorCore implements IReplicaS
      * PUT /putMetaMap
      *
      * @param replicaSetId, the id of the replica set.
-     * @param replicaSet, the query that to be stored
+     * @param replicaSet,   the query that to be stored
      * @return replicaSetId: Long
      */
     @Override
@@ -223,7 +225,8 @@ public class ReplicaSetsIntegrator extends RsIntegratorCore implements IReplicaS
 
     /**
      * PUSH /updateReplicaSet
-     * @param replicaSetId, the id of the replica to be modified.
+     *
+     * @param replicaSetId,  the id of the replica to be modified.
      * @param newReplicaSet, the new replicaSet.
      * @return the updated replica set.
      */
@@ -236,6 +239,7 @@ public class ReplicaSetsIntegrator extends RsIntegratorCore implements IReplicaS
 
     /**
      * DELETE /deleteReplicaSet
+     *
      * @param replicaSetId the id of the replica to be evicted.
      * @return true, if evicted now. False, if not available.
      */
@@ -262,8 +266,9 @@ public class ReplicaSetsIntegrator extends RsIntegratorCore implements IReplicaS
 
     /**
      * Makes a duplicate of an existing replica set.
+     *
      * @param replicaSetId the id of the replica set to be duplicated.
-     * @param userId the user who is duplicating the replica.
+     * @param userId       the user who is duplicating the replica.
      * @return the id of the duplicate replica set.
      */
     @Override
