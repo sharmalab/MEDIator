@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # MEDIator documentation build configuration file, created by
-# sphinx-quickstart on Thu Jul 21 13:17:36 2016.
+# sphinx-quickstart on Thu Jul 21 13:43:53 2016.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -38,7 +38,7 @@ templates_path = ['_templates']
 # You can specify multiple suffix as a list of string:
 #
 # source_suffix = ['.rst', '.md']
-source_suffix = '.txt'
+source_suffix = '.rst'
 
 # The encoding of source files.
 #
@@ -320,14 +320,6 @@ texinfo_documents = [
      author, 'MEDIator', 'One line description of project.',
      'Miscellaneous'),
 ]
-
-from recommonmark.parser import CommonMarkParser
-
-source_parsers = {
-    '.md': CommonMarkParser,
-}
-
-source_suffix = ['.rst', '.md']
 
 # Documents to append as an appendix to all manuals.
 #
