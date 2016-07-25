@@ -37,3 +37,10 @@ response = unirest.post("http://localhost:9090/replicaset/-4727115044472165798",
 print '%s\n%s\n%s' % (response.code, response.headers, response.body)
 
 
+# Append Replica Set.
+
+response = unirest.put("http://localhost:9090/replicaset/-4727115044472165798", headers={ "Accept": "application/json" }, params={"iCollection" : "TCGA-GBM"})
+
+print '%s\n%s\n%s' % (response.code, response.headers, response.body)
+
+
