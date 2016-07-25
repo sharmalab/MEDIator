@@ -1,4 +1,4 @@
-Installing DataCafe on CentOS
+Installing MEDIator on CentOS
 
 Install wget
 ------------
