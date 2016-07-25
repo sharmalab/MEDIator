@@ -18,7 +18,7 @@ print '%s\n%s\n%s' % (response.code, response.headers, response.body)
 
 # Retrieve Replica Set.
 
-response = unirest.get("http://localhost:9090/replicaset/-6899694980964851751")
+response = unirest.get("http://localhost:9090/replicaset/-4727115044472165798")
 
 print '%s\n%s\n%s' % (response.code, response.headers, response.body)
 
@@ -28,3 +28,12 @@ print '%s\n%s\n%s' % (response.code, response.headers, response.body)
 response = unirest.delete("http://localhost:9090/replicaset/12?replicaSetID=-5896416803618323002")
 
 print '%s\n%s\n%s' % (response.code, response.headers, response.body)
+
+
+# Replace Replica Set.
+
+response = unirest.post("http://localhost:9090/replicaset/-4727115044472165798", headers={ "Accept": "application/json" }, params={"iStudyInstanceUID" : "1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895", "iSeriesInstanceUID" : "1.3.6.1.4.1.14519.5.2.1.4591.4001.179004339156422100336233996679" })
+
+print '%s\n%s\n%s' % (response.code, response.headers, response.body)
+
+
