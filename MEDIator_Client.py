@@ -25,6 +25,6 @@ print '%s\n%s\n%s' % (response.code, response.headers, response.body)
 
 # Delete Replica Set.
 
-response = unirest.delete("http://localhost:9090/replicaset/12", headers={ "Accept": "application/json" }, params={ "replicaSetID" : "-6132597127709157935"})
+response = unirest.delete("http://localhost:9090/replicaset/12?replicaSetID=-5896416803618323002")
 
 print '%s\n%s\n%s' % (response.code, response.headers, response.body)
