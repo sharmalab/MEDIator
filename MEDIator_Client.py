@@ -44,3 +44,8 @@ response = unirest.put("http://localhost:9090/replicaset/-4727115044472165798", 
 print '%s\n%s\n%s' % (response.code, response.headers, response.body)
 
 
+# Duplicate Replica Set.
+
+response = unirest.post("http://localhost:9090/replicaset", headers={ "Accept": "application/json" }, params={ "userID" : "1234567", "replicaSetID": "-4727115044472165798"})
+
+print '%s\n%s\n%s' % (response.code, response.headers, response.body)
