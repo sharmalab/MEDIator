@@ -51,7 +51,7 @@ The implementation of the RESTful invocations can be found at TciaReplicaSetMana
    
      sh modules/repl-server/target/bin/webapp
 
-Go to http://localhost:9090/mediator/ using your browser to access the Web Application.
+Go to http://localhost:<EMBEDDED_TOMCAT_PORT>/mediator/ using your browser to access the Web Application.
 
 
 
