@@ -12,6 +12,6 @@ package edu.emory.bmi.datarepl.constants;
  * Constants common to the data replication and synchronization tool.
  */
 public final class CommonConstants {
-    public static final int EMBEDDED_TOMCAT_PORT = 9090;
-    public static final int REST_PORT = 9090;
+    public static final int EMBEDDED_TOMCAT_PORT = 80;
+    public static final int REST_PORT = 80;
 }

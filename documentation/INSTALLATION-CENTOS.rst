@@ -60,7 +60,7 @@ nohup sh modules/repl-server/target/bin/webapp > nohup.out &
 To view the logs
 tail -f nohup.out
 
-Go to http://localhost:9090/ using your browser.
+Go to http://localhost:<EMBEDDED_TOMCAT_PORT>/ using your browser.
 
 
 Execute with multiple data sources

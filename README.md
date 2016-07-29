@@ -33,16 +33,25 @@ Executing
 ---------
 [1] MEDIator REST APIs.
 
-In order to expose the MEDIator REST APIs, execute the MEDIatorEngine class.
+If you are hosting MEDIator for public access, you need to start it and expose its RESTful APIs. Execute the
+MEDIatorEngine class.
 
-Extend or leverage the exposed APIs, or simply test using a REST client such as the Postman Chrome application.
+$ java -classpath lib/repl-server-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.datarepl.core.MEDIatorEngine
+
+You may extend or leverage the exposed APIs. To begin with, you may consume the MEDIator RESTful APIs through a REST
+client such as the Postman plugin of the Chrome browser.
+
+To add more instances to the cluster, start the instances of Initiator class.
+$ java -classpath lib/repl-server-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.datarepl.core.Initiator
+
+The implementation of the RESTful invocations can be found at TciaReplicaSetManager.
 
 
 [2] MEDIator Web Application
    
      sh modules/repl-server/target/bin/webapp
 
-Go to http://localhost:9090/mediator/ using your browser to access the Web Application.
+Go to http://localhost:<EMBEDDED_TOMCAT_PORT>/mediator/ using your browser to access the Web Application.
 
 
 
