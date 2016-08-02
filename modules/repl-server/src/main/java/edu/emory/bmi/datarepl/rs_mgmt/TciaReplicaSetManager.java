@@ -79,6 +79,31 @@ public class TciaReplicaSetManager {
 
 
         /**
+         Retrieve the set of users:
+         /GET
+         http://localhost:9090/
+
+         Response:
+         [12, 1234567]
+
+         or
+
+         No users found..
+         */
+        get("/", (request, response) -> {
+            String[] users = tciaReplicaSetHandler.getUsers();
+
+            String out = Arrays.toString(users);
+
+            if ((users != null) && (users.length > 0)) {
+                return out;
+            } else {
+                return "No users found..";
+            }
+        });
+
+
+        /**
          *
          Retrieve Replica Set:
          /GET

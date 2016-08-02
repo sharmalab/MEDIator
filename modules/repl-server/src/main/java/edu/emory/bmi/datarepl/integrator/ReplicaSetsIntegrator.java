@@ -54,11 +54,11 @@ public class ReplicaSetsIntegrator extends RsIntegratorCore implements IReplicaS
         userReplicasMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
         replicaSetsMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_RS);
 
-        metaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE);
+        metaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_META);
 
-        csvMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_META);
+        csvMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_CSV);
         s3MetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_S3);
-        tciaMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_META);
+        tciaMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_TCIA);
         caMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_CA);
 
         logger.info("Initialized the Infinispan Cache for the Data Replication Tool..");
