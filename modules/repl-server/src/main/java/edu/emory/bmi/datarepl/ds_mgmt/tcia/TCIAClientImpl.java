@@ -310,8 +310,6 @@ public class TCIAClientImpl implements ITCIAClient {
 // create a new HttpGet request
             HttpGet request = new HttpGet(uri);
 
-// add api_key to the header
-            request.setHeader(API_KEY_FIELD, apiKey);
             long startTime = System.currentTimeMillis();
             HttpResponse response = httpClient.execute(request);
             long diff = System.currentTimeMillis() - startTime;
