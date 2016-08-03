@@ -1,6 +1,7 @@
 package edu.emory.bmi.datarepl.ds_mgmt.tcia;
 
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -292,6 +293,38 @@ public class TCIAClientImpl implements ITCIAClient {
             throw new edu.emory.bmi.datarepl.ds_mgmt.tcia.TCIAClientException(e, baseUrl);
         }
     }
+
+    /**
+     * Downloads the images in a given series
+     * @param seriesInstanceUID the inst
+     * @throws TCIAClientException
+     * @throws IOException
+     */
+    public void downloadImagesOfSeries(String seriesInstanceUID) throws TCIAClientException, IOException {
+            ITCIAClient.ImageResult imageResult =  getImage(seriesInstanceUID);
+            saveTo(imageResult.getRawData(), seriesInstanceUID + ".zip", ".");
+    }
+
+
+    private static void saveTo(InputStream in, String name, String directory) throws IOException {
+        FileOutputStream fos = new FileOutputStream(directory + "/" + name);
+        byte[] buffer = new byte[4096];
+        int read = -1;
+        int sum = 0;
+        while ((read = in.read(buffer)) > 0) {
+            fos.write(buffer, 0, read);
+            long mseconds = System.currentTimeMillis();
+            sum += read;
+
+            if (mseconds % 10 == 0) {
+                System.out.println(String.format("Bytes Written %s", sum));
+            }
+        }
+
+        fos.close();
+        in.close();
+    }
+
 
     public ImageResult getImage(String seriesInstanceUID)
             throws edu.emory.bmi.datarepl.ds_mgmt.tcia.TCIAClientException {
