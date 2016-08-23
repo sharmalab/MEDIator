@@ -73,6 +73,7 @@ This project depends on the below major projects.
 * Apache Velocity
 * Apache Log4j2
 * Mashape Unirest
+* SparkJava
 
 
 
