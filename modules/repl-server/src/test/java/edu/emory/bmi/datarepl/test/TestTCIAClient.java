@@ -53,24 +53,17 @@ public class TestTCIAClient {
      * Method : GetImage
      * Description : Returns images in a zip file
      */
-
     @Test
     public void testGetImage() {
-
-        // create TCIA Client by passing API-Key and baseUrl in the constructor
-        ITCIAClient client = TCIAClientImpl.getTCIAClientImpl();
+        TCIAClientImpl client = TCIAClientImpl.getTCIAClientImpl();
         String seriesInstanceUID = "1.3.6.1.4.1.14519.5.2.1.7695.4001.306204232344341694648035234440";
         try {
-            // Make the RESTfull call . Response comes back as InputStream.
-            ITCIAClient.ImageResult imageResult = client.getImage(seriesInstanceUID);
-            saveTo(imageResult.getRawData(), seriesInstanceUID + ".zip", ".");
-
+            client.downloadImagesOfSeries(seriesInstanceUID);
         } catch (TCIAClientException e) {
-            fail(e.getMessage()); // request failed
-        } catch (Exception e) {
-            fail(e.getMessage()); // request failed
+            fail("TCIA Client Exception in downloading the images. " + e.getMessage());
+        } catch (IOException e) {
+            fail("IOException in downloading the images. " + e.getMessage());
         }
-
     }
 
 
@@ -238,24 +231,6 @@ public class TestTCIAClient {
         in.close();
     }
 
-    public static void saveTo(InputStream in, String name, String directory) throws IOException {
-        FileOutputStream fos = new FileOutputStream(directory + "/" + name);
-        byte[] buffer = new byte[4096];
-        int read = -1;
-        int sum = 0;
-        while ((read = in.read(buffer)) > 0) {
-            fos.write(buffer, 0, read);
-            long mseconds = System.currentTimeMillis();
-            sum += read;
-
-            if (mseconds % 10 == 0) {
-                System.out.println(String.format("Bytes Written %s", sum));
-            }
-        }
-
-        fos.close();
-        in.close();
-    }
 
     public static String toString(InputStream in) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
