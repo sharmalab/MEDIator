@@ -20,17 +20,17 @@
   </modules>
   
   <issueManagement>
-  	<system>BitBucket</system>
-  	<url>https://bitbucket.org/BMI/datareplicationsystem/issues</url>
+  	<system>GitHub</system>
+  	<url>https://github.com/sharmalab/MEDIator/issues</url>
   </issueManagement>
   <scm>
-  	<connection>https://author_name@bitbucket.org/BMI/datareplicationsystem.git</connection>
-  	<developerConnection>https://author_name@bitbucket.org/BMI/datareplicationsystem.git</developerConnection>
-  	<url>https://bitbucket.org/BMI/datareplicationsystem</url>
+  	<connection>git@github.com:sharmalab/MEDIator.git</connection>
+  	<developerConnection>git@github.com:sharmalab/MEDIator.git</developerConnection>
+  	<url>https://github.com/sharmalab/MEDIator</url>
   </scm>
   
   <organization>
-  	<name>Biomedical Informatics, Emory University</name>
+  	<name>Department of Biomedical Informatics, Emory University</name>
   	<url>http://www.bmi.emory.edu/</url>
   </organization>
   
