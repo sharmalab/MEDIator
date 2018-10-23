@@ -1,8 +1,8 @@
 # Project Overview
 
-Welcome to the wiki of the MEDIator - Data Replication System project!
+Welcome to the wiki of the MEDIator - Data Sharing Framework!
 
-Please visit the website to learn more - https://bitbucket.org/BMI/datareplicationsystem
+Please visit the website to learn more - https://github.com/sharmalab/MEDIator
 
 
 ## Setting the Environment Variables.
@@ -36,20 +36,20 @@ Executing
 If you are hosting MEDIator for public access, you need to start it and expose its RESTful APIs. Execute the
 MEDIatorEngine class.
 
-$ java -classpath lib/repl-server-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.datarepl.core.MEDIatorEngine
+$ java -classpath lib/core-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.mediator.core.MEDIatorEngine
 
 You may extend or leverage the exposed APIs. To begin with, you may consume the MEDIator RESTful APIs through a REST
 client such as the Postman plugin of the Chrome browser.
 
 To add more instances to the cluster, start the instances of Initiator class.
-$ java -classpath lib/repl-server-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.datarepl.core.Initiator
+$ java -classpath lib/mediator-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.mediator.core.Initiator
 
 The implementation of the RESTful invocations can be found at TciaReplicaSetManager.
 
 
 [2] MEDIator Web Application
    
-     sh modules/repl-server/target/bin/webapp
+     sh modules/core/target/bin/webapp
 
 Go to http://localhost:<EMBEDDED_TOMCAT_PORT>/mediator/ using your browser to access the Web Application.
 
