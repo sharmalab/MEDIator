@@ -2,14 +2,13 @@
 	<id>package</id>
 	<formats>
 		<format>tar.gz</format>
-		<format>zip</format>
 	</formats>
 	<dependencySets>
 		<dependencySet>
 			<outputDirectory>jars</outputDirectory>
 			<includes>
-				<include>${project.groupId}:repl-server:jar</include>
-				<include>${project.groupId}:repl-server:jar:sources</include>
+				<include>${project.groupId}:mediator-core:jar</include>
+				<include>${project.groupId}:mediator-core:jar:sources</include>
 			</includes>
 		</dependencySet>
 		<dependencySet>
@@ -21,7 +20,7 @@
 				</excludes>
 			</unpackOptions>
 			<includes>
-				<include>${project.groupId}:repl-server:jar:sources</include>
+				<include>${project.groupId}:mediator-core:jar:sources</include>
 			</includes>
 		</dependencySet>
 		<dependencySet>
@@ -45,7 +44,7 @@
 				</excludes>
 			</unpackOptions>			
 			<includes>
-				<include>${project.groupId}:repl-server:jar:javadoc</include>
+				<include>${project.groupId}:mediator-core:jar:javadoc</include>
 			</includes>
 		</dependencySet>
 	</dependencySets>
