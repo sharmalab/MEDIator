@@ -145,6 +145,20 @@ If you wish to reproduce the system in another deployment, please refer to docum
 
 
 
+## Running TCIA-SDK as a dependency.
+
+Create src/main/resources/config.yaml with the correct access credentials (TCIA user name and password) to access the
+TCIA REST API with authentication. 
+
+A sample configuration file can be found at src/main/resources/config.test.yaml.
+
+The currently implemented methods query the public data sets. Therefore, the user name and password are optional for now.
+You may therefore create your configuration file based on the simple configuration file that can be found at 
+src/main/resources/config.simple.test.yaml instead.
+
+You may build your code with the tests, following the command: mvn clean install
+
+
 ## Citing MEDIator
 If you have used MEDIator in your research, please cite the below papers:
 
