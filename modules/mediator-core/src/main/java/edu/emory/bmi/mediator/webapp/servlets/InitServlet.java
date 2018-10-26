@@ -8,9 +8,9 @@
 
 package edu.emory.bmi.mediator.webapp.servlets;
 
-import edu.emory.bmi.mediator.ds_mgmt.TciaDSManager;
-import edu.emory.bmi.mediator.core.TciaInitializer;
 import edu.emory.bmi.mediator.webapp.UIGenerator;
+import edu.emory.bmi.tcia.client.core.OutputFormat;
+import edu.emory.bmi.tcia.client.impl.TCIAClientImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,8 +33,8 @@ public class InitServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        TciaDSManager tciaDSManager = TciaInitializer.getTciaDSManager();
 
+        TCIAClientImpl tciaClient = new TCIAClientImpl();
         String response1;
 
         response.setContentType("text/html");
@@ -46,7 +46,7 @@ public class InitServlet extends HttpServlet {
 
         out.println("<HTML>    <BODY>\n");
         try {
-            response1 = tciaDSManager.getSeries("json", collectionName, patientID, studyInstanceUID, modality);
+            response1 = tciaClient.getSeries(collectionName, studyInstanceUID, modality, patientID, null, null, null, null, OutputFormat.json);
             String output = UIGenerator.returnSeriesOutput(response1);
             logger.info("\n\n[getSeries]: " + response1);
             out.println(output);

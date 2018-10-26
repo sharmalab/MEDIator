@@ -8,8 +8,8 @@
 
 package edu.emory.bmi.mediator.core;
 
-import edu.emory.bmi.mediator.ds_mgmt.TciaDSManager;
 import edu.emory.bmi.mediator.rs_mgmt.TciaReplicaSetHandler;
+import edu.emory.bmi.tcia.client.impl.TCIAClientImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Logger;
 public class TciaInitializer {
     private static Logger logger = LogManager.getLogger(TciaInitializer.class.getName());
     private static TciaReplicaSetHandler tciaReplicaSetHandler;
-    private static TciaDSManager tciaDSManager;
+    private static TCIAClientImpl tciaClient;
 
 
     /**
@@ -27,7 +27,7 @@ public class TciaInitializer {
      */
     public void init() {
         tciaReplicaSetHandler = (TciaReplicaSetHandler) TciaReplicaSetHandler.getInfiniCore();
-        tciaDSManager = new TciaDSManager();
+        tciaClient = new TCIAClientImpl();
         logger.info("MEDIator has been initialized..");
     }
 
@@ -35,7 +35,7 @@ public class TciaInitializer {
         return tciaReplicaSetHandler;
     }
 
-    public static TciaDSManager getTciaDSManager() {
-        return tciaDSManager;
+    public static TCIAClientImpl getTciaClient() {
+        return tciaClient;
     }
 }

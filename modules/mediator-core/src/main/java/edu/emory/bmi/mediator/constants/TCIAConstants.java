@@ -12,20 +12,6 @@ package edu.emory.bmi.mediator.constants;
  * Common TCIA and MEDIator Constants
  */
 public final class TCIAConstants {
-    public static String FORMAT = "format";
-
-    public static String COLLECTION = "Collection";
-
-    public static String BODY_PART_EXAMINED = "BodyPartExamined";
-
-    public static String MODALITY = "Modality";
-
-    public static String PATIENT_ID = "PatientID";
-
-    public static String STUDY_INSTANCE_UID = "StudyInstanceUID";
-
-    public static String SERIES_INSTANCE_UID = "SeriesInstanceUID";
-
     public static String MASHAPE_BASE_URL = "https://tcia.p.mashape.com/";
 
     public static String IMAGE_TAG = "IMG__";

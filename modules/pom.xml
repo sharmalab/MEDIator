@@ -140,5 +140,9 @@
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-simple</artifactId>
       </dependency>
+      <dependency>
+          <groupId>edu.emory.bmi</groupId>
+          <artifactId>tcia-sdk</artifactId>
+      </dependency>
   </dependencies>
 </project>

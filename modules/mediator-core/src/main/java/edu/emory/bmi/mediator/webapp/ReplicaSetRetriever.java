@@ -8,14 +8,12 @@
 
 package edu.emory.bmi.mediator.webapp;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
-import edu.emory.bmi.mediator.ds_mgmt.TciaDSManager;
 import edu.emory.bmi.mediator.core.TciaInitializer;
+import edu.emory.bmi.tcia.client.exceptions.TCIAClientException;
+import edu.emory.bmi.tcia.client.impl.TCIAClientImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.velocity.VelocityContext;
-
-import java.io.IOException;
 
 /**
  * Retrieves the replicaSets with different granularity.
@@ -38,7 +36,7 @@ public class ReplicaSetRetriever {
      */
     public static String retrieveReplicaSet(Long replicaSetID, String[] collectionNames, String[] patientIDs,
                                             String[] studyInstanceUIDs, String[] seriesInstanceUIDs) {
-        TciaDSManager tciaDSManager = TciaInitializer.getTciaDSManager();
+        TCIAClientImpl tciaClient = TciaInitializer.getTciaClient();
         VelocityContext context = new VelocityContext();
         context.put("collectionsList", collectionNames);
         context.put("patientsList", patientIDs);
@@ -47,11 +45,9 @@ public class ReplicaSetRetriever {
         if (seriesInstanceUIDs != null) {
             for (String aSeriesInstanceUID : seriesInstanceUIDs) {
                 try {
-                    tciaDSManager.getImage(aSeriesInstanceUID);
-                } catch (UnirestException e) {
-                    logger.error("Exception while retrieving the images for the replicaSet", e);
-                } catch (IOException e) {
-                    logger.error("IO Exception occurred while retrieving the images for the replicaSet", e);
+                    tciaClient.getImage(aSeriesInstanceUID);
+                } catch (TCIAClientException e) {
+                   logger.error("TCIA Exception occurred while retrieving the images for the replicaSet", e);
                 }
             }
         }

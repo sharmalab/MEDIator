@@ -22,10 +22,14 @@ public class DSIntegratorInitiator {
         ReplicaSetsIntegrator replicaSetsIntegrator = ReplicaSetsIntegrator.getInfiniCore();
         logger.info("Infinispan Initiator instance started..");
 
-        MetaDataLoader.parseCSV(edu.emory.bmi.mediator.constants.DataSourcesConstants.META_CSV_FILE, edu.emory.bmi.mediator.constants.DataSourcesConstants.CSV_META_POSITION,
-                edu.emory.bmi.mediator.constants.DataSourcesConstants.CSV_META_INDEX, edu.emory.bmi.mediator.constants.DataSourcesConstants.CSV_SPLIT_BY);
+        MetaDataLoader.parseCSV(edu.emory.bmi.mediator.constants.DataSourcesConstants.META_CSV_FILE,
+                edu.emory.bmi.mediator.constants.DataSourcesConstants.CSV_META_POSITION,
+                edu.emory.bmi.mediator.constants.DataSourcesConstants.CSV_META_INDEX,
+                edu.emory.bmi.mediator.constants.DataSourcesConstants.CSV_SPLIT_BY);
 
-        MetaDataLoader.parseCSV(edu.emory.bmi.mediator.constants.DataSourcesConstants.S3_META_CSV_FILE, edu.emory.bmi.mediator.constants.DataSourcesConstants.S3_META_POSITION,
-                edu.emory.bmi.mediator.constants.DataSourcesConstants.S3_META_INDEX, edu.emory.bmi.mediator.constants.DataSourcesConstants.S3_SPLIT_BY);
+        MetaDataLoader.parseCSV(edu.emory.bmi.mediator.constants.DataSourcesConstants.S3_META_CSV_FILE,
+                edu.emory.bmi.mediator.constants.DataSourcesConstants.S3_META_POSITION,
+                edu.emory.bmi.mediator.constants.DataSourcesConstants.S3_META_INDEX,
+                edu.emory.bmi.mediator.constants.DataSourcesConstants.S3_SPLIT_BY);
     }
 }

@@ -21,7 +21,7 @@ import org.apache.catalina.LifecycleException;
 public class DataRetriever {
     private static Logger logger = LogManager.getLogger(DataRetriever.class.getName());
 
-    public static void main(String[] args) throws FileNotFoundException, LifecycleException {
+    public static void main(String[] args) throws LifecycleException {
         TciaInitializer tciaInitializer = new TciaInitializer();
         tciaInitializer.init();
         logger.info("Starting Tomcat ..");

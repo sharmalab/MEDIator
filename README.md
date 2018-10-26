@@ -49,7 +49,7 @@ The implementation of the RESTful invocations can be found at TciaReplicaSetMana
 
 [2] MEDIator Web Application
    
-     sh modules/core/target/bin/webapp
+     sh modules/mediator-core/target/bin/webapp
 
 Go to http://localhost:<EMBEDDED_TOMCAT_PORT>/mediator/ using your browser to access the Web Application.
 
@@ -147,8 +147,8 @@ If you wish to reproduce the system in another deployment, please refer to docum
 
 ## Running TCIA-SDK as a dependency.
 
-Create src/main/resources/config.yaml with the correct access credentials (TCIA user name and password) to access the
-TCIA REST API with authentication. 
+Create config.yaml in your execution directory with the correct access credentials (TCIA user name and password) 
+to access the TCIA REST API with authentication.
 
 A sample configuration file can be found at src/main/resources/config.test.yaml.
 

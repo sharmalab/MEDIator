@@ -13,7 +13,10 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import edu.emory.bmi.mediator.exception.MediatorException;
 import edu.emory.bmi.mediator.constants.TCIAConstants;
-import edu.emory.bmi.mediator.ds_mgmt.tcia.TCIAClientImpl;
+import edu.emory.bmi.tcia.client.core.ITCIAClient;
+import edu.emory.bmi.tcia.client.exceptions.TCIAClientException;
+import edu.emory.bmi.tcia.client.util.ImageResult;
+import edu.emory.bmi.tcia.client.util.TCIAClientUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -58,10 +61,7 @@ public abstract class DataSourceManager implements IDataSourceManager {
      * @throws com.mashape.unirest.http.exceptions.UnirestException
      */
     public HttpResponse retrieveMetadata(String query) throws UnirestException {
-        return Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).
-                header("X-Mashape-Authorization", TCIAClientImpl.getMashapeAuthorization()).
-                header("api_key", TCIAClientImpl.getApiKey()).
-                asJson();
+        return Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).asJson();
     }
 
     /**
@@ -72,18 +72,21 @@ public abstract class DataSourceManager implements IDataSourceManager {
      * @throws UnirestException
      */
     public HttpResponse retrieveImage(String query) throws UnirestException {
-        HttpResponse<InputStream> request = Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).
-                header("X-Mashape-Authorization", TCIAClientImpl.getMashapeAuthorization()).
-                header("api_key", TCIAClientImpl.getApiKey()).
-                asBinary();
+        HttpResponse<InputStream> request = Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).asBinary();
         if (logger.isDebugEnabled()) {
             logger.debug("Downloading the image again: " + query);
         }
+        ITCIAClient client = new edu.emory.bmi.tcia.client.impl.TCIAClientImpl();
+
         logger.info(request.getHeaders());
         String [] imageData = query.split("SeriesInstanceUID=");
         try {
-            TciaUtil.saveTo(request.getBody(), imageData[1] + ".zip", ".");
+            ImageResult imageResult = client.getImage(imageData[1]);
+            // Store as a zip in the current directory.
+            TCIAClientUtil.saveTo(imageResult,  imageData[1] + ".zip", ".");
         } catch (IOException e) {
+            logger.error("Error when downloading the image", e);
+        } catch (TCIAClientException e) {
             logger.error("Error when downloading the image", e);
         }
         return request;
