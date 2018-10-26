@@ -1,8 +1,8 @@
 # Project Overview
 
-Welcome to the wiki of the MEDIator - Data Replication System project!
+Welcome to the wiki of the MEDIator - Data Sharing Framework!
 
-Please visit the website to learn more - https://bitbucket.org/BMI/datareplicationsystem
+Please visit the website to learn more - https://github.com/sharmalab/MEDIator
 
 
 ## Setting the Environment Variables.
@@ -36,20 +36,20 @@ Executing
 If you are hosting MEDIator for public access, you need to start it and expose its RESTful APIs. Execute the
 MEDIatorEngine class.
 
-$ java -classpath lib/repl-server-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.datarepl.core.MEDIatorEngine
+$ java -classpath lib/core-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.mediator.core.MEDIatorEngine
 
 You may extend or leverage the exposed APIs. To begin with, you may consume the MEDIator RESTful APIs through a REST
 client such as the Postman plugin of the Chrome browser.
 
 To add more instances to the cluster, start the instances of Initiator class.
-$ java -classpath lib/repl-server-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.datarepl.core.Initiator
+$ java -classpath lib/mediator-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.mediator.core.Initiator
 
 The implementation of the RESTful invocations can be found at TciaReplicaSetManager.
 
 
 [2] MEDIator Web Application
    
-     sh modules/repl-server/target/bin/webapp
+     sh modules/mediator-core/target/bin/webapp
 
 Go to http://localhost:<EMBEDDED_TOMCAT_PORT>/mediator/ using your browser to access the Web Application.
 
@@ -143,6 +143,20 @@ $ tar -zxvf 652ccf44-cfda-4e99-81ac-d8f4c0eca6be.tar
 ## Further customizations
 If you wish to reproduce the system in another deployment, please refer to documentation/HOW-TO.
 
+
+
+## Running TCIA-SDK as a dependency.
+
+Create config.yaml in your execution directory with the correct access credentials (TCIA user name and password) 
+to access the TCIA REST API with authentication.
+
+A sample configuration file can be found at src/main/resources/config.test.yaml.
+
+The currently implemented methods query the public data sets. Therefore, the user name and password are optional for now.
+You may therefore create your configuration file based on the simple configuration file that can be found at 
+src/main/resources/config.simple.test.yaml instead.
+
+You may build your code with the tests, following the command: mvn clean install
 
 
 ## Citing MEDIator

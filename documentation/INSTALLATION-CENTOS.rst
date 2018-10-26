@@ -43,19 +43,19 @@ sudo yum install git
 
 Configure MEDIator
 ------------------
-git clone https://pradeeban@bitbucket.org/BMI/datareplicationsystem.git
+git clone git@github.com:sharmalab/MEDIator.git
 
-cd datareplicationsystem
+cd MEDIator
 
 
 Execute the MEDIator web app
 ----------------------------
 mvn package
 
-sh modules/repl-server/target/bin/webapp
+sh modules/core/target/bin/webapp
 
 with nohup
-nohup sh modules/repl-server/target/bin/webapp > nohup.out &
+nohup sh modules/core/target/bin/webapp > nohup.out &
 
 To view the logs
 tail -f nohup.out
@@ -65,6 +65,6 @@ Go to http://localhost:<EMBEDDED_TOMCAT_PORT>/ using your browser.
 
 Execute with multiple data sources
 -----------------------------------
-java -classpath lib/repl-server-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.datarepl.ds_impl.DSIntegratorInitiator
+java -classpath lib/core-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.mediator.ds_impl.DSIntegratorInitiator
 
 

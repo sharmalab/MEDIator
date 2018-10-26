@@ -1,5 +1,5 @@
 * Checkout the source code
-git clone https://<user-name>@bitbucket.org/BMI/datareplicationsystem.git
+git clone git@github.com:sharmalab/MEDIator.git
 
 * Download a set of medical source from The Cancer Genome Atlas (TCGA)
 https://tcga-data.nci.nih.gov/tcga/
@@ -12,7 +12,7 @@ NOTE: The tar contains the associated “blob” that will be linked with the cl
 Place all the meta data files in the root folder of the data replication system source code.
 
 * Constants
-edu.emory.bmi.datarepl.constants package contains the constants to be modified.
+edu.emory.bmi.mediator.constants package contains the constants to be modified.
 The class DataSourcesConstants contains the constants.
 
 Set the name of the CSV file that is used to load the CSV meta data into Infinispan.
@@ -48,6 +48,6 @@ Check the caMicroscope base url and sample query url that is used in the prototy
 $ mvn package
 
 * To execute the DSIntegratorIntegrator:
-$ java -classpath lib/repl-server-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.datarepl.ds_impl.DSIntegratorInitiator
+$ java -classpath lib/core-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.mediator.ds_impl.DSIntegratorInitiator
 
 * Access the Data Replication API from a REST Client. See API documentation for more details. 

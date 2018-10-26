@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>edu.emory.bmi</groupId>
-    <artifactId>datarepl-package</artifactId>
+    <artifactId>mediator</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
   
@@ -11,7 +11,7 @@
   <name>modules</name>
   
   <modules>
-    <module>repl-server</module>
+    <module>mediator-core</module>
   </modules>
 
   <build>
@@ -50,7 +50,7 @@
                 <assembleDirectory>target</assembleDirectory>
                 <programs>
                     <program>
-                        <mainClass>edu.emory.bmi.datarepl.webapp.DataRetriever</mainClass>
+                        <mainClass>edu.emory.bmi.mediator.webapp.DataRetriever</mainClass>
                         <name>webapp</name>
                     </program>
                 </programs>
@@ -139,6 +139,10 @@
       <dependency>
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-simple</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>edu.emory.bmi</groupId>
+          <artifactId>tcia-sdk</artifactId>
       </dependency>
   </dependencies>
 </project>
