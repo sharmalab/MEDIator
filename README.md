@@ -1,11 +1,6 @@
 ## Building MEDIator Using Apache Maven 3.x.x
+
      mvn package
-
-It is expected to have the TCIA API_KEY set in the environment variables to build with tests.
-
-If you do not have a TCIA API_KEY yet, please build with skipping the tests.
-
-    mvn package -DskipTests
 
 
 ## Configuring Access and Authentication for TCIA-SDK
@@ -13,18 +8,12 @@ If you do not have a TCIA API_KEY yet, please build with skipping the tests.
 Create config.yaml in your execution directory with the correct access information and credentials 
 (TCIA user name and password) to access the TCIA REST API with authentication. 
 
-A sample configuration file can be found at modules/mediator-core/src/main/resources/config.test.yaml.
-
-The currently implemented methods query the public data sets. Therefore, the user name and password are optional for 
-now. You may therefore create your configuration file based on the simple configuration file that can be found at 
-modules/mediator-core/src/main/resources/config.simple.test.yaml instead.
-
-Place the configuration file at your execution directory.
+Sample configuration files can be found at modules/mediator-core/src/main/resources/config directory.
 
 
 Executing MEDIator
 ---------
-[1] MEDIator REST APIs.
+* **MEDIator REST APIs:**
 
 If you are hosting MEDIator for public access, you need to start it and expose its RESTful APIs. Execute the
 MEDIatorEngine class.
@@ -41,7 +30,7 @@ To add more instances to the cluster, start the instances of Initiator class.
 The implementation of the RESTful invocations can be found at TciaReplicaSetManager.
 
 
-[2] MEDIator Web Application
+* **MEDIator Web Application:**
    
      sh modules/mediator-core/target/bin/webapp
 
