@@ -1,8 +1,11 @@
-# Project Overview
+## Building MEDIator Using Apache Maven 3.x.x
+     mvn package
 
-Welcome to the wiki of the MEDIator - Data Sharing Framework!
+It is expected to have the TCIA API_KEY set in the environment variables to build with tests.
 
-Please visit the website to learn more - https://github.com/sharmalab/MEDIator
+If you do not have a TCIA API_KEY yet, please build with skipping the tests.
+
+    mvn package -DskipTests
 
 
 ## Configuring Access and Authentication for TCIA-SDK
@@ -17,16 +20,6 @@ now. You may therefore create your configuration file based on the simple config
 modules/mediator-core/src/main/resources/config.simple.test.yaml instead.
 
 Place the configuration file at your execution directory.
-
-
-## Building MEDIator Using Apache Maven 3.x.x
-     mvn package
-
-It is expected to have the TCIA API_KEY set in the environment variables to build with tests.
-
-If you do not have a TCIA API_KEY yet, please build with skipping the tests.
-
-    mvn package -DskipTests
 
 
 Executing MEDIator
@@ -60,10 +53,9 @@ By default, http://localhost/mediator/
 You may run the Initiator class in parallel, to create a MEDIator cluster in both cases.
 
 
-
-## Further customizations
-If you wish to reproduce the system in another deployment, please refer to documentation/HOW-TO.
-
+## Documentation
+Further documentation can be found inside the documentation folder. If you wish to reproduce the system in another 
+deployment, please refer to HOW-TO.rst.
 
 
 ## Citing MEDIator
@@ -73,11 +65,9 @@ If you have used MEDIator in your research, please cite the below papers:
 Approach for Reproducible Scientific Research. In Distributed and Parallel Databases (DAPD). (JCR IF: 1.179, Q2). 
 pp. 1 – 23. Sep. 2018. Springer. https://doi.org/10.1007/s10619-018-7248-y
 
-
 * Kathiravelu, P. & Sharma, A. (2015). MEDIator: A Data Sharing Synchronization Platform for Heterogeneous Medical Image Archives.
 In Workshop on Connected Health at Big Data Era (BigCHat'15), co-located with 21st ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD 2015).
 Aug. 2015. ACM. 6 pages. http://doi.org/10.13140/RG.2.1.3709.4248
-
 
 * Kathiravelu, P. & Sharma, A. (2016). SPREAD - System for Sharing and Publishing Research Data. In Society for Imaging
 Informatics in Medicine Annual Meeting (SIIM 2016). June 2016.
