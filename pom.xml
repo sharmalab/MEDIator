@@ -229,7 +229,7 @@
 			<dependency>
 				<groupId>org.infinispan</groupId>
 				<artifactId>infinispan-embedded</artifactId>
-				<version>8.2.2.Final</version>
+				<version>9.1.7.Final</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.logging.log4j</groupId>
