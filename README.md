@@ -22,7 +22,13 @@ For example, in Linux.
 Create config.yaml in your execution directory with the correct access information and credentials 
 (TCIA user name and password) to access the TCIA REST API with authentication. 
 
-A sample configuration file can be found at src/main/resources/config.simple.test.yaml.
+A sample configuration file can be found at modules/mediator-core/src/main/resources/config.test.yaml.
+
+The currently implemented methods query the public data sets. Therefore, the user name and password are optional for 
+now. You may therefore create your configuration file based on the simple configuration file that can be found at 
+modules/mediator-core/src/main/resources/config.simple.test.yaml instead.
+
+Place the configuration file at your execution directory.
 
 
 ## Building MEDIator Using Apache Maven 3.x.x
