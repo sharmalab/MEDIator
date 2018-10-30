@@ -23,7 +23,7 @@ import java.util.UUID;
 import static spark.Spark.*;
 
 /**
- * The core singleton ReplicaSetsIntegrator.
+ * The singleton entity that has a one-to-many relationship with the data sources of MEDIator for replicaset management.
  */
 public class ReplicaSetsIntegrator extends RsIntegratorCore implements IReplicaSetHandler, IIntegrator {
     private static ReplicaSetsIntegrator replicaSetsIntegrator = null;
