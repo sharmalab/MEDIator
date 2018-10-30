@@ -14,4 +14,6 @@ package edu.emory.bmi.mediator.constants;
 public final class CommonConstants {
     public static final int EMBEDDED_TOMCAT_PORT = 80;
     public static final int REST_PORT = 80;
+    public static final String WEB_APP_RELATIVE_PATH = "modules/mediator-core/src/main/resources/webapp/";
+    public static final String FILE_SEPARATOR = "/";
 }

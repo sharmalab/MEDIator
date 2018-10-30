@@ -24,7 +24,8 @@ public class TomcatEmbeddedRunner {
 	public void startServer() throws LifecycleException {
 		Tomcat tomcat = new Tomcat();
 		tomcat.setPort(CommonConstants.EMBEDDED_TOMCAT_PORT);
-		File base = new File(System.getProperty("user.dir"));
+		File base = new File(System.getProperty("user.dir") + CommonConstants.FILE_SEPARATOR +
+				CommonConstants.WEB_APP_RELATIVE_PATH);
 
         Context rootCtx = tomcat.addContext("/mediator", base.getAbsolutePath());
 
