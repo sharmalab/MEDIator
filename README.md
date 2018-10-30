@@ -17,9 +17,15 @@ For example, in Linux.
     export BASE_URL=services.cancerimagingarchive.net/services/v4/TCIA/query
 
 
-## Building and Executing Using Apache Maven 3.x.x
-Building
---------
+## Configuring Access and Authentication
+
+Create config.yaml in your execution directory with the correct access information and credentials 
+(TCIA user name and password) to access the TCIA REST API with authentication. 
+
+A sample configuration file can be found at src/main/resources/config.simple.test.yaml.
+
+
+## Building MEDIator Using Apache Maven 3.x.x
      mvn package
 
 It is expected to have the TCIA API_KEY set in the environment variables to build with tests.
@@ -29,20 +35,21 @@ If you do not have a TCIA API_KEY yet, please build with skipping the tests.
     mvn package -DskipTests
 
 
-Executing
+Executing MEDIator
 ---------
 [1] MEDIator REST APIs.
 
 If you are hosting MEDIator for public access, you need to start it and expose its RESTful APIs. Execute the
 MEDIatorEngine class.
 
-$ java -classpath lib/core-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.mediator.core.MEDIatorEngine
+     java -classpath lib/mediator-core-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.mediator.core.MEDIatorEngine
 
 You may extend or leverage the exposed APIs. To begin with, you may consume the MEDIator RESTful APIs through a REST
 client such as the Postman plugin of the Chrome browser.
 
 To add more instances to the cluster, start the instances of Initiator class.
-$ java -classpath lib/mediator-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.mediator.core.Initiator
+
+     java -classpath lib/mediator-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.mediator.core.Initiator
 
 The implementation of the RESTful invocations can be found at TciaReplicaSetManager.
 
@@ -53,6 +60,7 @@ The implementation of the RESTful invocations can be found at TciaReplicaSetMana
 
 Go to http://localhost:<EMBEDDED_TOMCAT_PORT>/mediator/ using your browser to access the Web Application.
 
+By default, http://localhost/mediator/
 
 
 You may run the Initiator class in parallel, to create a MEDIator cluster in both cases.
@@ -125,19 +133,22 @@ Otherwise, you may directly upload the clinical files which were downloaded to y
 
 * Connect to the instance
 
-$ ssh -i pradeeban.pem ubuntu@ec2-54-237-35-248.compute-1.amazonaws.com
+
+     ssh -i pradeeban.pem ubuntu@ec2-54-237-35-248.compute-1.amazonaws.com
 
 * Make a directory and change to the directory.
 
-$ mkdir gsoc2014
 
-$ cd gsoc2014
+     mkdir gsoc2014
+
+     cd gsoc2014
 
 * Download and extract the meta data from the online repository (link sent to email. Given below is an example).
 
-$ nohup wget https://tcga-data.nci.nih.gov/tcgafiles/ftp_auth/distro_ftpusers/anonymous/userCreatedArchives/652ccf44-cfda-4e99-81ac-d8f4c0eca6be.tar > nohup.out &
 
-$ tar -zxvf 652ccf44-cfda-4e99-81ac-d8f4c0eca6be.tar
+     nohup wget https://tcga-data.nci.nih.gov/tcgafiles/ftp_auth/distro_ftpusers/anonymous/userCreatedArchives/652ccf44-cfda-4e99-81ac-d8f4c0eca6be.tar > nohup.out &
+
+     tar -zxvf 652ccf44-cfda-4e99-81ac-d8f4c0eca6be.tar
 
 
 
@@ -163,12 +174,17 @@ You may build your code with the tests, following the command: mvn clean install
 ## Citing MEDIator
 If you have used MEDIator in your research, please cite the below papers:
 
-[1] Kathiravelu, P. & Sharma, A. (2015). MEDIator: A Data Sharing Synchronization Platform for Heterogeneous Medical Image Archives.
+* Kathiravelu, P., Sharma, A., Galhardas, H., Van Roy, P., & Veiga, L. On-Demand Big Data Integration: A Hybrid ETL 
+Approach for Reproducible Scientific Research. In Distributed and Parallel Databases (DAPD). (JCR IF: 1.179, Q2). 
+pp. 1 – 23. Sep. 2018. Springer. https://doi.org/10.1007/s10619-018-7248-y
+
+
+* Kathiravelu, P. & Sharma, A. (2015). MEDIator: A Data Sharing Synchronization Platform for Heterogeneous Medical Image Archives.
 In Workshop on Connected Health at Big Data Era (BigCHat'15), co-located with 21st ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD 2015).
 Aug. 2015. ACM. 6 pages. http://doi.org/10.13140/RG.2.1.3709.4248
 
 
-[2] Kathiravelu, P. & Sharma, A. (2016). SPREAD - System for Sharing and Publishing Research Data. In Society for Imaging
+* Kathiravelu, P. & Sharma, A. (2016). SPREAD - System for Sharing and Publishing Research Data. In Society for Imaging
 Informatics in Medicine Annual Meeting (SIIM 2016). June 2016.
 http://c.ymcdn.com/sites/siim.org/resource/resmgr/siim2016abstracts/Research_Kathiravelu.pdf
 
