@@ -12,59 +12,38 @@
   
   <modules>
     <module>mediator-core</module>
+    <module>mediator-webapp</module>
+    <module>mediator-client</module>
   </modules>
 
   <build>
     <plugins>
       <!-- Sets the version of the code -->
       <plugin>
-      	<groupId>org.apache.maven.plugins</groupId>
-      		<artifactId>maven-compiler-plugin</artifactId>
-      		<configuration>
-      		<source>1.8</source>
-      		<target>1.8</target>
-      		</configuration>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <configuration>
+              <source>1.8</source>
+              <target>1.8</target>
+          </configuration>
       </plugin>
 
       <plugin>
-        <inherited>true</inherited>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>2.1.2</version>
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-            <goals>
-              <goal>jar</goal>
-              <goal>test-jar</goal>
-            </goals>
-          </execution>
-        </executions>
+          <inherited>true</inherited>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>2.1.2</version>
+          <executions>
+              <execution>
+                  <id>attach-sources</id>
+                  <goals>
+                      <goal>jar</goal>
+                      <goal>test-jar</goal>
+                  </goals>
+              </execution>
+          </executions>
       </plugin>
-
-        <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>appassembler-maven-plugin</artifactId>
-            <version>1.1.1</version>
-            <configuration>
-                <assembleDirectory>target</assembleDirectory>
-                <programs>
-                    <program>
-                        <mainClass>edu.emory.bmi.mediator.webapp.DataRetriever</mainClass>
-                        <name>webapp</name>
-                    </program>
-                </programs>
-            </configuration>
-            <executions>
-                <execution>
-                    <phase>package</phase>
-                    <goals>
-                        <goal>assemble</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
-    </plugins>
+  </plugins>
   </build>  
   
   <dependencies>

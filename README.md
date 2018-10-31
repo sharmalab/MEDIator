@@ -24,22 +24,6 @@ client such as the Postman plugin of the Chrome browser.
 The implementation of the RESTful invocations can be found at TciaReplicaSetManager.
 
 
-Executing MEDIator Web Application
----------
-Alternatively, you may run MEDIator as a web application.   
-   
-
-     sh modules/mediator-core/target/bin/webapp
-
-   
-   
-
-Go to http://localhost:<EMBEDDED_TOMCAT_PORT>/mediator/ using your browser to access the Web Application.
-
-By default, http://localhost/mediator/
-
-
-You may run the Initiator class in parallel, to create a MEDIator cluster in both cases.
 
 
 ## Documentation

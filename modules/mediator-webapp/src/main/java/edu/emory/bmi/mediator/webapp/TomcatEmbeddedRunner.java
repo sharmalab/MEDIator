@@ -11,7 +11,15 @@ package edu.emory.bmi.mediator.webapp;
 import java.io.File;
 
 import edu.emory.bmi.mediator.constants.CommonConstants;
-import edu.emory.bmi.mediator.webapp.servlets.*;
+import edu.emory.bmi.mediator.webapp.constants.WebappConstants;
+import edu.emory.bmi.mediator.webapp.servlets.AppendRsServlet;
+import edu.emory.bmi.mediator.webapp.servlets.CreateRsServlet;
+import edu.emory.bmi.mediator.webapp.servlets.DeleteRsServlet;
+import edu.emory.bmi.mediator.webapp.servlets.DuplicateRsServlet;
+import edu.emory.bmi.mediator.webapp.servlets.InitServlet;
+import edu.emory.bmi.mediator.webapp.servlets.ListRsServlet;
+import edu.emory.bmi.mediator.webapp.servlets.ListUsersServlet;
+import edu.emory.bmi.mediator.webapp.servlets.RetrieveRsServlet;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.Wrapper;
@@ -23,9 +31,9 @@ import org.apache.catalina.startup.Tomcat;
 public class TomcatEmbeddedRunner {
 	public void startServer() throws LifecycleException {
 		Tomcat tomcat = new Tomcat();
-		tomcat.setPort(CommonConstants.EMBEDDED_TOMCAT_PORT);
+		tomcat.setPort(WebappConstants.EMBEDDED_TOMCAT_PORT);
 		File base = new File(System.getProperty("user.dir") + CommonConstants.FILE_SEPARATOR +
-				CommonConstants.WEB_APP_RELATIVE_PATH);
+				WebappConstants.WEB_APP_RELATIVE_PATH);
 
         Context rootCtx = tomcat.addContext("/mediator", base.getAbsolutePath());
 

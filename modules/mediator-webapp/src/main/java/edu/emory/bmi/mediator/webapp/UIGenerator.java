@@ -8,7 +8,7 @@
 
 package edu.emory.bmi.mediator.webapp;
 
-import edu.emory.bmi.mediator.constants.CommonConstants;
+import edu.emory.bmi.mediator.webapp.constants.WebappConstants;
 import org.apache.http.HttpResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -51,7 +51,7 @@ public class UIGenerator {
     public static void printReplicaSetList(Long[] replicaSetIDs) {
         context = new VelocityContext();
         context.put("rsList", replicaSetIDs);
-        printToFile(CommonConstants.WEB_APP_RELATIVE_PATH + "replicaSets.vm", "replicaSets.html");
+        printToFile(WebappConstants.WEB_APP_RELATIVE_PATH + "replicaSets.vm", "replicaSets.html");
     }
 
 
@@ -63,7 +63,7 @@ public class UIGenerator {
     public static String returnReplicaSetOutput(Long[] replicaSetIDs) {
         context = new VelocityContext();
         context.put("rsList", replicaSetIDs);
-        return returnPrintable(CommonConstants.WEB_APP_RELATIVE_PATH + "replicaSets.vm");
+        return returnPrintable(WebappConstants.WEB_APP_RELATIVE_PATH + "replicaSets.vm");
     }
 
     /**
@@ -73,7 +73,7 @@ public class UIGenerator {
     public static void printUserList(String[] userIDs) {
         context = new VelocityContext();
         context.put("usersList", userIDs);
-        printToFile(CommonConstants.WEB_APP_RELATIVE_PATH + "users.vm", "users.html");
+        printToFile(WebappConstants.WEB_APP_RELATIVE_PATH + "users.vm", "users.html");
     }
 
     /**
@@ -84,7 +84,7 @@ public class UIGenerator {
     public static String returnUsersOutput(String[] userIDs) {
         context = new VelocityContext();
         context.put("usersList", userIDs);
-        return returnPrintable(CommonConstants.WEB_APP_RELATIVE_PATH + "users.vm");
+        return returnPrintable(WebappConstants.WEB_APP_RELATIVE_PATH + "users.vm");
     }
 
     private static void getSeriesContext(String response) {
@@ -129,7 +129,7 @@ public class UIGenerator {
      */
     public static String returnSeriesOutput(String response) {
         getSeriesContext(response);
-        return returnPrintable(CommonConstants.WEB_APP_RELATIVE_PATH + "series.vm");
+        return returnPrintable(WebappConstants.WEB_APP_RELATIVE_PATH + "series.vm");
     }
 
     /**
@@ -138,7 +138,7 @@ public class UIGenerator {
      */
     public static void printSeries(String response) {
         getSeriesContext(response);
-        printToFile(CommonConstants.WEB_APP_RELATIVE_PATH + "series.vm", "series.html");
+        printToFile(WebappConstants.WEB_APP_RELATIVE_PATH + "series.vm", "series.html");
     }
 
     /**
@@ -147,7 +147,7 @@ public class UIGenerator {
      */
     public static void printStudies(HttpResponse response) {
         getStudiesContext(response);
-        printToFile(CommonConstants.WEB_APP_RELATIVE_PATH + "studies.vm", "studies.html");
+        printToFile(WebappConstants.WEB_APP_RELATIVE_PATH + "studies.vm", "studies.html");
     }
 
     /**
@@ -156,7 +156,7 @@ public class UIGenerator {
      */
     public static void printPatients(HttpResponse response) {
         getPatientsContext(response);
-        printToFile(CommonConstants.WEB_APP_RELATIVE_PATH + "patients.vm", "patients.html");
+        printToFile(WebappConstants.WEB_APP_RELATIVE_PATH + "patients.vm", "patients.html");
     }
 
     /**
