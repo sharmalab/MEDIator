@@ -8,7 +8,7 @@
 Create config.yaml in your execution directory with the correct access information and credentials 
 (TCIA user name and password) to access the TCIA REST API with authentication. 
 
-Sample configuration files can be found at modules/mediator-core/src/main/resources/config directory.
+Sample configuration files can be found at the conf folder (config.test.yaml and config.simple.test.yaml).
 
 
 Executing MEDIator
