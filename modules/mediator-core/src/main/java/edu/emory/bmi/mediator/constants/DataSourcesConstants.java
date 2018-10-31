@@ -15,8 +15,8 @@ import java.util.Map;
  * Constants related to data sources.
  */
 public final class DataSourcesConstants {
-    public static final String META_CSV_FILE = "getAllDataAsCSV";
-    public static final String S3_META_CSV_FILE = "FILE_SAMPLE_MAP.txt";
+    public static final String META_CSV_FILE = "conf/getAllDataAsCSV";
+    public static final String S3_META_CSV_FILE = "conf/FILE_SAMPLE_MAP.txt";
 
     public static final int CSV_META_INDEX = 58;
     public static final int S3_META_INDEX = 1;
