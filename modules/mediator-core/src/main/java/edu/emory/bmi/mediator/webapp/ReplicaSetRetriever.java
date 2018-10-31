@@ -15,6 +15,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.velocity.VelocityContext;
 
+import static edu.emory.bmi.mediator.constants.CommonConstants.FILE_SEPARATOR;
+import static edu.emory.bmi.mediator.constants.CommonConstants.WEB_APP_RELATIVE_PATH;
+
 /**
  * Retrieves the replicaSets with different granularity.
  */
@@ -52,6 +55,6 @@ public class ReplicaSetRetriever {
             }
         }
         context.put("title", "ReplicaSetID: " + replicaSetID.toString());
-        return UIGenerator.returnPrintable(context, "replicaSet.vm");
+        return UIGenerator.returnPrintable(context, WEB_APP_RELATIVE_PATH + FILE_SEPARATOR+ "replicaSet.vm");
     }
 }

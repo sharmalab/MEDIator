@@ -287,6 +287,10 @@ public class TciaReplicaSetHandler extends ReplicaSetsIntegrator {
         String[] seriesInstanceUIDs = {};
 
         Boolean[] metaMap = getTciaMetaMap(aReplicaSetID);
+
+        if (metaMap == null || metaMap.length == 0) {
+            return "The replicaset does not exist";
+        }
         if (metaMap[0]) {
             collectionNames = getCollectionsSet(aReplicaSetID);
         }
@@ -317,6 +321,9 @@ public class TciaReplicaSetHandler extends ReplicaSetsIntegrator {
             return false;
         } else {
             Long[] replicas = userReplicasMap.get(userId);
+            if (replicas.length <= 0) {
+                return false;
+            }
             Long[] newReplicas = new Long[replicas.length - 1];
             int j = 0;
             for (Long replica : replicas) {

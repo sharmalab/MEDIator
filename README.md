@@ -13,24 +13,20 @@ Sample configuration files can be found at the conf folder (config.test.yaml and
 
 Executing MEDIator
 ---------
-* **MEDIator REST APIs:**
-
-If you are hosting MEDIator for public access, you need to start it and expose its RESTful APIs. Execute the
-MEDIatorEngine class.
+Execute the MEDIatorEngine class to start MEDIator.
 
      java -classpath lib/mediator-core-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.mediator.core.MEDIatorEngine
 
 You may extend or leverage the exposed APIs. To begin with, you may consume the MEDIator RESTful APIs through a REST
 client such as the Postman plugin of the Chrome browser.
 
-To add more instances to the cluster, start the instances of Initiator class.
-
-     java -classpath lib/mediator-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.mediator.core.Initiator
 
 The implementation of the RESTful invocations can be found at TciaReplicaSetManager.
 
 
-* **MEDIator Web Application:**
+Executing MEDIator Web Application
+---------
+Alternatively, you may run MEDIator as a web application.   
    
 
      sh modules/mediator-core/target/bin/webapp
