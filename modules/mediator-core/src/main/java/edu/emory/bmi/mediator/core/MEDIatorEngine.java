@@ -18,7 +18,6 @@ package edu.emory.bmi.mediator.core;
 import edu.emory.bmi.mediator.constants.CommonConstants;
 import edu.emory.bmi.mediator.integrator.ReplicaSetsIntegrator;
 import edu.emory.bmi.mediator.rs_mgmt.TciaReplicaSetManager;
-import edu.emory.bmi.mediator.webapp.DataRetriever;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,7 +27,7 @@ import static spark.Spark.port;
  * Invokes the REST APIs of MEDIator.
  */
 public class MEDIatorEngine {
-    private static Logger logger = LogManager.getLogger(DataRetriever.class.getName());
+    private static Logger logger = LogManager.getLogger(MEDIatorEngine.class.getName());
 
     public static void main(String[] args) {
 

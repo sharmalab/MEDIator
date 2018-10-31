@@ -10,7 +10,6 @@ package edu.emory.bmi.mediator.rs_mgmt;
 
 import edu.emory.bmi.mediator.constants.InfConstants;
 import edu.emory.bmi.mediator.integrator.ReplicaSetsIntegrator;
-import edu.emory.bmi.mediator.webapp.ReplicaSetRetriever;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.infinispan.Cache;
@@ -272,37 +271,6 @@ public class TciaReplicaSetHandler extends ReplicaSetsIntegrator {
         return out;
     }
 
-    /**
-     * GET /get the replicaSet of the given replicaSetID
-     *
-     * @param aReplicaSetID replicaSet ID
-     * @return replicaSet as a printable output
-     */
-    public String getReplicaSet(Long aReplicaSetID) {
-        logger.info("Getting the ReplicaSet with ID: " + aReplicaSetID);
-
-        String[] collectionNames = {};
-        String[] patientIDs = {};
-        String[] studyInstanceUIDs = {};
-        String[] seriesInstanceUIDs = {};
-
-        Boolean[] metaMap = getTciaMetaMap(aReplicaSetID);
-        if (metaMap[0]) {
-            collectionNames = getCollectionsSet(aReplicaSetID);
-        }
-        if (metaMap[1]) {
-            patientIDs = getPatientsSet(aReplicaSetID);
-        }
-        if (metaMap[2]) {
-            studyInstanceUIDs = getStudiesSet(aReplicaSetID);
-        }
-        if (metaMap[3]) {
-            seriesInstanceUIDs = getSeriesSet(aReplicaSetID);
-        }
-        String out = ReplicaSetRetriever.retrieveReplicaSet(aReplicaSetID, collectionNames, patientIDs, studyInstanceUIDs,
-                seriesInstanceUIDs);
-        return out;
-    }
 
 
     /**
@@ -317,6 +285,9 @@ public class TciaReplicaSetHandler extends ReplicaSetsIntegrator {
             return false;
         } else {
             Long[] replicas = userReplicasMap.get(userId);
+            if (replicas.length <= 0) {
+                return false;
+            }
             Long[] newReplicas = new Long[replicas.length - 1];
             int j = 0;
             for (Long replica : replicas) {

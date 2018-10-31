@@ -35,7 +35,8 @@ public abstract class DataSourceManager implements IDataSourceManager {
      *
      * @param replicaSet query information
      * @return HttpResponse
-     * @throws com.mashape.unirest.http.exceptions.UnirestException
+     * @throws UnirestException when the unirest invocation fails
+     * @throws MediatorException when MEDIator invocation fails
      */
     public HttpResponse retrieve(String replicaSet) throws UnirestException, MediatorException {
         String meta[];
@@ -58,9 +59,9 @@ public abstract class DataSourceManager implements IDataSourceManager {
      *
      * @param query query information
      * @return HttpResponse
-     * @throws com.mashape.unirest.http.exceptions.UnirestException
+     * @throws UnirestException when the unirest invocation fails
      */
-    public HttpResponse retrieveMetadata(String query) throws UnirestException {
+    private HttpResponse retrieveMetadata(String query) throws UnirestException {
         return Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).asJson();
     }
 
@@ -69,7 +70,7 @@ public abstract class DataSourceManager implements IDataSourceManager {
      *
      * @param query query information
      * @return HttpResponse
-     * @throws UnirestException
+     * @throws UnirestException when the unirest invocation fails
      */
     public HttpResponse retrieveImage(String query) throws UnirestException {
         HttpResponse<InputStream> request = Unirest.get(TCIAConstants.MASHAPE_BASE_URL + query).asBinary();
@@ -87,7 +88,7 @@ public abstract class DataSourceManager implements IDataSourceManager {
         } catch (IOException e) {
             logger.error("Error when downloading the image", e);
         } catch (TCIAClientException e) {
-            logger.error("Error when downloading the image", e);
+            logger.error("TCIA Exception when downloading the image", e);
         }
         return request;
 

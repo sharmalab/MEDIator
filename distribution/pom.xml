@@ -53,7 +53,26 @@
 		<version>${project.version}</version>
 		<type>jar</type>
 		<classifier>sources</classifier>
-  	</dependency> 	
+  	</dependency>
+  	<dependency>
+  		<groupId>${project.groupId}</groupId>
+		<artifactId>mediator-webapp</artifactId>
+		<version>${project.version}</version>
+		<type>jar</type>
+  	</dependency>
+  	<dependency>
+  		<groupId>${project.groupId}</groupId>
+		<artifactId>mediator-webapp</artifactId>
+		<version>${project.version}</version>
+		<type>jar</type>
+		<classifier>sources</classifier>
+  	</dependency>
+  	<dependency>
+  		<groupId>${project.groupId}</groupId>
+		<artifactId>mediator-client</artifactId>
+		<version>${project.version}</version>
+		<type>jar</type>
+  	</dependency>
   	<dependency>
   		<groupId>${project.groupId}</groupId>
 		<artifactId>documentation</artifactId>

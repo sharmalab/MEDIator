@@ -9,11 +9,13 @@
 package edu.emory.bmi.mediator.webapp;
 
 import edu.emory.bmi.mediator.core.TciaInitializer;
+import edu.emory.bmi.mediator.webapp.constants.WebappConstants;
 import edu.emory.bmi.tcia.client.exceptions.TCIAClientException;
 import edu.emory.bmi.tcia.client.impl.TCIAClientImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.velocity.VelocityContext;
+
 
 /**
  * Retrieves the replicaSets with different granularity.
@@ -52,6 +54,7 @@ public class ReplicaSetRetriever {
             }
         }
         context.put("title", "ReplicaSetID: " + replicaSetID.toString());
-        return UIGenerator.returnPrintable(context, "replicaSet.vm");
+        return UIGenerator.returnPrintable(context, WebappConstants.WEB_APP_RELATIVE_PATH +
+                WebappConstants.FILE_SEPARATOR+ "replicaSet.vm");
     }
 }

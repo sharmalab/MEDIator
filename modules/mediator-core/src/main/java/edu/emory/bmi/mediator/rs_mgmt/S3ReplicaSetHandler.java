@@ -15,7 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Replica set maanagement for S3.
+ * Replica set management for S3.
  */
 public class S3ReplicaSetHandler {
     private static Logger logger = LogManager.getLogger(S3ReplicaSetHandler.class.getName());
