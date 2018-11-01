@@ -26,11 +26,6 @@ The implementation of the RESTful invocations can be found at TciaReplicaSetMana
 
 
 
-## Documentation
-Further documentation can be found inside the documentation folder. If you wish to reproduce the system in another 
-deployment, please refer to HOW-TO.rst.
-
-
 ## Citing MEDIator
 If you have used MEDIator in your research, please cite the below papers:
 
