@@ -41,7 +41,6 @@
 
 	<modules>
 		<module>modules</module>
-		<module>documentation</module>
 		<module>distribution</module>
 	</modules>
 
