@@ -13,5 +13,4 @@ package edu.emory.bmi.mediator.constants;
  */
 public final class CommonConstants {
     public static final int REST_PORT = 80;
-    public static final String FILE_SEPARATOR = "/"; //remove this
 }

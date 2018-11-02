@@ -19,6 +19,7 @@ public class DSIntegratorInitiator {
     private static Logger logger = LogManager.getLogger(DSIntegratorInitiator.class.getName());
 
     public static void main(String[] args) {
+        @SuppressWarnings({"UnusedDeclaration"})
         ReplicaSetsIntegrator replicaSetsIntegrator = ReplicaSetsIntegrator.getInfiniCore();
         logger.info("Infinispan Initiator instance started..");
 
