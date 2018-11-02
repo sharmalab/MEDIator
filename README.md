@@ -32,7 +32,7 @@ configured with UDP.
 
 Edit the below line with correct IP addresses. Please note that "localhost" or "127.0.0.1" does not work as an IP address here.
 
-			 initial_hosts="${jgroups.tcpping.initial_hosts:10.40.50.63[7800],10.40.50.63[7801],10.40.50.63[7802],10.40.50.63[7803]}"
+	initial_hosts="${jgroups.tcpping.initial_hosts:10.40.50.63[7800],10.40.50.63[7801],10.40.50.63[7802],10.40.50.63[7803]}"
 
 
 To add more instances to the cluster, start the instances of Initiator class.
@@ -42,10 +42,8 @@ To add more instances to the cluster, start the instances of Initiator class.
 
 You will see logs similar to the below, as more Initiator instances join the MEDIator cluster:
 
-`     -------------------------------------------------------------------
-`     GMS: address=pradeeban-25946, cluster=ISPN, physical address=10.40.50.63:7802
-`     -------------------------------------------------------------------
-`     14:00:30.367 [main] INFO  org.infinispan.CLUSTER - ISPN000094: Received new cluster view for channel ISPN: [pradeeban-17789|2] (3) [pradeeban-17789, pradeeban-4769, pradeeban-25946]
+	GMS: address=pradeeban-25946, cluster=ISPN, physical address=10.40.50.63:7802
+    14:00:30.367 [main] INFO  org.infinispan.CLUSTER - ISPN000094: Received new cluster view for channel ISPN: [pradeeban-17789|2] (3) [pradeeban-17789, pradeeban-4769, pradeeban-25946]
 
 
 ## Citing MEDIator
