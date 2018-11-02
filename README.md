@@ -48,11 +48,6 @@ You will see logs similar to the below, as more Initiator instances join the MED
 `     14:00:30.367 [main] INFO  org.infinispan.CLUSTER - ISPN000094: Received new cluster view for channel ISPN: [pradeeban-17789|2] (3) [pradeeban-17789, pradeeban-4769, pradeeban-25946]
 
 
-## Documentation
-Further documentation can be found inside the documentation folder. If you wish to reproduce the system in another 
-deployment, please refer to HOW-TO.rst.
-
-
 ## Citing MEDIator
 If you have used MEDIator in your research, please cite the below papers:
 
