@@ -33,13 +33,18 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>appassembler-maven-plugin</artifactId>
-				<version>1.1.1</version>
+				<version>2.0.0</version>
 				<configuration>
 					<assembleDirectory>target</assembleDirectory>
 					<programs>
 						<program>
 							<mainClass>edu.emory.bmi.mediator.webapp.DataRetriever</mainClass>
 							<name>webapp</name>
+							<jvmSettings>
+								<extraArguments>
+									<extraArgument>-Djava.net.preferIPv4Stack=true</extraArgument>
+								</extraArguments>
+							</jvmSettings>
 						</program>
 					</programs>
 				</configuration>
