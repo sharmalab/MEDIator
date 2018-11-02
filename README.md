@@ -27,7 +27,8 @@ The implementation of the RESTful invocations can be found at TciaReplicaSetMana
 
 Configuring MEDIator to run in a cluster
 ---------
-First, configure jgroups correctly via jgroups.xml.
+First, configure jgroups correctly via jgroups.xml. We are using the TCP configurations here. Jgroups also can be 
+configured with UDP.
 
 Edit the below line with correct IP addresses. Please note that "localhost" or "127.0.0.1" does not work as an IP address here.
 
