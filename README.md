@@ -15,7 +15,7 @@ Executing MEDIator
 ---------
 Execute the MEDIatorEngine class to start MEDIator.
 
-     java -classpath lib/mediator-core-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.mediator.core.MEDIatorEngine
+     java -Djava.net.preferIPv4Stack=true -classpath lib/mediator-core-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.mediator.core.MEDIatorEngine
 
 You may extend or leverage the exposed APIs. To begin with, you may consume the MEDIator RESTful APIs through a REST
 client such as the Postman plugin of the Chrome browser.
@@ -25,10 +25,25 @@ The implementation of the RESTful invocations can be found at TciaReplicaSetMana
 
 
 
+Configuring MEDIator to run in a cluster
+---------
+First, configure jgroups correctly via jgroups.xml. We are using the TCP configurations here. Jgroups also can be 
+configured with UDP.
 
-## Documentation
-Further documentation can be found inside the documentation folder. If you wish to reproduce the system in another 
-deployment, please refer to HOW-TO.rst.
+Edit the below line with correct IP addresses. Please note that "localhost" or "127.0.0.1" does not work as an IP address here.
+
+	initial_hosts="${jgroups.tcpping.initial_hosts:10.40.50.63[7800],10.40.50.63[7801],10.40.50.63[7802],10.40.50.63[7803]}"
+
+
+To add more instances to the cluster, start the instances of Initiator class.
+
+`     java -Djava.net.preferIPv4Stack=true -classpath lib/mediator-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.mediator.core.Initiator 
+`
+
+You will see logs similar to the below, as more Initiator instances join the MEDIator cluster:
+
+	GMS: address=pradeeban-25946, cluster=ISPN, physical address=10.40.50.63:7802
+    14:00:30.367 [main] INFO  org.infinispan.CLUSTER - ISPN000094: Received new cluster view for channel ISPN: [pradeeban-17789|2] (3) [pradeeban-17789, pradeeban-4769, pradeeban-25946]
 
 
 ## Citing MEDIator
