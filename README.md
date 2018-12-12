@@ -37,8 +37,7 @@ Edit the below line with correct IP addresses. Please note that "localhost" or "
 
 To add more instances to the cluster, start the instances of Initiator class.
 
-`     java -Djava.net.preferIPv4Stack=true -classpath lib/mediator-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.mediator.core.Initiator 
-`
+     java -Djava.net.preferIPv4Stack=true -classpath lib/mediator-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.mediator.core.Initiator 
 
 You will see logs similar to the below, as more Initiator instances join the MEDIator cluster:
 

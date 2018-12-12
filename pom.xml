@@ -155,13 +155,6 @@
 		</pluginManagement>
 	</build>
 
-	<distributionManagement>
-		<repository>
-			<id>localrepo</id>
-			<name>LocalRepository</name>
-			<url>file:///${project.build.directory}/deployment-artifacts</url>
-		</repository>
-	</distributionManagement>
 
 	<dependencyManagement>
 		<dependencies>
