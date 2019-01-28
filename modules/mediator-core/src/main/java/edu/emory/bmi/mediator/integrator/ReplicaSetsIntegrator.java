@@ -61,7 +61,7 @@ public class ReplicaSetsIntegrator extends RsIntegratorCore implements IReplicaS
         tciaMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_TCIA);
         caMetaMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_CA);
 
-        logger.info("Initialized the Infinispan Cache for the Data Replication Tool..");
+        logger.info("Initialized the Infinispan Cache for the MEDIator..");
     }
 
     /**

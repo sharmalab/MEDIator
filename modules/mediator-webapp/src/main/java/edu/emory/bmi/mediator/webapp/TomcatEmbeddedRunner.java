@@ -10,7 +10,6 @@ package edu.emory.bmi.mediator.webapp;
 
 import java.io.File;
 
-import edu.emory.bmi.mediator.constants.CommonConstants;
 import edu.emory.bmi.mediator.webapp.constants.WebappConstants;
 import edu.emory.bmi.mediator.webapp.servlets.AppendRsServlet;
 import edu.emory.bmi.mediator.webapp.servlets.CreateRsServlet;
@@ -32,7 +31,7 @@ public class TomcatEmbeddedRunner {
 	public void startServer() throws LifecycleException {
 		Tomcat tomcat = new Tomcat();
 		tomcat.setPort(WebappConstants.EMBEDDED_TOMCAT_PORT);
-		File base = new File(System.getProperty("user.dir") + CommonConstants.FILE_SEPARATOR +
+		File base = new File(System.getProperty("user.dir") + WebappConstants.FILE_SEPARATOR +
 				WebappConstants.WEB_APP_RELATIVE_PATH);
 
         Context rootCtx = tomcat.addContext("/mediator", base.getAbsolutePath());

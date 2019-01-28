@@ -9,6 +9,7 @@
 package edu.emory.bmi.mediator.webapp;
 
 import edu.emory.bmi.mediator.core.TciaInitializer;
+import edu.emory.bmi.mediator.webapp.constants.WebappConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,7 +24,8 @@ public class DataRetriever {
     public static void main(String[] args) throws LifecycleException {
         TciaInitializer tciaInitializer = new TciaInitializer();
         tciaInitializer.init();
-        logger.info("Starting Tomcat ..");
+        logger.info("Starting the Embedded Tomcat for the MEDIator WebApp in port " +
+                WebappConstants.EMBEDDED_TOMCAT_PORT);
         new TomcatEmbeddedRunner().startServer();
     }
 }

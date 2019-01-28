@@ -53,15 +53,6 @@ public abstract class RsIntegratorCore implements IIntegrator {
     }
 
     /**
-     * Get patient studies
-     *
-     * @param patientID, id of the patient
-     */
-    public static String getPatientStudies(String patientID) {
-        return null;
-    }
-
-    /**
      * Updating the existing data source
      *
      * @param key,            patientID

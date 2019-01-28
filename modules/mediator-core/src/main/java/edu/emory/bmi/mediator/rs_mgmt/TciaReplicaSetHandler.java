@@ -45,7 +45,7 @@ public class TciaReplicaSetHandler extends ReplicaSetsIntegrator {
         patientsMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_PATIENTS);
         studiesMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_STUDIES);
         seriesMap = manager.getCache(InfConstants.TRANSACTIONAL_CACHE_SERIES);
-        logger.info("Initialized the Infinispan Cache for the TCIA Data Replication Tool..");
+        logger.info("Initialized the Infinispan Cache for the TCIA MEDIator..");
 
     }
 

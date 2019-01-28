@@ -33,7 +33,11 @@ public class TciaReplicaSetManager {
         /**
          * Create Replica Set:
          /POST
-         http://localhost:9090/replicasets?iUserID=12&iCollection=TCGA-GBM&iPatientID=TCGA-06-6701%2CTCGA-08-0831&iStudyInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895&iSeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.179004339156422100336233996679
+         http://HOST:REST-PORT</>/replicasets?...
+
+         Sample query
+         $ curl -X POST "http://localhost/replicasets?iUserID=11&iCollection=TCGA-GBM&iPatientID=TCGA-06-6701%2CTCGA-08-0831&iStudyInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895&iSeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.179004339156422100336233996679"
+
 
          Response:
          (replicaSetID).
@@ -55,14 +59,17 @@ public class TciaReplicaSetManager {
         /**
          Retrieve Replica Sets of the user:
          /GET
-         http://localhost:9090/replicasets/12
+         http://HOST:REST-PORT/replicasets/12
+
+         Sample query
+         $ curl http://localhost/replicasets/12
 
          Response:
-         [-7466653342708752832, -7059417815353339196, -6908825180316283930, -6365519002970140943]
+         [-6473501845925322331, -4850389656555765651]
 
          or
 
-         Replicasets not found for the user: 123
+         Replicasets not found for the user: 12
          */
         get("/replicasets/:id", (request, response) -> {
             Long[] replicaSets = tciaReplicaSetHandler.getUserReplicaSets(request.params(":id"));
@@ -81,10 +88,13 @@ public class TciaReplicaSetManager {
         /**
          Retrieve the set of users:
          /GET
-         http://localhost:9090/
+         http://HOST:REST-PORT/
+
+         Sample query
+         $ curl http://localhost/
 
          Response:
-         [12, 1234567]
+         [11, 12]
 
          or
 
@@ -107,7 +117,10 @@ public class TciaReplicaSetManager {
          *
          Retrieve Replica Set:
          /GET
-         http://localhost:9090/replicaset/-9176938584709039161
+         http://HOST:REST-PORT/replicaset/-9176938584709039161
+
+         Sample query
+         $ curl http://localhost/replicaset/-6473501845925322331
 
          Response:
          Collection Names: [TCGA-GBM]. Patient IDs: [TCGA-06-6701, TCGA-08-0831]. StudyInstanceUIDs: [1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895]. SeriesInstanceUIDs: [1.3.6.1.4.1.14519.5.2.1.4591.4001.179004339156422100336233996679]
@@ -141,7 +154,10 @@ public class TciaReplicaSetManager {
          *
          Delete Replica Set:
          /DELETE
-         http://localhost:9090/replicaset/12?replicaSetID=-9176938584709039161
+         http://HOST:REST-PORT/replicaset/12?replicaSetID=-9176938584709039161
+
+         Sample query
+         $ curl -X DELETE http://localhost/replicaset/12?replicaSetID=-4850389656555765651
 
          Response:
          true
@@ -167,7 +183,10 @@ public class TciaReplicaSetManager {
          *
          Replace Replica Set:
          /POST
-         http://localhost:9090/replicaset/-5841894688098285105?iStudyInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895&iSeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.179004339156422100336233996679
+         http://HOST:REST-PORT/replicaset/-5841894688098285105?iStudyInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895&iSeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.179004339156422100336233996679
+
+         Sample query
+         $ curl -X POST "http://localhost/replicaset/-4850389656555765651?iStudyInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895&iSeriesInstanceUID=1.3.6.1.4.1.14519.5.2.1.4591.4001.179004339156422100336233996679"
 
          Response:
          true
@@ -197,7 +216,10 @@ public class TciaReplicaSetManager {
          *
          Append Replica Set:
          /PUT
-         http://localhost:9090/replicaset/-5841894688098285105?iCollection=TCGA-GBM
+         http://HOST:REST-PORT/replicaset/-5841894688098285105?iCollection=TCGA-GBM
+
+         Sample query
+         $ curl -X PUT "http://localhost/replicaset/-4850389656555765651?iCollection=TCGA-GBM"
 
          Response:
          true
@@ -227,7 +249,10 @@ public class TciaReplicaSetManager {
         /**
          Duplicate Replica Set:
          /POST
-         http://localhost:9090/replicaset?userID=1234567&replicaSetID=-7196077834010820228
+         http://HOST:REST-PORT/replicaset?userID=1234567&replicaSetID=-7196077834010820228
+
+         Sample query
+         $ curl -X POST "http://localhost/replicaset?userID=1234567&replicaSetID=-4850389656555765651"
 
          Response:
          -5054196249282594410
