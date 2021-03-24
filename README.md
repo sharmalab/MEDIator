@@ -1,5 +1,7 @@
 ## Building MEDIator Using Apache Maven 3.x.x
 
+MEDIator is built with JDK 1.8 and Apache Maven 3.
+
      mvn package
 
 
