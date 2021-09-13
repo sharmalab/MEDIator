@@ -1,5 +1,3 @@
 #!/bin/bash
 
-mvn package
-
-while true; do sleep 1000; done
+java -Djava.net.preferIPv4Stack=true -classpath lib/mediator-core-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.mediator.core.MEDIatorEngine
