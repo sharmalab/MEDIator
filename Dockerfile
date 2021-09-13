@@ -23,7 +23,6 @@ COPY . /root
 
 USER bindaas
 
-EXPOSE 9099
-EXPOSE 8080
+EXPOSE 8040
 
 CMD ["sh", "run.sh"]
