@@ -2,6 +2,7 @@
  
 import requests
 import logging
+logging.basicConfig(level=logging.INFO)
 
 # Define the REST Port as defined in the CommonConstants class.
 REST_PORT = "80"
