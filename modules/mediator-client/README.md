@@ -1,6 +1,6 @@
 Install the dependencies
 			
-			pip install unirest
+			pip install requests
 			
 
 Start the Server
