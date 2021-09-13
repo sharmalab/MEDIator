@@ -20,8 +20,9 @@ Execute the MEDIatorEngine class to start MEDIator.
      java -Djava.net.preferIPv4Stack=true -classpath lib/mediator-core-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.mediator.core.MEDIatorEngine
 
 You may extend or leverage the exposed APIs. To begin with, you may consume the MEDIator RESTful APIs through a REST
-client such as the Postman plugin of the Chrome browser.
+client such as the Postman plugin of the Chrome browser or test with the Python client included in the mediator-client package.
 
+MEDIator, by default, runs on port 8040, that can be changed by changing the REST_PORT constant in the CommonConstants class.
 
 The implementation of the RESTful invocations can be found at TciaReplicaSetManager.
 
