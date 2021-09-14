@@ -1,0 +1,4 @@
+authheader: Authorization
+authflag: ldap
+baseurl: http://api.cancerimagingarchive.net
+resource: /radiology

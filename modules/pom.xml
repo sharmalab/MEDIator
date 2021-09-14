@@ -60,18 +60,6 @@
           <artifactId>httpclient</artifactId>
       </dependency>
       <dependency>
-          <groupId>org.apache.logging.log4j</groupId>
-          <artifactId>log4j-api</artifactId>
-      </dependency>
-      <dependency>
-          <groupId>org.apache.logging.log4j</groupId>
-          <artifactId>log4j-core</artifactId>
-      </dependency>
-      <dependency>
-          <groupId>org.apache.logging.log4j</groupId>
-          <artifactId>log4j-web</artifactId>
-      </dependency>
-      <dependency>
           <groupId>com.mashape.unirest</groupId>
           <artifactId>unirest-java</artifactId>
       </dependency>
@@ -120,12 +108,12 @@
           <artifactId>spark-core</artifactId>
       </dependency>
       <dependency>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-simple</artifactId>
-      </dependency>
-      <dependency>
           <groupId>edu.emory.bmi</groupId>
           <artifactId>tcia-sdk</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-simple</artifactId>
       </dependency>
   </dependencies>
 </project>
