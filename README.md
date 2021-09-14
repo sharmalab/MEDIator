@@ -72,7 +72,7 @@ You will see logs similar to the below, as more Initiator instances join the MED
 
 ## Running MEDIator Container
 
-Alternatively, you may MEDIator as a container.
+Alternatively, you may run MEDIator as a container.
 
 ```
 $ docker run --name mediator -p 8040:8040 pradeeban/mediator:1.0.0
