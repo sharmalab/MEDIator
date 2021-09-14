@@ -32,4 +32,6 @@ Content-Length: 289
 
 ## Access via browser
 
-[http://xxx.yy.zz.222:8000/mediator]
+Now you can access the MEDIator APIs through Kong via your browser or your REST client.
+
+http://xxx.yy.zz.222:8000/mediator
