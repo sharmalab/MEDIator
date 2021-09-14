@@ -1,9 +1,31 @@
+# MEDIator
+
+Skip to Running MEDIator Container section if you just want to use MEDIator in a container.
+
 ## Building MEDIator Using Apache Maven 3.x.x
 
 MEDIator is built with JDK 1.8 and Apache Maven 3.
 
-     mvn package
+```
+mvn package
+```
 
+## Building MEDIator Container
+
+After building MEDIator locally, follow the below steps to build and push the MEDIator container.
+
+```
+$ sudo docker build -t mediator:1.0.0 .
+
+$ sudo docker image ls
+
+$ docker tag mediator:1.0.0 pradeeban/mediator:1.0.0
+
+$ docker login
+
+$ docker push pradeeban/mediator:1.0.0
+
+```
 
 ## Configuring Access and Authentication for TCIA-SDK
 
@@ -13,8 +35,8 @@ Create config.yaml in your execution directory with the correct access informati
 Sample configuration files can be found at the conf folder (config.test.yaml and config.simple.test.yaml).
 
 
-Executing MEDIator
----------
+## Running MEDIator Locally on the host
+
 Execute the MEDIatorEngine class to start MEDIator.
 
      java -Djava.net.preferIPv4Stack=true -classpath lib/mediator-core-1.0-SNAPSHOT.jar:lib/*:conf/ edu.emory.bmi.mediator.core.MEDIatorEngine
@@ -47,6 +69,14 @@ You will see logs similar to the below, as more Initiator instances join the MED
 	GMS: address=pradeeban-25946, cluster=ISPN, physical address=10.40.50.63:7802
     14:00:30.367 [main] INFO  org.infinispan.CLUSTER - ISPN000094: Received new cluster view for channel ISPN: [pradeeban-17789|2] (3) [pradeeban-17789, pradeeban-4769, pradeeban-25946]
 
+
+## Running MEDIator Container
+
+Alternatively, you may MEDIator as a container.
+
+```
+$ docker run --name mediator -p 8040:8040 pradeeban/mediator:1.0.0
+```
 
 ## Citing MEDIator
 If you have used MEDIator in your research, please cite the below papers:
