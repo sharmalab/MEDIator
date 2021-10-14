@@ -78,6 +78,10 @@ Alternatively, you may run MEDIator as a container.
 $ docker run --name mediator -p 8040:8040 pradeeban/mediator:1.0.0
 ```
 
+## Using MEDIator with TCIA
+
+To create, update, replace, duplicate, and delete replicasets from the TCIA data, follow the REST client provided in modules/mediator-client/.
+
 ## Citing MEDIator
 If you have used MEDIator in your research, please cite the below papers:
 
