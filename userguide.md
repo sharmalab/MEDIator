@@ -6,3 +6,5 @@ By default, Mediator allows creating pointers to datasets from TCIA. These point
 
 # Using MEDIator to create a replicaset
 Why would someone use it? You use MEDIator to create pointers to data. This pointer points to various disjoint sets of data. In case of TCIA, this may span across various collections, patients, studies, and series. These pointers can be shared across various users, spanning multiple organizations, without actually duplicating and sharing the data.
+
+What does it do? MEDIator saves the replicasets created by the users in a secure space, separate from other user spaces.
