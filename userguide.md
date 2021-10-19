@@ -9,17 +9,84 @@ Why would someone use it? You use MEDIator to create pointers to data. This poin
 
 What does it do? MEDIator saves the replicasets created by the users in a secure space, separate from other user spaces.
 
-Creating a replicaset is a curl command that can be issued from a REST client.
+
+
+
+# Create Replica Set.
+
+Creating a replicaset is a POST command that can be issued from a REST client.
 
 For example, a POST request as below:
 ````
 http://172.20.11.223:8040/replicasets", headers={ "Accept": "application/json" }, params={ "iUserID": 12, "iCollection": "TCGA-GBM", "iPatientID" : "TCGA-06-6701%2CTCGA-08-0831", "iStudyInstanceUID" : "1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895", "iSeriesInstanceUID" : "1.3.6.1.4.1.14519.5.2.1.4591.4001.179004339156422100336233996679" })
 ````
 
+# Retrieve Replica Sets of a user.
 
-To retrieve the replicasets of the user.
+Retrieving the replicasets of a user is a GET command that can be issued from a REST client.
 
-For example, a get request as below:
+For example, a GET request as below:
 ````
 http://172.20.11.223:8040/replicasets/12"
+````
+
+
+# Retrieve a Replica Set.
+
+Retrieving a replicaset is a GET command that can be issued from a REST client.
+
+For example, a GET request as below:
+
+````
+http://172.20.11.223:8040//replicaset/-4727115044472165798
+````
+
+# Delete Replica Set.
+
+Deleting a replicaset is a DELETE command that can be issued from a REST client.
+
+For example, a DELETE request as below:
+
+````
+http://172.20.11.223:8040/replicaset/12?replicaSetID=-5896416803618323002
+````
+
+
+# Replace Replica Set.
+
+Replacing a replicaset is a POST command that can be issued from a REST client.
+
+For example, a POST request as below:
+
+````
+http://172.20.11.223:8040/replicaset/-4727115044472165798", headers={ "Accept": "application/json" }, params={"iStudyInstanceUID" : "1.3.6.1.4.1.14519.5.2.1.4591.4001.151679082681232740021018262895", "iSeriesInstanceUID" : "1.3.6.1.4.1.14519.5.2.1.4591.4001.179004339156422100336233996679" })
+````
+
+# Append Replica Set.
+
+Appending a replicaset is a POST command that can be issued from a REST client.
+
+For example, a POST request as below:
+
+````
+http://172.20.11.223:8040/replicaset/-4727115044472165798", headers={ "Accept": "application/json" }, params={"iCollection" : "TCGA-GBM"})
+````
+
+# Duplicate Replica Set.
+
+Duplicating a replicaset is a POST command that can be issued from a REST client.
+
+For example, a POST request as below:
+````
+http://172.20.11.223:8040/replicaset", headers={ "Accept": "application/json" }, params={ "userID" : "1234567", "replicaSetID": "-4727115044472165798"})
+````
+
+
+# Retrieve the users.
+
+Retrieving the users is a GET command that can be issued from a REST client.
+
+For example, a GET request as below:
+````
+http://172.20.11.223:8040/
 ````
