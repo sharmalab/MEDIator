@@ -1,4 +1,4 @@
-# MEDIator Dats Sharing and Federation Framework
+# MEDIator Dats Sharing and Federation Middleware Framework
 
 Skip to Running MEDIator Container section if you just want to use MEDIator in a container.
 
